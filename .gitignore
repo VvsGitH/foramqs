@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Ambiente virtuale (ricreato da `uv sync`)
+.venv/
+
+# Test e strumenti
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Risultati generati dalla pipeline (Results, check, grafici)
+output/
+
+# Dati: i workbook Excel non vanno versionati (restano fuori dalla repo, vedi config/pipeline.toml)
+*.xlsx
+*.xls
+~$*
+
+# Variabili d'ambiente e segreti
+.env
+
+# Sistema operativo ed editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# NB: config/worms_cache.json e reference/species_traits.csv vanno invece versionati

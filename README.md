@@ -1,0 +1,99 @@
+# foramqs: elaborazione dei campioni di foraminiferi bentonici
+
+Pipeline unica che sostituisce Power Query, ForamEcoQS e i passaggi manuali in PAST. Parte **solo** dai dati
+grezzi (le tabelle `MC_*` e la geochimica di `Campioni_P_2025_Data.xlsx`) e da poche tabelle tecniche non
+derivabili, e produce un `Results_<data>.xlsx` con gli stessi fogli di prima, più i grafici e i report di controllo.
+
+Principi:
+- **nessun dato derivato viene copiato a mano**: Shannon, densità, liste per ForamEcoQS, etichette PAST… sono calcolati;
+- **gli errori negli input fermano il calcolo**; gli avvisi finiscono nel foglio `Validazione`;
+- **ogni trasformazione è tracciata** (`Log_pulizia`, `Revisione_nomi`).
+
+## Installazione
+
+```bash
+brew install uv          # una volta sola
+cd data-elaboration-python
+uv sync                  # crea l'ambiente Python 3.12 con le dipendenze
+```
+
+## Comandi
+
+| Comando | Cosa fa |
+|---|---|
+| `uv run foramqs check` | Legge, valida e pulisce gli input e risolve i nomi in WoRMS. Scrive `output/check_<data>.xlsx` senza calcolare indici. |
+| `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` e `output/figures_<data>/`. Se ci sono errori negli input si ferma e li elenca. |
+| `uv run foramqs diff ../Campioni_P_2025_Results.xlsx` | Confronta gli indici con un vecchio Results ed elenca, per campione, i cambiamenti che spiegano le differenze. |
+| `uv run foramqs migrate-traits` | Crea `reference/species_traits.csv` dalle fonti storiche. **Già eseguito**: da qui in poi la tabella dei tratti si modifica a mano. |
+
+Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worms_cache.json`).
+
+## Dati in ingresso
+
+| File | Contenuto | Chi lo modifica |
+|---|---|---|
+| `../Campioni_P_2025_Data.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
+| `reference/species_traits.csv` | Tratti per taxon: stile di vita, gruppo ecologico Foram-AMBI (1-5/NA), gruppo FSI (Sen/Str/ND), guscio (A/I/P) | ricercatori |
+| `config/name_corrections.csv` | Refusi da correggere nel testo (`trova;sostituisci;motivo;fonte`) | ricercatori |
+| `config/taxon_aliases.csv` | AphiaID imposto per un nome, con precedenza su WoRMS (`nome;aphia_id;motivo;fonte`) | ricercatori |
+| `config/non_foram_terms.csv` | Voci da scartare (diatomee, "No Forams"…) | ricercatori |
+| `config/pipeline.toml` | Percorsi, soglie, volume delle repliche, classi EQS, gruppi di cluster, limiti SQA | ricercatori |
+| `config/worms_cache.json` | Risposte WoRMS salvate (generato) | nessuno |
+
+Non vengono più letti: la tabella `ALL`, `Elenco specie*`, `Densità faunistica`, `Shannon_H` e `ORDINE` della
+geochimica, `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
+
+## Operazioni frequenti
+
+- **Aggiungere un campione**: nel workbook dei dati, creare una Tabella Excel con le 7 colonne standard
+  (`REPLICA`, `N°SLIDE`, `CASELLA`, `SPECIE (LONG FORMAT)`, `TIPO GUSCIO`, `N°INDIVIDUI`, `DEFORMATI`) e chiamarla
+  come il campione (es. `MC_XX01`). Aggiungere la riga in `Geochimica_campioni`. Non serve toccare il codice.
+- **Correggere un refuso**: aggiungere una riga a `config/name_corrections.csv` e rilanciare `check`.
+- **Un nome non trovato o con suggerimento WoRMS** (codice T01): verificare su marinespecies.org e aggiungere
+  `nome;AphiaID;motivo;fonte` a `config/taxon_aliases.csv`.
+- **Non essere d'accordo con WoRMS su un sinonimo**: imporre l'AphiaID desiderato in `taxon_aliases.csv`.
+- **Specie senza tratti** (R04): aggiungere la riga in `reference/species_traits.csv` (va bene anche un sinonimo).
+- **Cambiare una soglia o le classi EQS**: modificare `config/pipeline.toml`.
+
+## Codici delle segnalazioni
+
+| Codice | Severità | Significato |
+|---|---|---|
+| V01-V05 | errore | Tabelle mancanti, posizioni/conte/deformati/guscio non validi |
+| V06 | avviso | Specie senza N°INDIVIDUI e senza commento che lo spieghi |
+| V07-V08 | avviso | Caselle duplicate, repliche mancanti o non consecutive |
+| V09-V10 | avviso | Nomi con struttura anomala; non determinati senza guscio |
+| V11 | avviso | Stesso taxon con gusci diversi nei campioni (taxa senza tratti) |
+| V12 | avviso | Nomi molto simili (possibili refusi) |
+| V20-V24 | errore/avviso | Geochimica: campioni, valori non numerici o censurati, granulometria ≠ 100%, righe copiate |
+| T01-T04 | avviso/info | WoRMS: nome non risolto, alias applicato, sinonimo risolto, nomi uniti |
+| R01-R05 | errore/avviso | Tratti: valore non ammesso o conflitto, righe in contrasto, taxa senza tratti, guscio diverso |
+| C01-C02 | errore/avviso | Gruppi di cluster: campioni sconosciuti, gruppo che non è un ramo del dendrogramma |
+| I01-I02 | info | Giovanili sommati a `Genere spp.`; righe di individui morti non conteggiate |
+
+## Indici e metodi
+
+- **ForamEcoQS** (`indices/foramecoqs.py`): S, exp(H'bc) (Chao–Shen), FSI, Foram-AMBI e classi EQS, portati dal
+  sorgente C# con la stessa aritmetica (arrotondamenti .NET). Verificati sui vecchi risultati in `tests/legacy`.
+- **PAST** (`indices/diversity.py`): i 16 indici del foglio `Indici_PAST` (Shannon con correzione di
+  Miller–Madow, Simpson non distorto, Chao-1, iChao-1, ACE…), verificati sui valori di PAST.
+- **Cluster**: UPGMA + Bray-Curtis sulle abbondanze relative. **CCA**: scikit-bio, sulle specie dominanti e sulle
+  variabili ambientali standardizzate.
+
+## Struttura del codice
+
+```
+src/foramqs/
+  config.py, inputs.py, io_excel.py   lettura di configurazione e workbook
+  validate.py                         controlli V.. sugli input
+  clean.py                            normalizzazione e parsing dei nomi
+  taxonomy.py                         WoRMS, alias, taxon_id
+  traits.py, migrate.py               tabella dei tratti e sua migrazione
+  tables.py                           abbondanze e tabelle di sintesi
+  indices/                            ForamEcoQS e PAST
+  multivariate.py, plots.py           cluster, CCA, grafici
+  reconcile.py                        confronto con un vecchio Results
+  pipeline.py, cli.py, report.py      collegamento dei passi, comandi, scrittura Excel
+```
+
+Test: `uv run pytest` (`tests/unit` = regole e formule; `tests/legacy` = parità con i vecchi risultati).

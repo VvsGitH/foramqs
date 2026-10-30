@@ -1,0 +1,107 @@
+# Configurazione della pipeline. I percorsi relativi sono risolti rispetto alla cartella del progetto
+# (quella che contiene pyproject.toml).
+
+[paths]
+data_workbook = "../Campioni_P_2025_Data.xlsx"
+species_traits = "reference/species_traits.csv"
+non_foram_terms = "config/non_foram_terms.csv"
+name_corrections = "config/name_corrections.csv"
+taxon_aliases = "config/taxon_aliases.csv"
+worms_cache = "config/worms_cache.json"
+output_dir = "output"
+
+[input]
+# Una tabella Excel è un campione se ha esattamente queste colonne; il nome della tabella è il nome del campione.
+sample_columns = ["REPLICA", "N°SLIDE", "CASELLA", "SPECIE (LONG FORMAT)", "TIPO GUSCIO", "N°INDIVIDUI", "DEFORMATI"]
+# Colonna di note scritta subito a destra della tabella del campione (fuori dalla Tabella Excel): viene letta anch'essa.
+sample_comment_column = "COMMENTI & DUBBI"
+# Una riga senza N°INDIVIDUI il cui commento contiene questo testo (minuscolo) è un individuo morto, non conteggiato.
+dead_comment_text = "mort"
+geochemistry_table = "Geochimica_campioni"
+geochemistry_sample_column = "Colonna1"
+# Colonne della geochimica che sono risultati di calcolo e quindi vengono ignorate (ora calcolate dalla pipeline).
+geochemistry_derived_columns = ["Shannon_H", "ORDINE"]
+# Colonne della geochimica che descrivono la granulometria e devono sommare a ~100%.
+grain_size_columns = ["GRAVEL", "SAND", "SILT"]
+grain_size_tolerance_pct = 1.0
+
+# Valori censurati nella geochimica: testo trovato → valore numerico usato (regola storica di Power Query).
+[input.censored_values]
+"> 200" = 201
+
+[cleaning]
+# I giovanili ("Genere Juvenile") confluiscono in "Genere spp." (decisione dei ricercatori, 2026-10-30).
+juveniles_into_genus_spp = true
+# Etichette (minuscole) che indicano un individuo non determinato.
+not_determined_labels = ["not determined", "specie anomala"]
+valid_shell_types = ["A", "I", "P"]
+# Due nomi (generi, o epiteti dello stesso genere) più simili di questa soglia (0-1) vengono segnalati come possibili refusi.
+similar_names_threshold = 0.8
+
+[density]
+# Densità faunistica = individui della replica / (volume_replica_ml / per_ml)
+replica_volume_ml = 150
+per_ml = 10
+
+[taxonomy]
+# Solo i record WoRMS di questo phylum sono accettati (evita omonimi in altri gruppi).
+required_phylum = "Foraminifera"
+
+[traits]
+# Valori ammessi nella tabella reference/species_traits.csv
+lifestyles = ["Epifaunale", "Epifita", "Infaunale superficiale", "Infaunale profondo", "ND"]
+eco_groups = ["1", "2", "3", "4", "5", "NA"]
+fsi_groups = ["Sen", "Str", "ND"]
+
+# Fonti storiche usate una sola volta da `foramqs migrate-traits` per creare reference/species_traits.csv
+[migration]
+traits_table = "specie_stilevita"
+foram_ambi_list = "../lists_for_feqs/Lista_Foram_AMBI.csv"
+fsi_list = "../lists_for_feqs/Lista_FSI.csv"
+
+# Classi di qualità ecologica (EQS): regole [classe, operatore, limite] valutate in ordine; l'ultima è [classe].
+# Valori predefiniti di ForamEcoQS (BioticIndicesCalculator.cs).
+[eqs]
+# Dimiza et al. 2016
+fsi = [["Azoic", "==", 0], ["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]]
+# Borja et al. 2003
+foram_ambi = [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]]
+# Soglie norvegesi, frazione 63 µm (alternativa italiana 63 µm: >=5, >=4, >=3, >2)
+exp_hbc = [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor", ">", 3], ["Bad"]]
+
+[tables]
+# Soglie (frazioni 0-1) per le tabelle di comunità.
+dominant_species_threshold = 0.05  # Abb_rel%_cut5, tabelle per PAST e CCA
+genera_threshold = 0.03            # Tabella_comunità_3%
+# Come applicare le soglie:
+#   "cella"  = un valore resta solo dove quella specie supera la soglia in quel campione (metodo Power Query storico);
+#   "specie" = si tengono tutti i valori delle specie che superano la soglia in almeno un campione.
+threshold_mode = "cella"
+# Indice esterno (non calcolato dalla pipeline) presente nella geochimica.
+external_index_column = "M-AMBI_ 2022"
+# Variabili ambientali accanto alle specie nella tabella per PAST (Abbondanza_relativa_PAST_5%).
+past_geochemistry_columns = ["DEPTH (m)", "GRAVEL", "SAND", "SILT", "TOC (%)", "As", "Cr", "Hg", "Ni"]
+# Colonne della geochimica escluse da Tabella_completa.
+complete_table_excluded_columns = ["Mn", "Fe", "Co", "Cd"]
+
+[labels]
+shell = { A = "Agglutinated", I = "Hyaline", P = "Porcellaneous" }
+lifestyle = { Epifaunale = "Epifaunal", Epifita = "Epiphytic", "Infaunale superficiale" = "Shallow infaunal", "Infaunale profondo" = "Deep infaunal", ND = "ND" }
+lifestyle_abbreviation = { Epifaunale = "E", Epifita = "Epi", "Infaunale superficiale" = "Inf sup", "Infaunale profondo" = "Inf prof", ND = "ND" }
+
+[cluster]
+# Cluster gerarchico dei campioni sulle abbondanze relative di tutte le specie (come in PAST).
+method = "average"     # UPGMA
+metric = "braycurtis"
+# Gruppi di campioni definiti dai ricercatori leggendo il dendrogramma (dato tecnico, non calcolato).
+# La validazione segnala i gruppi che non corrispondono a un ramo del dendrogramma calcolato.
+[cluster.groups]
+G1 = ["MC_FL01", "MC_FO02", "MC_FO01", "MC_VI01", "MC_ML01", "MC_FL02", "MC_ML02", "MC_VI02"]
+G2 = ["MC_PN01", "MC_PN02"]
+G3 = ["MC_PP01", "MC_PP02", "MC_CB02", "MC_CE01", "MC_CB01", "MC_SV01", "MC_CE02", "MC_SV02"]
+
+[sqa]
+# Standard di qualità ambientale dei sedimenti (mg/kg s.s.) per lo Specchietto_limiti HMe.
+Hg = 0.3
+As = 12
+Cr = 50

@@ -1,0 +1,31 @@
+[project]
+name = "foramqs"
+version = "0.1.0"
+description = "Pipeline di elaborazione per campioni di foraminiferi bentonici"
+readme = "README.md"
+authors = [
+    { name = "Vito Paparella Santorsola", email = "vito.paparella@rcsinnovation.it" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "openpyxl>=3.1.5",
+    "pandas>=3.1.0",
+    "requests>=2.34.2",
+    "scikit-bio>=0.7.4",
+    "scipy>=1.18.1",
+    "typer>=0.27.3",
+]
+
+[project.scripts]
+foramqs = "foramqs.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

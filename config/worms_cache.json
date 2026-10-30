@@ -1,0 +1,3597 @@
+{
+ "by_id": {},
+ "by_name": {
+  "Adelosina": [
+   {
+    "AphiaID": 112021,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Adelosina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112021,
+    "valid_name": "Adelosina"
+   }
+  ],
+  "Adelosina colomi": [
+   {
+    "AphiaID": 577333,
+    "authority": "(Le Calvez & Le Calvez, 1958)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina colomi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 577333,
+    "valid_name": "Adelosina colomi"
+   }
+  ],
+  "Adelosina dubia": [
+   {
+    "AphiaID": 112530,
+    "authority": "(d'Orbigny in Fornasini, 1905)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina dubia",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112530,
+    "valid_name": "Adelosina dubia"
+   }
+  ],
+  "Adelosina duthiersi": [
+   {
+    "AphiaID": 112531,
+    "authority": "Schlumberger, 1886",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina duthiersi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112531,
+    "valid_name": "Adelosina duthiersi"
+   }
+  ],
+  "Adelosina elegans": [
+   {
+    "AphiaID": 112532,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina elegans",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112532,
+    "valid_name": "Adelosina elegans"
+   }
+  ],
+  "Adelosina intricata": [
+   {
+    "AphiaID": 112534,
+    "authority": "(Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina intricata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112534,
+    "valid_name": "Adelosina intricata"
+   }
+  ],
+  "Adelosina italica": [
+   {
+    "AphiaID": 994447,
+    "authority": "(Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina italica",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 994447,
+    "valid_name": "Adelosina italica"
+   }
+  ],
+  "Adelosina laevigata": [
+   {
+    "AphiaID": 492867,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina laevigata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 492867,
+    "valid_name": "Adelosina laevigata"
+   }
+  ],
+  "Adelosina longirostra": [
+   {
+    "AphiaID": 112535,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina longirostra",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112535,
+    "valid_name": "Adelosina longirostra"
+   }
+  ],
+  "Adelosina mediterranensis": [
+   {
+    "AphiaID": 112536,
+    "authority": "(Le Calvez & Le Calvez, 1958)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina mediterranensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112536,
+    "valid_name": "Adelosina mediterranensis"
+   }
+  ],
+  "Adelosina partschii": [
+   {
+    "AphiaID": 990645,
+    "authority": "(d'Orbigny, 1846)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina partschii",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 990645,
+    "valid_name": "Adelosina partschii"
+   }
+  ],
+  "Adelosina pulchella": [
+   {
+    "AphiaID": 112538,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina pulchella",
+    "status": "superseded combination",
+    "unacceptreason": "Confusion with Adelosina pulchella d'Orbigny, 1846 in Gross (2001)",
+    "valid_AphiaID": 112667,
+    "valid_name": "Quinqueloculina pulchella"
+   },
+   {
+    "AphiaID": 889462,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina pulchella",
+    "status": "junior subjective synonym",
+    "unacceptreason": "Synonym juvenile form of Adelosina schreibersii opinion Papp & Schmid (1985)",
+    "valid_AphiaID": 737244,
+    "valid_name": "Adelosina schreibersii"
+   }
+  ],
+  "Adelosina schreibersii": [
+   {
+    "AphiaID": 737244,
+    "authority": "(d'Orbigny, 1846)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Adelosina schreibersii",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 737244,
+    "valid_name": "Adelosina schreibersii"
+   }
+  ],
+  "Affinetrina": [
+   {
+    "AphiaID": 112010,
+    "authority": "Łuczkowska, 1972",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Affinetrina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112010,
+    "valid_name": "Affinetrina"
+   }
+  ],
+  "Affinetrina gualtieriana": [
+   {
+    "AphiaID": 1479263,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Affinetrina gualtieriana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1479263,
+    "valid_name": "Affinetrina gualtieriana"
+   }
+  ],
+  "Affinetrina planciana": [
+   {
+    "AphiaID": 112495,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Affinetrina planciana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112495,
+    "valid_name": "Affinetrina planciana"
+   }
+  ],
+  "Affinetrina ucrainica": [
+   {
+    "AphiaID": 1479265,
+    "authority": "(Serova in Bogdanovich, 1952)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Affinetrina ucrainica",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1479265,
+    "valid_name": "Affinetrina ucrainica"
+   }
+  ],
+  "Ammolagena clavata": [
+   {
+    "AphiaID": 113827,
+    "authority": "(Jones & Parker, 1860)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Ammolagena clavata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113827,
+    "valid_name": "Ammolagena clavata"
+   }
+  ],
+  "Ammonia": [
+   {
+    "AphiaID": 112078,
+    "authority": "Brünnich, 1771",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Ammonia",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112078,
+    "valid_name": "Ammonia"
+   }
+  ],
+  "Ammonia beccarii": [
+   {
+    "AphiaID": 112849,
+    "authority": "(Linnaeus, 1758)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Ammonia beccarii",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112849,
+    "valid_name": "Ammonia beccarii"
+   }
+  ],
+  "Ammonia parkinsoniana": [
+   {
+    "AphiaID": 418095,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Ammonia parkinsoniana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 418095,
+    "valid_name": "Ammonia parkinsoniana"
+   }
+  ],
+  "Ammonia tepida": [
+   {
+    "AphiaID": 112857,
+    "authority": "(Cushman, 1926)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Ammonia tepida",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112857,
+    "valid_name": "Ammonia tepida"
+   }
+  ],
+  "Ammoscalaria pseudospiralis": [
+   {
+    "AphiaID": 113918,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Ammoscalaria pseudospiralis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113918,
+    "valid_name": "Ammoscalaria pseudospiralis"
+   }
+  ],
+  "Amphicoryna scalaris": [
+   {
+    "AphiaID": 113780,
+    "authority": "(Batsch, 1791)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Amphicoryna scalaris",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113780,
+    "valid_name": "Amphicoryna scalaris"
+   }
+  ],
+  "Articulina": [
+   {
+    "AphiaID": 238293,
+    "authority": null,
+    "match_type": "exact",
+    "phylum": "Bryozoa",
+    "rank": "Suborder",
+    "scientificname": "Articulina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 238293,
+    "valid_name": "Articulina"
+   },
+   {
+    "AphiaID": 112012,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Articulina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112012,
+    "valid_name": "Articulina"
+   }
+  ],
+  "Articulina carinata": [
+   {
+    "AphiaID": 112497,
+    "authority": "Wiesner, 1923",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Articulina carinata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112497,
+    "valid_name": "Articulina carinata"
+   },
+   {
+    "AphiaID": 897828,
+    "authority": "Cushman, 1944",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Articulina carinata",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Articulina sagra var. carinata Wiesner, 1923",
+    "valid_AphiaID": 897828,
+    "valid_name": "Articulina carinata"
+   }
+  ],
+  "Articulina mucronata": [
+   {
+    "AphiaID": 417763,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Articulina mucronata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 417763,
+    "valid_name": "Articulina mucronata"
+   }
+  ],
+  "Asterigerinata": [
+   {
+    "AphiaID": 112095,
+    "authority": "Bermúdez, 1949",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Asterigerinata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112095,
+    "valid_name": "Asterigerinata"
+   }
+  ],
+  "Asterigerinata adriatica": [
+   {
+    "AphiaID": 528257,
+    "authority": "Haake, 1977",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Asterigerinata adriatica",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 528257,
+    "valid_name": "Asterigerinata adriatica"
+   }
+  ],
+  "Asterigerinata mamilla": [
+   {
+    "AphiaID": 112933,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Asterigerinata mamilla",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112933,
+    "valid_name": "Asterigerinata mamilla"
+   }
+  ],
+  "Asterigerinata mariae": [
+   {
+    "AphiaID": 556418,
+    "authority": "Sgarrella in Amore, Barra, Ciampo, Ruggiero, Russo & Sgarrella, 1990",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Asterigerinata mariae",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 556418,
+    "valid_name": "Asterigerinata mariae"
+   }
+  ],
+  "Astrononion stelligerum": [
+   {
+    "AphiaID": 113552,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Astrononion stelligerum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113552,
+    "valid_name": "Astrononion stelligerum"
+   }
+  ],
+  "Aubignyna perlucida": [
+   {
+    "AphiaID": 466408,
+    "authority": "(Heron-Allen & Earland, 1913)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Aubignyna perlucida",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466408,
+    "valid_name": "Aubignyna perlucida"
+   }
+  ],
+  "Bolivina": [
+   {
+    "AphiaID": 112101,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Bolivina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112101,
+    "valid_name": "Bolivina"
+   }
+  ],
+  "Bolivina alata": [
+   {
+    "AphiaID": 112964,
+    "authority": "(Seguenza, 1862)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina alata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112964,
+    "valid_name": "Bolivina alata"
+   }
+  ],
+  "Bolivina difformis": [
+   {
+    "AphiaID": 112972,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina difformis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112972,
+    "valid_name": "Bolivina difformis"
+   }
+  ],
+  "Bolivina dilatata": [
+   {
+    "AphiaID": 112973,
+    "authority": "Reuss, 1850",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina dilatata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112973,
+    "valid_name": "Bolivina dilatata"
+   }
+  ],
+  "Bolivina earlandi": [
+   {
+    "AphiaID": 183019,
+    "authority": "Parr, 1950",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina earlandi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 183019,
+    "valid_name": "Bolivina earlandi"
+   }
+  ],
+  "Bolivina plicatella": [
+   {
+    "AphiaID": 522744,
+    "authority": "Cushman, 1930",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina plicatella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 522744,
+    "valid_name": "Bolivina plicatella"
+   }
+  ],
+  "Bolivina spathulata": [
+   {
+    "AphiaID": 112988,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina spathulata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112988,
+    "valid_name": "Bolivina spathulata"
+   }
+  ],
+  "Bolivina striatula": [
+   {
+    "AphiaID": 112989,
+    "authority": "Cushman, 1922",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina striatula",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112989,
+    "valid_name": "Bolivina striatula"
+   }
+  ],
+  "Bolivina subspinescens": [
+   {
+    "AphiaID": 112992,
+    "authority": "Cushman, 1922",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bolivina subspinescens",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112992,
+    "valid_name": "Bolivina subspinescens"
+   }
+  ],
+  "Brizalina": [
+   {
+    "AphiaID": 112103,
+    "authority": "Costa, 1856",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Brizalina",
+    "status": "unaccepted",
+    "unacceptreason": "Genetic and morpologic studies do not support separate genera (e.g. Ertan et al., 2004)",
+    "valid_AphiaID": 112101,
+    "valid_name": "Bolivina"
+   }
+  ],
+  "Brizalina difformis": [
+   {
+    "AphiaID": 113002,
+    "authority": "(Williamson, 1848)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Brizalina difformis",
+    "status": "unaccepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112972,
+    "valid_name": "Bolivina difformis"
+   }
+  ],
+  "Brizalina earlandi": [
+   {
+    "AphiaID": 113004,
+    "authority": "(Parr, 1950)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Brizalina earlandi",
+    "status": "unaccepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 183019,
+    "valid_name": "Bolivina earlandi"
+   }
+  ],
+  "Buccella granulata": [
+   {
+    "AphiaID": 113137,
+    "authority": "(di Napoli Alliata, 1952)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Buccella granulata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113137,
+    "valid_name": "Buccella granulata"
+   },
+   {
+    "AphiaID": 1484380,
+    "authority": "(Lautenschlager In Myatlyuk, 1953)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Buccella granulata",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Eponides frigidus var. granulatus di Napoli Alliata, 1952",
+    "valid_AphiaID": 1484380,
+    "valid_name": "Buccella granulata"
+   }
+  ],
+  "Bulimina": [
+   {
+    "AphiaID": 112110,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Bulimina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112110,
+    "valid_name": "Bulimina"
+   },
+   {
+    "AphiaID": 998416,
+    "authority": "Ehrenberg, 1831",
+    "match_type": "exact",
+    "phylum": "Mollusca",
+    "rank": "Genus",
+    "scientificname": "Bulimina",
+    "status": "junior homonym",
+    "unacceptreason": "invalid: junior homonym of <i>Bulimina</i> d'Orbigny, 1826 [Foraminifera]",
+    "valid_AphiaID": 884405,
+    "valid_name": "Buliminus"
+   }
+  ],
+  "Bulimina aculeata": [
+   {
+    "AphiaID": 113030,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bulimina aculeata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113030,
+    "valid_name": "Bulimina aculeata"
+   }
+  ],
+  "Bulimina elongata": [
+   {
+    "AphiaID": 933974,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bulimina elongata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 933974,
+    "valid_name": "Bulimina elongata"
+   }
+  ],
+  "Bulimina gibba": [
+   {
+    "AphiaID": 113040,
+    "authority": "Fornasini, 1902",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bulimina gibba",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113040,
+    "valid_name": "Bulimina gibba"
+   }
+  ],
+  "Bulimina marginata": [
+   {
+    "AphiaID": 113042,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Bulimina marginata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113042,
+    "valid_name": "Bulimina marginata"
+   }
+  ],
+  "Cibicides": [
+   {
+    "AphiaID": 112082,
+    "authority": "Montfort, 1808",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Cibicides",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112082,
+    "valid_name": "Cibicides"
+   }
+  ],
+  "Cibicidoides variabilis": [
+   {
+    "AphiaID": 988322,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cibicidoides variabilis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 988322,
+    "valid_name": "Cibicidoides variabilis"
+   }
+  ],
+  "Connemarella rudis": [
+   {
+    "AphiaID": 114364,
+    "authority": "(Wright, 1900)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Connemarella rudis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114364,
+    "valid_name": "Connemarella rudis"
+   }
+  ],
+  "Conorbella imperatoria": [
+   {
+    "AphiaID": 113425,
+    "authority": "(d'Orbigny, 1846)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Conorbella imperatoria",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113425,
+    "valid_name": "Conorbella imperatoria"
+   }
+  ],
+  "Cornuspira": [
+   {
+    "AphiaID": 112006,
+    "authority": "Schultze, 1854",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Cornuspira",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112006,
+    "valid_name": "Cornuspira"
+   }
+  ],
+  "Cornuspira involvens": [
+   {
+    "AphiaID": 112488,
+    "authority": "(Reuss, 1850)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cornuspira involvens",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112488,
+    "valid_name": "Cornuspira involvens"
+   }
+  ],
+  "Coscinospira hemprichii": [
+   {
+    "AphiaID": 490014,
+    "authority": "Ehrenberg, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Coscinospira hemprichii",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 490014,
+    "valid_name": "Coscinospira hemprichii"
+   }
+  ],
+  "Cribrostomoides jeffreysii": [
+   {
+    "AphiaID": 114035,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cribrostomoides jeffreysii",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114035,
+    "valid_name": "Cribrostomoides jeffreysii"
+   }
+  ],
+  "Cyclocibicides vermiculatus": [
+   {
+    "AphiaID": 113116,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cyclocibicides vermiculatus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113116,
+    "valid_name": "Cyclocibicides vermiculatus"
+   }
+  ],
+  "Cycloforina": [
+   {
+    "AphiaID": 112016,
+    "authority": "Łuczkowska, 1972",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Cycloforina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112016,
+    "valid_name": "Cycloforina"
+   }
+  ],
+  "Cycloforina contorta": [
+   {
+    "AphiaID": 112516,
+    "authority": "(d'Orbigny, 1846)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cycloforina contorta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112516,
+    "valid_name": "Cycloforina contorta"
+   }
+  ],
+  "Cycloforina rugosa": [
+   {
+    "AphiaID": 112518,
+    "authority": "(d'Orbigny, 1852)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cycloforina rugosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112518,
+    "valid_name": "Cycloforina rugosa"
+   }
+  ],
+  "Cycloforina tenuicollis": [
+   {
+    "AphiaID": 112519,
+    "authority": "(Wiesner, 1923)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cycloforina tenuicollis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112519,
+    "valid_name": "Cycloforina tenuicollis"
+   }
+  ],
+  "Cycloforina villafranca": [
+   {
+    "AphiaID": 112520,
+    "authority": "(Le Calvez & Le Calvez, 1958)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Cycloforina villafranca",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112520,
+    "valid_name": "Cycloforina villafranca"
+   }
+  ],
+  "Dentalina": [
+   {
+    "AphiaID": 112217,
+    "authority": "Risso, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Dentalina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112217,
+    "valid_name": "Dentalina"
+   }
+  ],
+  "Discorbinella bertheloti": [
+   {
+    "AphiaID": 113143,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Discorbinella bertheloti",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113143,
+    "valid_name": "Discorbinella bertheloti"
+   }
+  ],
+  "Eggerelloides": [
+   {
+    "AphiaID": 112326,
+    "authority": "Haynes, 1973",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Eggerelloides",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112326,
+    "valid_name": "Eggerelloides"
+   }
+  ],
+  "Eggerelloides advena": [
+   {
+    "AphiaID": 113933,
+    "authority": "(Cushman, 1922)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Eggerelloides advena",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113933,
+    "valid_name": "Eggerelloides advena"
+   }
+  ],
+  "Eggerelloides scabrum": [
+   {
+    "AphiaID": 113938,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Eggerelloides scabrum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113938,
+    "valid_name": "Eggerelloides scabrum"
+   }
+  ],
+  "Elphidium": [
+   {
+    "AphiaID": 112162,
+    "authority": "Montfort, 1808",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Elphidium",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112162,
+    "valid_name": "Elphidium"
+   }
+  ],
+  "Elphidium aculeatum": [],
+  "Elphidium advena": [
+   {
+    "AphiaID": 1636051,
+    "authority": "(Cushman, 1922)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium advena",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1636051,
+    "valid_name": "Elphidium advena"
+   }
+  ],
+  "Elphidium complanatum": [
+   {
+    "AphiaID": 113261,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium complanatum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113261,
+    "valid_name": "Elphidium complanatum"
+   }
+  ],
+  "Elphidium crispum": [
+   {
+    "AphiaID": 113262,
+    "authority": "(Linnaeus, 1758)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium crispum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113262,
+    "valid_name": "Elphidium crispum"
+   }
+  ],
+  "Elphidium gerthi": [
+   {
+    "AphiaID": 113268,
+    "authority": "van Voorthuysen, 1957",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium gerthi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113268,
+    "valid_name": "Elphidium gerthi"
+   }
+  ],
+  "Elphidium granosum": [],
+  "Elphidium macellum": [
+   {
+    "AphiaID": 113276,
+    "authority": "(Fichtel & Moll, 1798)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium macellum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113276,
+    "valid_name": "Elphidium macellum"
+   }
+  ],
+  "Elphidium margaritaceum": [
+   {
+    "AphiaID": 113279,
+    "authority": "Cushman, 1930",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium margaritaceum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113279,
+    "valid_name": "Elphidium margaritaceum"
+   }
+  ],
+  "Elphidium strigilatum": [
+   {
+    "AphiaID": 1523651,
+    "authority": "(Fichtel & Moll, 1798)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Elphidium strigilatum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1523651,
+    "valid_name": "Elphidium strigilatum"
+   }
+  ],
+  "Eponides concameratus": [
+   {
+    "AphiaID": 113352,
+    "authority": "(Montagu, 1808)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Eponides concameratus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113352,
+    "valid_name": "Eponides concameratus"
+   }
+  ],
+  "Flintinoides labiosa": [
+   {
+    "AphiaID": 112544,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Flintinoides labiosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112544,
+    "valid_name": "Flintinoides labiosa"
+   }
+  ],
+  "Floresina": [
+   {
+    "AphiaID": 490033,
+    "authority": "Revets, 1990",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Floresina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 490033,
+    "valid_name": "Floresina"
+   }
+  ],
+  "Fursenkoina": [
+   {
+    "AphiaID": 112111,
+    "authority": "Loeblich & Tappan, 1961",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Fursenkoina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112111,
+    "valid_name": "Fursenkoina"
+   }
+  ],
+  "Fursenkoina complanata": [
+   {
+    "AphiaID": 466392,
+    "authority": "(Egger, 1893)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Fursenkoina complanata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466392,
+    "valid_name": "Fursenkoina complanata"
+   }
+  ],
+  "Fursenkoina subacuta": [
+   {
+    "AphiaID": 994413,
+    "authority": "(d'Orbigny, 1852)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Fursenkoina subacuta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 994413,
+    "valid_name": "Fursenkoina subacuta"
+   }
+  ],
+  "Gaudryina rudis": [
+   {
+    "AphiaID": 114370,
+    "authority": "Wright, 1900",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Gaudryina rudis",
+    "status": "unaccepted",
+    "unacceptreason": "Type species of Connemarella",
+    "valid_AphiaID": 114364,
+    "valid_name": "Connemarella rudis"
+   }
+  ],
+  "Gavelinopsis praegeri": [
+   {
+    "AphiaID": 113159,
+    "authority": "(Heron-Allen & Earland, 1913)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Gavelinopsis praegeri",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113159,
+    "valid_name": "Gavelinopsis praegeri"
+   }
+  ],
+  "Glaphyrammina americana": [
+   {
+    "AphiaID": 417573,
+    "authority": "(Cushman, 1910)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Glaphyrammina americana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 417573,
+    "valid_name": "Glaphyrammina americana"
+   }
+  ],
+  "Globulina": [
+   {
+    "AphiaID": 112250,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Globulina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112250,
+    "valid_name": "Globulina"
+   },
+   {
+    "AphiaID": 604146,
+    "authority": "Link",
+    "match_type": "exact",
+    "phylum": "Charophyta",
+    "rank": "Genus",
+    "scientificname": "Globulina",
+    "status": "uncertain",
+    "unacceptreason": null,
+    "valid_AphiaID": null,
+    "valid_name": null
+   }
+  ],
+  "Globulina gibba": [
+   {
+    "AphiaID": 113656,
+    "authority": "(d'Orbigny in Deshayes, 1832)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Globulina gibba",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113656,
+    "valid_name": "Globulina gibba"
+   }
+  ],
+  "Globulina inaequalis": [
+   {
+    "AphiaID": 113657,
+    "authority": "Reuss, 1850",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Globulina inaequalis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113657,
+    "valid_name": "Globulina inaequalis"
+   }
+  ],
+  "Globulina minuta": [
+   {
+    "AphiaID": 466321,
+    "authority": "(Roemer, 1838)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Globulina minuta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466321,
+    "valid_name": "Globulina minuta"
+   }
+  ],
+  "Globulina punctata": [
+   {
+    "AphiaID": 113659,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Globulina punctata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113659,
+    "valid_name": "Globulina punctata"
+   }
+  ],
+  "Haynesina": [
+   {
+    "AphiaID": 112163,
+    "authority": "Banner & Culver, 1978",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Haynesina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112163,
+    "valid_name": "Haynesina"
+   }
+  ],
+  "Haynesina depressula": [
+   {
+    "AphiaID": 113293,
+    "authority": "(Walker & Jacob, 1798)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Haynesina depressula",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113293,
+    "valid_name": "Haynesina depressula"
+   }
+  ],
+  "Lachlanella": [
+   {
+    "AphiaID": 112018,
+    "authority": "Vella, 1957",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Lachlanella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112018,
+    "valid_name": "Lachlanella"
+   }
+  ],
+  "Lachlanella carinata": [
+   {
+    "AphiaID": 1480204,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lachlanella carinata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1480204,
+    "valid_name": "Lachlanella carinata"
+   }
+  ],
+  "Lachlanella undulata": [
+   {
+    "AphiaID": 112523,
+    "authority": "(d'Orbigny, 1852)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lachlanella undulata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112523,
+    "valid_name": "Lachlanella undulata"
+   }
+  ],
+  "Lachlanella variolata": [
+   {
+    "AphiaID": 112524,
+    "authority": "(d'Orbigny in Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lachlanella variolata",
+    "status": "alternative representation",
+    "unacceptreason": null,
+    "valid_AphiaID": 112687,
+    "valid_name": "Quinqueloculina variolata"
+   }
+  ],
+  "Laevidentalina inflexa": [
+   {
+    "AphiaID": 113529,
+    "authority": "(Reuss, 1866)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Laevidentalina inflexa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113529,
+    "valid_name": "Laevidentalina inflexa"
+   }
+  ],
+  "Laevipeneroplis laevigatus": [
+   {
+    "AphiaID": 417776,
+    "authority": "(Karrer, 1868)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Laevipeneroplis laevigatus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 417776,
+    "valid_name": "Laevipeneroplis laevigatus"
+   }
+  ],
+  "Lagena doveyensis": [
+   {
+    "AphiaID": 113490,
+    "authority": "Haynes, 1973",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lagena doveyensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113490,
+    "valid_name": "Lagena doveyensis"
+   }
+  ],
+  "Lagena strumosa": [
+   {
+    "AphiaID": 490021,
+    "authority": "Reuss, 1863",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lagena strumosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 490021,
+    "valid_name": "Lagena strumosa"
+   }
+  ],
+  "Lagenammina": [
+   {
+    "AphiaID": 112364,
+    "authority": "Rhumbler, 1911",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Lagenammina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112364,
+    "valid_name": "Lagenammina"
+   }
+  ],
+  "Lagenammina atlantica": [
+   {
+    "AphiaID": 114164,
+    "authority": "(Cushman, 1944)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lagenammina atlantica",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114164,
+    "valid_name": "Lagenammina atlantica"
+   }
+  ],
+  "Lagenammina difflugiformis": [
+   {
+    "AphiaID": 114165,
+    "authority": "(Brady, 1879)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lagenammina difflugiformis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114165,
+    "valid_name": "Lagenammina difflugiformis"
+   }
+  ],
+  "Leptohalysis scottii": [
+   {
+    "AphiaID": 578704,
+    "authority": "(Chaster, 1892)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Leptohalysis scottii",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 578704,
+    "valid_name": "Leptohalysis scottii"
+   }
+  ],
+  "Lobatula lobatula": [
+   {
+    "AphiaID": 113118,
+    "authority": "(Walker & Jacob, 1798)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Lobatula lobatula",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113118,
+    "valid_name": "Lobatula lobatula"
+   }
+  ],
+  "Massilina": [
+   {
+    "AphiaID": 112026,
+    "authority": "Schlumberger, 1893",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Massilina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112026,
+    "valid_name": "Massilina"
+   }
+  ],
+  "Massilina gualtieriana": [
+   {
+    "AphiaID": 112550,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Massilina gualtieriana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112550,
+    "valid_name": "Massilina gualtieriana"
+   }
+  ],
+  "Massilina secans": [
+   {
+    "AphiaID": 163641,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Massilina secans",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 163641,
+    "valid_name": "Massilina secans"
+   }
+  ],
+  "Melonis affinis": [
+   {
+    "AphiaID": 418046,
+    "authority": "(Reuss, 1851)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Melonis affinis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 418046,
+    "valid_name": "Melonis affinis"
+   }
+  ],
+  "Miliolinella": [
+   {
+    "AphiaID": 112028,
+    "authority": "Wiesner, 1931",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Miliolinella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112028,
+    "valid_name": "Miliolinella"
+   }
+  ],
+  "Miliolinella elongata": [
+   {
+    "AphiaID": 112556,
+    "authority": "Kruit, 1955",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella elongata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112556,
+    "valid_name": "Miliolinella elongata"
+   }
+  ],
+  "Miliolinella grata": [
+   {
+    "AphiaID": 112557,
+    "authority": "(Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella grata",
+    "status": "unaccepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112695,
+    "valid_name": "Sigmoilina grata"
+   }
+  ],
+  "Miliolinella hybrida": [
+   {
+    "AphiaID": 988315,
+    "authority": "(Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella hybrida",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 988315,
+    "valid_name": "Miliolinella hybrida"
+   }
+  ],
+  "Miliolinella rhodiensis": [
+   {
+    "AphiaID": 1457679,
+    "authority": "(Wiesner, 1912)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella rhodiensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1457679,
+    "valid_name": "Miliolinella rhodiensis"
+   }
+  ],
+  "Miliolinella semicostata": [
+   {
+    "AphiaID": 112563,
+    "authority": "(Wiesner, 1923)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella semicostata",
+    "status": "junior objective synonym",
+    "unacceptreason": "Miliolina semicostata Wiesner, 1923 is a nomen novum pro Quinqueloculina seminuda Terquem, 1878 (not Reuss, 1866) already replaced by Miliolina rhodiensis Wiesner, 1912",
+    "valid_AphiaID": 1457679,
+    "valid_name": "Miliolinella rhodiensis"
+   }
+  ],
+  "Miliolinella subrotunda": [
+   {
+    "AphiaID": 112564,
+    "authority": "(Montagu, 1803)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella subrotunda",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112564,
+    "valid_name": "Miliolinella subrotunda"
+   }
+  ],
+  "Miliolinella webbiana": [
+   {
+    "AphiaID": 112566,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Miliolinella webbiana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112566,
+    "valid_name": "Miliolinella webbiana"
+   }
+  ],
+  "Neoconorbina": [
+   {
+    "AphiaID": 112261,
+    "authority": "Hofker, 1951",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Neoconorbina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112261,
+    "valid_name": "Neoconorbina"
+   }
+  ],
+  "Neoconorbina terquemi": [
+   {
+    "AphiaID": 113697,
+    "authority": "(Rzehak, 1888)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Neoconorbina terquemi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113697,
+    "valid_name": "Neoconorbina terquemi"
+   }
+  ],
+  "Neolenticulina variabilis": [
+   {
+    "AphiaID": 466174,
+    "authority": "(Reuss, 1850)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Neolenticulina variabilis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466174,
+    "valid_name": "Neolenticulina variabilis"
+   }
+  ],
+  "Nodosaria": [
+   {
+    "AphiaID": 112223,
+    "authority": "Lamarck, 1816",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Nodosaria",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112223,
+    "valid_name": "Nodosaria"
+   }
+  ],
+  "Nonion": [
+   {
+    "AphiaID": 112232,
+    "authority": "Montfort, 1808",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Nonion",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112232,
+    "valid_name": "Nonion"
+   }
+  ],
+  "Nonion faba": [
+   {
+    "AphiaID": 1470122,
+    "authority": "(Fichtel & Moll, 1798)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Nonion faba",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1470122,
+    "valid_name": "Nonion faba"
+   }
+  ],
+  "Nonionella": [
+   {
+    "AphiaID": 112233,
+    "authority": "Cushman, 1926",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Nonionella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112233,
+    "valid_name": "Nonionella"
+   }
+  ],
+  "Nonionella opima": [
+   {
+    "AphiaID": 113603,
+    "authority": "Cushman, 1947",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Nonionella opima",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113603,
+    "valid_name": "Nonionella opima"
+   }
+  ],
+  "Nonionellina": [
+   {
+    "AphiaID": 112234,
+    "authority": "Voloshinova, 1958",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Nonionellina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112234,
+    "valid_name": "Nonionellina"
+   }
+  ],
+  "Nonionoides turgidus": [
+   {
+    "AphiaID": 466471,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Nonionoides turgidus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466471,
+    "valid_name": "Nonionoides turgidus"
+   }
+  ],
+  "Nouria polymorphinoides": [
+   {
+    "AphiaID": 114061,
+    "authority": "Heron-Allen & Earland, 1914",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Nouria polymorphinoides",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114061,
+    "valid_name": "Nouria polymorphinoides"
+   }
+  ],
+  "Ophthalmidium concavum": [
+   {
+    "AphiaID": 736755,
+    "authority": "(Wiesner, 1916)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Ophthalmidium concavum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 736755,
+    "valid_name": "Ophthalmidium concavum"
+   }
+  ],
+  "Parrina bradyi": [
+   {
+    "AphiaID": 112570,
+    "authority": "(Millett, 1898)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Parrina bradyi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112570,
+    "valid_name": "Parrina bradyi"
+   }
+  ],
+  "Patellina corrugata": [
+   {
+    "AphiaID": 113626,
+    "authority": "Williamson, 1858",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Patellina corrugata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113626,
+    "valid_name": "Patellina corrugata"
+   }
+  ],
+  "Peneroplis": [
+   {
+    "AphiaID": 112066,
+    "authority": "Montfort, 1808",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Peneroplis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112066,
+    "valid_name": "Peneroplis"
+   }
+  ],
+  "Peneroplis pertusus": [
+   {
+    "AphiaID": 112815,
+    "authority": "(Forsskål in Niebuhr, 1775)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Peneroplis pertusus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112815,
+    "valid_name": "Peneroplis pertusus"
+   }
+  ],
+  "Peneroplis planatus": [
+   {
+    "AphiaID": 112817,
+    "authority": "(Fichtel & Moll, 1798)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Peneroplis planatus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112817,
+    "valid_name": "Peneroplis planatus"
+   }
+  ],
+  "Planorbulina mediterranensis": [
+   {
+    "AphiaID": 113634,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Planorbulina mediterranensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113634,
+    "valid_name": "Planorbulina mediterranensis"
+   }
+  ],
+  "Polymorphina": [
+   {
+    "AphiaID": 112254,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Polymorphina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112254,
+    "valid_name": "Polymorphina"
+   }
+  ],
+  "Polystomammina nitida": [
+   {
+    "AphiaID": 114321,
+    "authority": "(Brady, 1881)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Polystomammina nitida",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114321,
+    "valid_name": "Polystomammina nitida"
+   }
+  ],
+  "Psammosphaera fusca": [
+   {
+    "AphiaID": 114184,
+    "authority": "Schulze, 1875",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Psammosphaera fusca",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114184,
+    "valid_name": "Psammosphaera fusca"
+   }
+  ],
+  "Pseudotriloculina": [
+   {
+    "AphiaID": 112035,
+    "authority": "Cherif, 1970",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Pseudotriloculina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112035,
+    "valid_name": "Pseudotriloculina"
+   },
+   {
+    "AphiaID": 593816,
+    "authority": "Rasheed, 1971",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Pseudotriloculina",
+    "status": "unaccepted",
+    "unacceptreason": "Junior homonym of Pseudotriloculina Cherif, 1970 New name in Loeblich & Tappan (1985)",
+    "valid_AphiaID": 490009,
+    "valid_name": "Rupertianella"
+   }
+  ],
+  "Pseudotriloculina cuneata": [
+   {
+    "AphiaID": 112575,
+    "authority": "(Karrer, 1867)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pseudotriloculina cuneata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112575,
+    "valid_name": "Pseudotriloculina cuneata"
+   }
+  ],
+  "Pseudotriloculina laevigata": [
+   {
+    "AphiaID": 112576,
+    "authority": "(d'Orbigny in Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pseudotriloculina laevigata",
+    "status": "junior homonym",
+    "unacceptreason": "Triloculina laevigata d'Orbigny in Terquem, 1878 (not Bornemann, 1855) was replaced by T. lecalvezae Kaasschieter, 1961.",
+    "valid_AphiaID": 759649,
+    "valid_name": "Pseudotriloculina lecalvezae"
+   }
+  ],
+  "Pseudotriloculina lecalvezae": [
+   {
+    "AphiaID": 759649,
+    "authority": "(Kaasschieter, 1961)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pseudotriloculina lecalvezae",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 759649,
+    "valid_name": "Pseudotriloculina lecalvezae"
+   }
+  ],
+  "Pseudotriloculina limbata": [
+   {
+    "AphiaID": 988318,
+    "authority": "(d'Orbigny in Fornasini, 1905)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pseudotriloculina limbata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 988318,
+    "valid_name": "Pseudotriloculina limbata"
+   }
+  ],
+  "Pseudotriloculina rotunda": [
+   {
+    "AphiaID": 112578,
+    "authority": "(d'Orbigny in Schlumberger, 1893)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pseudotriloculina rotunda",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112578,
+    "valid_name": "Pseudotriloculina rotunda"
+   }
+  ],
+  "Pseudotriloculina sidebottomi": [
+   {
+    "AphiaID": 112579,
+    "authority": "(Martinotti, 1921)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pseudotriloculina sidebottomi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112579,
+    "valid_name": "Pseudotriloculina sidebottomi"
+   }
+  ],
+  "Pyrgo elongata": [
+   {
+    "AphiaID": 112588,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Pyrgo elongata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112588,
+    "valid_name": "Pyrgo elongata"
+   }
+  ],
+  "Pyrulina": [
+   {
+    "AphiaID": 112039,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Pyrulina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112039,
+    "valid_name": "Pyrulina"
+   }
+  ],
+  "Quinqueloculina": [
+   {
+    "AphiaID": 112040,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Quinqueloculina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112040,
+    "valid_name": "Quinqueloculina"
+   }
+  ],
+  "Quinqueloculina agglutinans": [
+   {
+    "AphiaID": 466054,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina agglutinans",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466054,
+    "valid_name": "Quinqueloculina agglutinans"
+   }
+  ],
+  "Quinqueloculina agglutinata": [
+   {
+    "AphiaID": 582641,
+    "authority": "Cushman, 1917",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina agglutinata",
+    "status": "unaccepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 741093,
+    "valid_name": "Siphonaperta agglutinata"
+   }
+  ],
+  "Quinqueloculina annectens": [
+   {
+    "AphiaID": 112612,
+    "authority": "(Schlumberger, 1893)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina annectens",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112612,
+    "valid_name": "Quinqueloculina annectens"
+   }
+  ],
+  "Quinqueloculina auberiana": [
+   {
+    "AphiaID": 112615,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina auberiana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112615,
+    "valid_name": "Quinqueloculina auberiana"
+   }
+  ],
+  "Quinqueloculina berthelotiana": [
+   {
+    "AphiaID": 112616,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina berthelotiana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112616,
+    "valid_name": "Quinqueloculina berthelotiana"
+   }
+  ],
+  "Quinqueloculina bosciana": [
+   {
+    "AphiaID": 112620,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina bosciana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112620,
+    "valid_name": "Quinqueloculina bosciana"
+   }
+  ],
+  "Quinqueloculina bradyana": [
+   {
+    "AphiaID": 112621,
+    "authority": "Cushman, 1917",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina bradyana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112621,
+    "valid_name": "Quinqueloculina bradyana"
+   }
+  ],
+  "Quinqueloculina carinatastriata": [
+   {
+    "AphiaID": 466057,
+    "authority": "(Wiesner, 1923)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina carinatastriata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 466057,
+    "valid_name": "Quinqueloculina carinatastriata"
+   }
+  ],
+  "Quinqueloculina disparilis": [
+   {
+    "AphiaID": 889665,
+    "authority": "d'Orbigny in Schlumberger, 1893",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina disparilis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 889665,
+    "valid_name": "Quinqueloculina disparilis"
+   }
+  ],
+  "Quinqueloculina irregularis": [
+   {
+    "AphiaID": 523482,
+    "authority": "d'Orbigny in Terquem, 1878",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina irregularis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 523482,
+    "valid_name": "Quinqueloculina irregularis"
+   }
+  ],
+  "Quinqueloculina jugosa": [
+   {
+    "AphiaID": 112641,
+    "authority": "Cushman, 1944",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina jugosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112641,
+    "valid_name": "Quinqueloculina jugosa"
+   }
+  ],
+  "Quinqueloculina laevigata": [
+   {
+    "AphiaID": 112642,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina laevigata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112642,
+    "valid_name": "Quinqueloculina laevigata"
+   }
+  ],
+  "Quinqueloculina lata": [
+   {
+    "AphiaID": 112644,
+    "authority": "Terquem, 1876",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina lata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112644,
+    "valid_name": "Quinqueloculina lata"
+   }
+  ],
+  "Quinqueloculina neapolitana": [
+   {
+    "AphiaID": 556419,
+    "authority": "Sgarrella & Moncharmont Zei, 1993",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina neapolitana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 556419,
+    "valid_name": "Quinqueloculina neapolitana"
+   }
+  ],
+  "Quinqueloculina padana": [
+   {
+    "AphiaID": 112656,
+    "authority": "Perconig, 1954",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina padana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112656,
+    "valid_name": "Quinqueloculina padana"
+   }
+  ],
+  "Quinqueloculina parvula": [
+   {
+    "AphiaID": 112657,
+    "authority": "Schlumberger, 1894",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina parvula",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112657,
+    "valid_name": "Quinqueloculina parvula"
+   }
+  ],
+  "Quinqueloculina pseudobuchiana": [
+   {
+    "AphiaID": 112665,
+    "authority": "Łuczkowska, 1974",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina pseudobuchiana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112665,
+    "valid_name": "Quinqueloculina pseudobuchiana"
+   }
+  ],
+  "Quinqueloculina pulchella": [
+   {
+    "AphiaID": 112667,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina pulchella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112667,
+    "valid_name": "Quinqueloculina pulchella"
+   },
+   {
+    "AphiaID": 1786037,
+    "authority": "(d'Orbigny, 1846)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina pulchella",
+    "status": "superseded combination",
+    "unacceptreason": null,
+    "valid_AphiaID": 737244,
+    "valid_name": "Adelosina schreibersii"
+   }
+  ],
+  "Quinqueloculina schlumbergeri": [
+   {
+    "AphiaID": 112671,
+    "authority": "(Wiesner, 1923)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina schlumbergeri",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112671,
+    "valid_name": "Quinqueloculina schlumbergeri"
+   }
+  ],
+  "Quinqueloculina seminula": [
+   {
+    "AphiaID": 112674,
+    "authority": "(Linnaeus, 1758)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina seminula",
+    "status": "unaccepted",
+    "unacceptreason": "Noun (Latin), seminulum is the dimunitive of semen (neuter), seed. See ICZN article 34.2.1.",
+    "valid_AphiaID": 112675,
+    "valid_name": "Quinqueloculina seminulum"
+   }
+  ],
+  "Quinqueloculina seminulum": [
+   {
+    "AphiaID": 112675,
+    "authority": "(Linnaeus, 1758)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina seminulum",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112675,
+    "valid_name": "Quinqueloculina seminulum"
+   }
+  ],
+  "Quinqueloculina stelligera": [
+   {
+    "AphiaID": 112679,
+    "authority": "Schlumberger, 1893",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina stelligera",
+    "status": "junior homonym",
+    "unacceptreason": "Junior homonym of Quinqueloculina stelligera Terquem, 1882",
+    "valid_AphiaID": 112671,
+    "valid_name": "Quinqueloculina schlumbergeri"
+   }
+  ],
+  "Quinqueloculina ungeriana": [
+   {
+    "AphiaID": 112686,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina ungeriana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112686,
+    "valid_name": "Quinqueloculina ungeriana"
+   }
+  ],
+  "Quinqueloculina variolata": [
+   {
+    "AphiaID": 112687,
+    "authority": "d'Orbigny in Terquem, 1878",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina variolata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112687,
+    "valid_name": "Quinqueloculina variolata"
+   }
+  ],
+  "Quinqueloculina viennensis": [
+   {
+    "AphiaID": 112689,
+    "authority": "Le Calvez & Le Calvez, 1958",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina viennensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112689,
+    "valid_name": "Quinqueloculina viennensis"
+   }
+  ],
+  "Quinqueloculina vulgaris": [
+   {
+    "AphiaID": 112690,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Quinqueloculina vulgaris",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112690,
+    "valid_name": "Quinqueloculina vulgaris"
+   }
+  ],
+  "Rectuvigerina bononiensis": [
+   {
+    "AphiaID": 1426021,
+    "authority": "(Fornasini, 1888)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rectuvigerina bononiensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1426021,
+    "valid_name": "Rectuvigerina bononiensis"
+   }
+  ],
+  "Rectuvigerina phlegeri": [
+   {
+    "AphiaID": 113755,
+    "authority": "Le Calvez, 1959",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rectuvigerina phlegeri",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113755,
+    "valid_name": "Rectuvigerina phlegeri"
+   }
+  ],
+  "Reophax": [
+   {
+    "AphiaID": 112341,
+    "authority": "Montfort, 1808",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Reophax",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112341,
+    "valid_name": "Reophax"
+   }
+  ],
+  "Reophax fusiformis": [
+   {
+    "AphiaID": 114003,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Reophax fusiformis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114003,
+    "valid_name": "Reophax fusiformis"
+   }
+  ],
+  "Reophax nana": [
+   {
+    "AphiaID": 114011,
+    "authority": "Rhumbler, 1913",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Reophax nana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114011,
+    "valid_name": "Reophax nana"
+   }
+  ],
+  "Reophax scorpiurus": [
+   {
+    "AphiaID": 114016,
+    "authority": "Montfort, 1808",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Reophax scorpiurus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114016,
+    "valid_name": "Reophax scorpiurus"
+   }
+  ],
+  "Reophax testaceus": [
+   {
+    "AphiaID": 491730,
+    "authority": "Wiesner, 1931",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Reophax testaceus",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Reophax difflugiformis var. testacea Flint, 1899",
+    "valid_AphiaID": 491730,
+    "valid_name": "Reophax testaceus"
+   }
+  ],
+  "Reussella": [
+   {
+    "AphiaID": 112257,
+    "authority": "Galloway, 1933",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Reussella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112257,
+    "valid_name": "Reussella"
+   }
+  ],
+  "Reussella spinulosa": [
+   {
+    "AphiaID": 113681,
+    "authority": "(Reuss, 1850)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Reussella spinulosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113681,
+    "valid_name": "Reussella spinulosa"
+   }
+  ],
+  "Rosalina": [
+   {
+    "AphiaID": 112148,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Rosalina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112148,
+    "valid_name": "Rosalina"
+   }
+  ],
+  "Rosalina anomala": [
+   {
+    "AphiaID": 113166,
+    "authority": "Terquem, 1875",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rosalina anomala",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113166,
+    "valid_name": "Rosalina anomala"
+   }
+  ],
+  "Rosalina bradyi": [
+   {
+    "AphiaID": 113167,
+    "authority": "(Cushman, 1915)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rosalina bradyi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113167,
+    "valid_name": "Rosalina bradyi"
+   }
+  ],
+  "Rosalina floridensis": [
+   {
+    "AphiaID": 113170,
+    "authority": "(Cushman, 1930)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rosalina floridensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113170,
+    "valid_name": "Rosalina floridensis"
+   }
+  ],
+  "Rosalina macropora": [
+   {
+    "AphiaID": 113173,
+    "authority": "(Hofker, 1951)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rosalina macropora",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113173,
+    "valid_name": "Rosalina macropora"
+   }
+  ],
+  "Rosalina williamsoni": [
+   {
+    "AphiaID": 113182,
+    "authority": "(Chapman & Parr, 1932)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rosalina williamsoni",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113182,
+    "valid_name": "Rosalina williamsoni"
+   }
+  ],
+  "Rotalinoides gaimardi": [
+   {
+    "AphiaID": 113726,
+    "authority": "(d'Orbigny in Fornasini, 1906)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Rotalinoides gaimardi",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113726,
+    "valid_name": "Rotalinoides gaimardi"
+   }
+  ],
+  "Sahulia conica": [
+   {
+    "AphiaID": 114253,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Sahulia conica",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114253,
+    "valid_name": "Sahulia conica"
+   }
+  ],
+  "Sahulia kerimbaensis": [
+   {
+    "AphiaID": 489117,
+    "authority": "(Said, 1949)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Sahulia kerimbaensis",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 489117,
+    "valid_name": "Sahulia kerimbaensis"
+   }
+  ],
+  "Sigmoilina": [
+   {
+    "AphiaID": 112042,
+    "authority": "Schlumberger, 1887",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Sigmoilina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112042,
+    "valid_name": "Sigmoilina"
+   }
+  ],
+  "Sigmoilina costata": [
+   {
+    "AphiaID": 112693,
+    "authority": "Schlumberger, 1893",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Sigmoilina costata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112693,
+    "valid_name": "Sigmoilina costata"
+   }
+  ],
+  "Sigmoilina grata": [
+   {
+    "AphiaID": 112695,
+    "authority": "(Terquem, 1878)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Sigmoilina grata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112695,
+    "valid_name": "Sigmoilina grata"
+   }
+  ],
+  "Siphonaperta": [
+   {
+    "AphiaID": 415984,
+    "authority": "Vella, 1957",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Siphonaperta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 415984,
+    "valid_name": "Siphonaperta"
+   }
+  ],
+  "Siphonaperta agglutinata": [
+   {
+    "AphiaID": 741093,
+    "authority": "(Cushman, 1917)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Siphonaperta agglutinata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 741093,
+    "valid_name": "Siphonaperta agglutinata"
+   }
+  ],
+  "Siphonaperta aspera": [
+   {
+    "AphiaID": 593433,
+    "authority": "(d'Orbigny, 1826)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Siphonaperta aspera",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 593433,
+    "valid_name": "Siphonaperta aspera"
+   }
+  ],
+  "Siphonaperta dilatata": [
+   {
+    "AphiaID": 593436,
+    "authority": "(Le Calvez & Le Calvez, 1958)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Siphonaperta dilatata",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Quinqueloculina dilatata d'Orbigny, 1839",
+    "valid_AphiaID": 593436,
+    "valid_name": "Siphonaperta dilatata"
+   }
+  ],
+  "Siphonaperta horrida": [
+   {
+    "AphiaID": 417729,
+    "authority": "(Cushman, 1947)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Siphonaperta horrida",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 417729,
+    "valid_name": "Siphonaperta horrida"
+   }
+  ],
+  "Siphonina reticulata": [
+   {
+    "AphiaID": 113731,
+    "authority": "(Cžjžek, 1848)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Siphonina reticulata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113731,
+    "valid_name": "Siphonina reticulata"
+   }
+  ],
+  "Siphotextularia concava": [
+   {
+    "AphiaID": 114255,
+    "authority": "(Karrer, 1868)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Siphotextularia concava",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114255,
+    "valid_name": "Siphotextularia concava"
+   }
+  ],
+  "Siphouvigerina": [
+   {
+    "AphiaID": 415986,
+    "authority": "Parr, 1950",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Siphouvigerina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 415986,
+    "valid_name": "Siphouvigerina"
+   }
+  ],
+  "Sorites": [
+   {
+    "AphiaID": 112069,
+    "authority": "Ehrenberg, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Sorites",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112069,
+    "valid_name": "Sorites"
+   }
+  ],
+  "Sorites orbiculus": [
+   {
+    "AphiaID": 112823,
+    "authority": "(Forsskål in Niebuhr, 1775)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Sorites orbiculus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112823,
+    "valid_name": "Sorites orbiculus"
+   }
+  ],
+  "Spirillina": [
+   {
+    "AphiaID": 112273,
+    "authority": "Ehrenberg, 1843",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Spirillina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112273,
+    "valid_name": "Spirillina"
+   }
+  ],
+  "Spirillina limbata": [
+   {
+    "AphiaID": 113734,
+    "authority": "Brady, 1879",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spirillina limbata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113734,
+    "valid_name": "Spirillina limbata"
+   }
+  ],
+  "Spirillina vivipara": [
+   {
+    "AphiaID": 113737,
+    "authority": "Ehrenberg, 1843",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spirillina vivipara",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113737,
+    "valid_name": "Spirillina vivipara"
+   }
+  ],
+  "Spiroloculina": [
+   {
+    "AphiaID": 112046,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Spiroloculina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112046,
+    "valid_name": "Spiroloculina"
+   }
+  ],
+  "Spiroloculina angulosa": [
+   {
+    "AphiaID": 112711,
+    "authority": "Terquem, 1878",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina angulosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112711,
+    "valid_name": "Spiroloculina angulosa"
+   },
+   {
+    "AphiaID": 889377,
+    "authority": "d'Orbigny in Fornasini, 1904",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina angulosa",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Spiroloculina angulosa Terquem, 1878",
+    "valid_AphiaID": 889377,
+    "valid_name": "Spiroloculina angulosa"
+   }
+  ],
+  "Spiroloculina cymbium": [
+   {
+    "AphiaID": 112721,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina cymbium",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112721,
+    "valid_name": "Spiroloculina cymbium"
+   }
+  ],
+  "Spiroloculina depressa": [
+   {
+    "AphiaID": 112722,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina depressa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112722,
+    "valid_name": "Spiroloculina depressa"
+   }
+  ],
+  "Spiroloculina dilatata": [
+   {
+    "AphiaID": 112723,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina dilatata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112723,
+    "valid_name": "Spiroloculina dilatata"
+   }
+  ],
+  "Spiroloculina excavata": [
+   {
+    "AphiaID": 112726,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina excavata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112726,
+    "valid_name": "Spiroloculina excavata"
+   }
+  ],
+  "Spiroloculina ornata": [
+   {
+    "AphiaID": 112734,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spiroloculina ornata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112734,
+    "valid_name": "Spiroloculina ornata"
+   }
+  ],
+  "Spirophthalmidium acutimargo": [
+   {
+    "AphiaID": 112788,
+    "authority": "(Brady, 1884)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Spirophthalmidium acutimargo",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112788,
+    "valid_name": "Spirophthalmidium acutimargo"
+   }
+  ],
+  "Stainforthia": [
+   {
+    "AphiaID": 112117,
+    "authority": "Hofker, 1956",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Stainforthia",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112117,
+    "valid_name": "Stainforthia"
+   }
+  ],
+  "Textularia": [
+   {
+    "AphiaID": 112394,
+    "authority": "Defrance, 1824",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Textularia",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112394,
+    "valid_name": "Textularia"
+   }
+  ],
+  "Textularia agglutinans": [
+   {
+    "AphiaID": 114264,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia agglutinans",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114264,
+    "valid_name": "Textularia agglutinans"
+   }
+  ],
+  "Textularia bocki": [
+   {
+    "AphiaID": 114267,
+    "authority": "Höglund, 1947",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia bocki",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114267,
+    "valid_name": "Textularia bocki"
+   }
+  ],
+  "Textularia calva": [
+   {
+    "AphiaID": 114269,
+    "authority": "Lalicker, 1935",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia calva",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114269,
+    "valid_name": "Textularia calva"
+   }
+  ],
+  "Textularia gramen": [
+   {
+    "AphiaID": 114277,
+    "authority": "d'Orbigny, 1846",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia gramen",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114277,
+    "valid_name": "Textularia gramen"
+   }
+  ],
+  "Textularia pala": [
+   {
+    "AphiaID": 914020,
+    "authority": "Cžjžek, 1848",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia pala",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 914020,
+    "valid_name": "Textularia pala"
+   }
+  ],
+  "Textularia porrecta": [
+   {
+    "AphiaID": 114281,
+    "authority": "Brady, 1884",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia porrecta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114281,
+    "valid_name": "Textularia porrecta"
+   }
+  ],
+  "Textularia pseudorugosa": [
+   {
+    "AphiaID": 114283,
+    "authority": "Lacroix, 1931",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Textularia pseudorugosa",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114283,
+    "valid_name": "Textularia pseudorugosa"
+   }
+  ],
+  "Toddinella incerta": [
+   {
+    "AphiaID": 1845130,
+    "authority": "(Williamson, 1858)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Toddinella incerta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 1845130,
+    "valid_name": "Toddinella incerta"
+   }
+  ],
+  "Tretomphaloides concinnus": [
+   {
+    "AphiaID": 418034,
+    "authority": "(Brady, 1884)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Tretomphaloides concinnus",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 418034,
+    "valid_name": "Tretomphaloides concinnus"
+   }
+  ],
+  "Triloculina": [
+   {
+    "AphiaID": 112047,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Triloculina",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112047,
+    "valid_name": "Triloculina"
+   }
+  ],
+  "Triloculina adriatica": [
+   {
+    "AphiaID": 112747,
+    "authority": "Le Calvez & Le Calvez, 1958",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina adriatica",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112747,
+    "valid_name": "Triloculina adriatica"
+   }
+  ],
+  "Triloculina elongata": [
+   {
+    "AphiaID": 889592,
+    "authority": "d'Orbigny in Fornasini, 1905",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina elongata",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Triloculina gibba var. elongata Karrer, 1868",
+    "valid_AphiaID": 889592,
+    "valid_name": "Triloculina elongata"
+   },
+   {
+    "AphiaID": 1535925,
+    "authority": "Nguyen Ngoc, 2006",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina elongata",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Triloculina gibba var. elongata Karrer, 1868",
+    "valid_AphiaID": 1535925,
+    "valid_name": "Triloculina elongata"
+   }
+  ],
+  "Triloculina marioni": [
+   {
+    "AphiaID": 112763,
+    "authority": "Schlumberger, 1893",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina marioni",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112763,
+    "valid_name": "Triloculina marioni"
+   }
+  ],
+  "Triloculina oblonga": [
+   {
+    "AphiaID": 112764,
+    "authority": "(Montagu, 1803)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina oblonga",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112764,
+    "valid_name": "Triloculina oblonga"
+   }
+  ],
+  "Triloculina plicata": [
+   {
+    "AphiaID": 112767,
+    "authority": "Terquem, 1878",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina plicata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112767,
+    "valid_name": "Triloculina plicata"
+   }
+  ],
+  "Triloculina schreiberiana": [
+   {
+    "AphiaID": 112769,
+    "authority": "d'Orbigny, 1839",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina schreiberiana",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112769,
+    "valid_name": "Triloculina schreiberiana"
+   }
+  ],
+  "Triloculina tricarinata": [
+   {
+    "AphiaID": 991800,
+    "authority": "d'Orbigny in Deshayes, 1832",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina tricarinata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 991800,
+    "valid_name": "Triloculina tricarinata"
+   }
+  ],
+  "Triloculina trigonula": [
+   {
+    "AphiaID": 112772,
+    "authority": "(Lamarck, 1804)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculina trigonula",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112772,
+    "valid_name": "Triloculina trigonula"
+   }
+  ],
+  "Triloculinella dilatata": [
+   {
+    "AphiaID": 417747,
+    "authority": "(d'Orbigny, 1839)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Triloculinella dilatata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 417747,
+    "valid_name": "Triloculinella dilatata"
+   }
+  ],
+  "Trochammina inflata": [
+   {
+    "AphiaID": 114348,
+    "authority": "(Montagu, 1808)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Trochammina inflata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 114348,
+    "valid_name": "Trochammina inflata"
+   }
+  ],
+  "Uvigerina mediterranea": [
+   {
+    "AphiaID": 113772,
+    "authority": "Hofker, 1932",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Uvigerina mediterranea",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 113772,
+    "valid_name": "Uvigerina mediterranea"
+   }
+  ],
+  "Valvulineria complanata": [
+   {
+    "AphiaID": 112961,
+    "authority": "(d'Orbigny, 1846)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Valvulineria complanata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112961,
+    "valid_name": "Valvulineria complanata"
+   }
+  ],
+  "Valvulineria minuta": [
+   {
+    "AphiaID": 911325,
+    "authority": "Parker, 1954",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Valvulineria minuta",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 911325,
+    "valid_name": "Valvulineria minuta"
+   },
+   {
+    "AphiaID": 466424,
+    "authority": "(Schubert, 1904)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Valvulineria minuta",
+    "status": "unreplaced junior homonym",
+    "unacceptreason": "Primary junior homonym of Discorbina minuta Seguenza, 1880",
+    "valid_AphiaID": 466424,
+    "valid_name": "Valvulineria minuta"
+   }
+  ],
+  "Vertebralina striata": [
+   {
+    "AphiaID": 112785,
+    "authority": "d'Orbigny, 1826",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Vertebralina striata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112785,
+    "valid_name": "Vertebralina striata"
+   }
+  ],
+  "Wellmanellinella": [
+   {
+    "AphiaID": 112020,
+    "authority": "Cherif, 1970",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Genus",
+    "scientificname": "Wellmanellinella",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112020,
+    "valid_name": "Wellmanellinella"
+   }
+  ],
+  "Wellmanellinella striata": [
+   {
+    "AphiaID": 112526,
+    "authority": "(Sidebottom, 1904)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Wellmanellinella striata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 112526,
+    "valid_name": "Wellmanellinella striata"
+   }
+  ],
+  "Wiesnerella auriculata": [
+   {
+    "AphiaID": 417770,
+    "authority": "(Egger, 1893)",
+    "match_type": "exact",
+    "phylum": "Foraminifera",
+    "rank": "Species",
+    "scientificname": "Wiesnerella auriculata",
+    "status": "accepted",
+    "unacceptreason": null,
+    "valid_AphiaID": 417770,
+    "valid_name": "Wiesnerella auriculata"
+   }
+  ]
+ }
+}
