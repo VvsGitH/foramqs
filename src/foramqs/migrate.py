@@ -1,6 +1,6 @@
 """Creazione una tantum di reference/species_traits.csv dalle fonti storiche.
 
-Fonti: la tabella `specie_stilevita` del workbook dei dati e le liste preparate per ForamEcoQS
+Fonti: la tabella `specie_stilevita` del vecchio workbook dei dati ([migration] workbook) e le liste preparate per ForamEcoQS
 (Lista_Foram_AMBI.csv, Lista_FSI.csv). I nomi di tutte le fonti vengono puliti e risolti in WoRMS; le voci che
 finiscono sullo stesso taxon vengono fuse. Se due voci danno valori diversi per lo stesso tratto, il campo viene
 scritto come "CONFLITTO: ..." con l'elenco delle alternative: la pipeline si ferma finché un ricercatore non
@@ -23,7 +23,7 @@ _FSI_CODES = {"S": "Sen", "T": "Str", "ND": "ND"}
 def historical_trait_records(cfg: Config) -> pd.DataFrame:
     """Tutte le attribuzioni storiche in formato long: fonte, nome originale, tratto, valore."""
     m = cfg.migration
-    table = read_tables(cfg.path("data_workbook"))[m["traits_table"]].data
+    table = read_tables(cfg.resolve(m["workbook"]))[m["traits_table"]].data
     columns = {
         "STILE DI VITA": "stile_di_vita", "GRUPPI ECOLOGICI": "gruppo_ecologico",
         "Ecological group FSI": "gruppo_fsi", "TIPO GUSCIO": "guscio",

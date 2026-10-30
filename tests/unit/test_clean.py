@@ -52,9 +52,10 @@ def test_juveniles_can_be_kept_separate():
     assert parse("Adelosina giovanili", juveniles_into_genus_spp=False).taxon == "Adelosina Juvenile"
 
 
-def test_not_determined_uses_shell_type():
+def test_not_determined_uses_shell_type_and_is_discarded_without_it():
     assert parse("Not determined", shell="A").taxon == "ND A"
-    assert parse("Specie anomala ", shell="").taxon == "ND"
+    without_shell = parse("Specie anomala ", shell="")
+    assert without_shell.discarded and "scartato:non_determinato_senza_guscio" in without_shell.rules
 
 
 def test_non_foram_and_empty_rows_are_discarded():

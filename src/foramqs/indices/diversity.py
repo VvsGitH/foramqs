@@ -84,7 +84,12 @@ def chao1_classic(s: int, n: float, f1: int, f2: int) -> float:
 
 
 def ichao1(s: int, n: float, f1: int, f2: int, f3: int, f4: int) -> float:
-    """iChao-1 (Chiu et al. 2014), costruito sul Chao-1 classico come in PAST; f4 = 1 se nullo."""
+    """iChao-1 (Chiu et al. 2014), costruito sul Chao-1 classico come in PAST; f4 = 1 se nullo.
+
+    Senza taxa con 3 individui (f3 = 0) la correzione è nulla; con f3 > 0 vale N ≥ 3, quindi N − 1 > 0.
+    """
+    if f3 == 0:
+        return chao1_classic(s, n, f1, f2)
     f4 = f4 or 1
     correction = (n - 3) / (4 * n) * f3 / f4 * max(f1 - (n - 3) / (n - 1) * f2 * f3 / (2 * f4), 0)
     return chao1_classic(s, n, f1, f2) + correction
@@ -105,9 +110,13 @@ def ace(x: np.ndarray) -> float:
 
 
 def squares(x: np.ndarray) -> float:
-    """Estimatore "Squares" (Alroy 2018): S + f1²·Σnᵢ² / (N² − f1·S)."""
+    """Estimatore "Squares" (Alroy 2018): S + f1²·Σnᵢ² / (N² − f1·S).
+
+    Non definito (NaN) se tutti i taxa sono singoletti: allora N² = f1·S.
+    """
     n, s, f1 = float(x.sum()), len(x), _frequency(x, 1)
-    return s + f1**2 * float((x**2).sum()) / (n**2 - f1 * s)
+    denominator = n**2 - f1 * s
+    return s + f1**2 * float((x**2).sum()) / denominator if denominator else math.nan
 
 
 def diversity_table(abundance_table: pd.DataFrame) -> pd.DataFrame:

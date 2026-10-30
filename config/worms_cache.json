@@ -1,5 +1,90 @@
 {
- "by_id": {},
+ "by_id": {
+  "112711": {
+   "AphiaID": 112711,
+   "authority": "Terquem, 1878",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Spiroloculina angulosa",
+   "status": "accepted",
+   "unacceptreason": null,
+   "valid_AphiaID": 112711,
+   "valid_name": "Spiroloculina angulosa"
+  },
+  "113137": {
+   "AphiaID": 113137,
+   "authority": "(di Napoli Alliata, 1952)",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Buccella granulata",
+   "status": "accepted",
+   "unacceptreason": null,
+   "valid_AphiaID": 113137,
+   "valid_name": "Buccella granulata"
+  },
+  "113253": {
+   "AphiaID": 113253,
+   "authority": "(d'Orbigny, 1846)",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Elphidium aculeatum",
+   "status": "accepted",
+   "unacceptreason": null,
+   "valid_AphiaID": 113253,
+   "valid_name": "Elphidium aculeatum"
+  },
+  "113269": {
+   "AphiaID": 113269,
+   "authority": "(d'Orbigny, 1846)",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Elphidium granosum",
+   "status": "accepted",
+   "unacceptreason": null,
+   "valid_AphiaID": 113269,
+   "valid_name": "Elphidium granosum"
+  },
+  "737244": {
+   "AphiaID": 737244,
+   "authority": "(d'Orbigny, 1846)",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Adelosina schreibersii",
+   "status": "accepted",
+   "unacceptreason": null,
+   "valid_AphiaID": 737244,
+   "valid_name": "Adelosina schreibersii"
+  },
+  "889592": {
+   "AphiaID": 889592,
+   "authority": "d'Orbigny in Fornasini, 1905",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Triloculina elongata",
+   "status": "unreplaced junior homonym",
+   "unacceptreason": "Primary junior homonym of Triloculina gibba var. elongata Karrer, 1868",
+   "valid_AphiaID": 889592,
+   "valid_name": "Triloculina elongata"
+  },
+  "911325": {
+   "AphiaID": 911325,
+   "authority": "Parker, 1954",
+   "match_type": "exact",
+   "phylum": "Foraminifera",
+   "rank": "Species",
+   "scientificname": "Valvulineria minuta",
+   "status": "accepted",
+   "unacceptreason": null,
+   "valid_AphiaID": 911325,
+   "valid_name": "Valvulineria minuta"
+  }
+ },
  "by_name": {
   "Adelosina": [
    {

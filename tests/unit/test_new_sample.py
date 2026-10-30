@@ -79,3 +79,16 @@ def test_open_workbook_is_not_modified(project):
     workbook.with_name(f"~${workbook.name}").touch()
     with pytest.raises(NewSampleError, match="aperto in Excel"):
         add_sample(cfg, config_path, "MC_B01", "G1")
+
+
+def test_failed_config_write_restores_the_workbook(project):
+    cfg, config_path, workbook = project
+    before = workbook.read_bytes()
+    config_path.chmod(0o444)
+    try:
+        with pytest.raises(PermissionError):
+            add_sample(cfg, config_path, "MC_B01", "G1")
+    finally:
+        config_path.chmod(0o644)
+    assert workbook.read_bytes() == before
+    assert "MC_B01" not in config_path.read_text(encoding="utf-8")

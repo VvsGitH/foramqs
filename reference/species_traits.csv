@@ -23,7 +23,7 @@ Ammonia tepida;Infaunale superficiale;4;Str;I;migrazione da Lista_FSI.csv, Lista
 Ammoscalaria pseudospiralis;Infaunale superficiale;NA;Str;A;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Amphicoryna scalaris;ND;2;Str;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Articulina carinata;Epifaunale;NA;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
-Articulina mucronata;Epifaunale;CONFLITTO: 1 (Articulina mucronata) | NA (Articulina mucronata);Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
+Articulina mucronata;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Articulina spp.;Epifaunale;NA;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Asterigerinata adriatica;Epifaunale;3;Sen;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Asterigerinata mamilla;Epifaunale;1;Sen;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
@@ -48,7 +48,7 @@ Bulimina marginata;Infaunale superficiale;3;Str;I;migrazione da Lista_FSI.csv, L
 Bulimina spp.;Infaunale superficiale;NA;Str;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Cibicides spp.;ND;NA;Sen;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Cibicidoides variabilis;Epifita;1;Sen;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
-Connemarella rudis;CONFLITTO: Epifaunale (Connemarella rudis) | ND (Gaudryina rudis);NA;Str;A;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Gaudryina rudis
+Connemarella rudis;Epifaunale;NA;Str;A;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Gaudryina rudis
 Conorbella imperatoria;ND;NA;Sen;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Cornuspira involvens;Epifaunale;3;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Cornuspira spp.;Epifaunale;3;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
@@ -160,12 +160,12 @@ Quinqueloculina neapolitana;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, List
 Quinqueloculina padana;Epifaunale;3;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Quinqueloculina parvula;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Quinqueloculina pseudobuchiana;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
-Quinqueloculina pulchella;Epifaunale;CONFLITTO: 1 (Adelosina pulchella) | 2 (Quinqueloculina pulchella);Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Adelosina pulchella
-Quinqueloculina schlumbergeri;Epifaunale;CONFLITTO: 2 (Quinqueloculina schlumbergeri) | 3 (Quinqueloculina stelligera, Quinqueloculina schlumbergeri);Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Quinqueloculina stelligera
+Quinqueloculina pulchella;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Adelosina pulchella
+Quinqueloculina schlumbergeri;Epifaunale;3;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Quinqueloculina stelligera
 Quinqueloculina seminulum;Epifaunale;3;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Quinqueloculina seminula
 Quinqueloculina spp.;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Quinqueloculina ungeriana;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
-Quinqueloculina variolata;Epifaunale;CONFLITTO: 1 (Lachlanella variolata, Quinqueloculina variolata) | 2 (Quinqueloculina variolata);Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Lachlanella variolata
+Quinqueloculina variolata;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Lachlanella variolata
 Quinqueloculina viennensis;Epifaunale;2;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Quinqueloculina vulgaris;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Rectuvigerina bononiensis;Infaunale superficiale;3;Str;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
@@ -187,7 +187,7 @@ Rotalinoides gaimardi;ND;NA;Sen;I;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.
 Sahulia conica;Epifaunale;NA;Sen;A;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Sahulia kerimbaensis;Epifaunale;NA;Sen;A;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Sigmoilina costata;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Sigmoilinita costata
-Sigmoilina grata;Epifaunale;CONFLITTO: 1 (Miliolinella grata, Sigmoilina grata) | NA (Sigmoilina grata, Sigmoilinita grata);Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;"nomi originali: Miliolinella grata; Sigmoilinita grata"
+Sigmoilina grata;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;"nomi originali: Miliolinella grata; Sigmoilinita grata"
 Sigmoilina spp.;Epifaunale;NA;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;
 Siphonaperta agglutinata;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;nomi originali: Quinqueloculina agglutinata
 Siphonaperta aspera;Epifaunale;1;Sen;P;migrazione da Lista_FSI.csv, Lista_Foram_AMBI.csv, specie_stilevita;

@@ -53,3 +53,14 @@ def test_past_indices_on_hand_computed_sample():
     h = -(0.5 * math.log(0.5) + 2 * 0.25 * math.log(0.25))
     assert idx["Equitability_J"] == pytest.approx(h / math.log(3))
     assert idx["Shannon_H"] == pytest.approx(h + 2 / 8)  # Miller–Madow: + (S−1)/(2N)
+
+
+@pytest.mark.parametrize("counts", [[1], [1, 1, 1], [2], [1, 2]])
+def test_diversity_indices_on_tiny_samples_do_not_raise(counts):
+    values = diversity_indices(counts)
+    assert values["Taxa_S"] == len(counts)
+
+
+def test_squares_is_undefined_when_all_taxa_are_singletons():
+    assert math.isnan(diversity_indices([1, 1, 1])["Squares"])
+    assert diversity_indices([1, 1, 3])["Squares"] == pytest.approx(3 + 4 * 11 / (25 - 6))

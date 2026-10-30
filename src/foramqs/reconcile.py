@@ -23,7 +23,9 @@ KNOWN_CAUSES = pd.DataFrame([
                    "specie_stilevita (molte specie allora NA) e non era più stato aggiornato."),
     ("Densità", "La densità storica era incollata a mano: in MC_PN01 R1 conteggiava 4 diatomee; in MC_FO02 le repliche "
                 "R2 e R3 erano copie di R1 (il campione ha una sola replica)."),
-    ("Tutti", "Nuove regole: giovanili sommati a 'Genere spp.'; non determinati senza guscio conteggiati come 'ND'; "
+    ("Campioni in [input.copied_replicas]", "La sola replica R1 è contata come N repliche identiche (MC_FO02: 3), "
+                                            "quindi N triplica e gli indici basati sulle specie rare cambiano."),
+    ("Tutti", "Nuove regole: giovanili sommati a 'Genere spp.'; "
               "sinonimi uniti secondo WoRMS."),
 ], columns=["dove", "causa"])
 
@@ -31,12 +33,8 @@ KNOWN_CAUSES = pd.DataFrame([
 _FORAMECOQS = {"Species Richness (S)": "Species Richness (S)", "exp(H'bc)": "exp(H'bc)", "FSI": "FSI", "Foram-AMBI 2025": "Foram-AMBI"}
 
 
-def _rows(path: Path, sheet: str) -> list[list]:
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        wb = openpyxl.load_workbook(path, data_only=True)
-    ws = wb[sheet]
-    return [list(r) for r in ws.iter_rows(values_only=True)]
+def _rows(wb: openpyxl.Workbook, sheet: str) -> list[list]:
+    return [list(r) for r in wb[sheet].iter_rows(values_only=True)]
 
 
 def _by_sample(rows: list[list]) -> pd.DataFrame:
@@ -49,18 +47,21 @@ def _by_sample(rows: list[list]) -> pd.DataFrame:
 
 def old_indices(path: Path) -> pd.DataFrame:
     """Indici del vecchio Results in formato long: indice, campione, valore."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        wb = openpyxl.load_workbook(path, data_only=True)
     parts = []
-    feqs = _by_sample(_rows(path, "Foram Echo QS"))
+    feqs = _by_sample(_rows(wb, "Foram Echo QS"))
     for old, new in _FORAMECOQS.items():
         parts.append(feqs[old].rename_axis("campione").rename("vecchio").reset_index().assign(indice=new))
-    past_rows = _rows(path, "Indici_PAST")[1:18]
+    past_rows = _rows(wb, "Indici_PAST")[1:18]
     past = pd.DataFrame(past_rows[1:], columns=past_rows[0]).set_index(past_rows[0][0])
     for index_name, values in past.iterrows():
         series = values.dropna().rename("vecchio").rename_axis("campione").reset_index()
         parts.append(series.assign(indice=f"PAST {index_name}"))
-    density = _by_sample(_rows(path, "Densità_faunistica_media"))
+    density = _by_sample(_rows(wb, "Densità_faunistica_media"))
     parts.append(density.iloc[:, 0].rename("vecchio").rename_axis("campione").reset_index().assign(indice="Densità faunistica media"))
-    deformed = _by_sample(_rows(path, "Abbondanza_rel%_deformati"))
+    deformed = _by_sample(_rows(wb, "Abbondanza_rel%_deformati"))
     parts.append(deformed.iloc[:, 0].rename("vecchio").rename_axis("campione").reset_index().assign(indice="Deformati (frazione)"))
     return pd.concat(parts, ignore_index=True)
 
@@ -101,6 +102,4 @@ def sample_changes(observations: pd.DataFrame, cleaning_log: pd.DataFrame) -> pd
             changes.append((sample, "giovanili in Genere spp.", taxon, n))
         if group["regole"].str.contains("correzione:").any():
             changes.append((sample, "correzione di nome", taxon, n))
-        if taxon == "ND":
-            changes.append((sample, "non determinato senza guscio conteggiato", taxon, n))
     return pd.DataFrame(changes, columns=["campione", "tipo", "dettaglio", "individui"])

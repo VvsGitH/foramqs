@@ -72,8 +72,9 @@ ECO_GROUP_WEIGHTS = {1: 0.0, 2: 1.5, 3: 3.0, 4: 4.5, 5: 6.0}
 def foram_ambi(eco_group_abundance: dict[int, float], named_total: float) -> float:
     """Foram-AMBI (Alve et al. 2016; Jorissen et al. 2018), 3 decimali (BIC:846-878, 923-934).
 
-    Come in ForamEcoQS, le percentuali dei gruppi ecologici sono calcolate sul totale di TUTTI i taxa con nome,
-    compresi quelli senza gruppo (NA), che quindi pesano come il gruppo I.
+    Come in ForamEcoQS, le percentuali dei gruppi ecologici sono calcolate sul totale di TUTTE le righe della
+    matrice: anche i taxa senza gruppo (NA) e i non determinati (ND) sono nel denominatore e pesano quindi come il
+    gruppo I. L'FSI invece usa solo i taxa assegnati a Sen/Str.
     """
     if named_total == 0:
         return 0.0

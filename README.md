@@ -1,7 +1,7 @@
 # foramqs: elaborazione dei campioni di foraminiferi bentonici
 
 Pipeline unica che sostituisce Power Query, ForamEcoQS e i passaggi manuali in PAST. Parte **solo** dai dati
-grezzi (le tabelle `MC_*` e la geochimica di `input_data/Campioni_P_2025_Data.xlsx`) e da poche tabelle tecniche non
+grezzi (le tabelle `MC_*` e la geochimica di `input_data/Campioni_P_2025_Data_Raw.xlsx`) e da poche tabelle tecniche non
 derivabili, e produce un `Results_<data>.xlsx` con gli stessi fogli di prima, più i grafici e i report di controllo.
 
 Principi:
@@ -24,7 +24,8 @@ copiati lì.
 
 | File | Uso |
 |---|---|
-| `input_data/Campioni_P_2025_Data.xlsx` | input della pipeline (percorso in `config/pipeline.toml`) |
+| `input_data/Campioni_P_2025_Data_Raw.xlsx` | **fonte primaria**: input della pipeline (percorso in `config/pipeline.toml`) |
+| `input_data/Campioni_P_2025_Data.xlsx` | vecchio workbook con Power Query: solo storico, migrazione dei tratti e test di parità |
 | `input_data/Campioni_P_2025_Results.xlsx` | vecchi risultati: `foramqs diff` e test di parità |
 | `input_data/Raw_ForamsEcoQs.xlsx` | vecchio input di ForamEcoQS: test di parità |
 
@@ -49,7 +50,7 @@ Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worm
 
 | File | Contenuto | Chi lo modifica |
 |---|---|---|
-| `input_data/Campioni_P_2025_Data.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
+| `input_data/Campioni_P_2025_Data_Raw.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
 | `reference/species_traits.csv` | Tratti per taxon: stile di vita, gruppo ecologico Foram-AMBI (1-5/NA), gruppo FSI (Sen/Str/ND), guscio (A/I/P) | ricercatori |
 | `config/name_corrections.csv` | Refusi da correggere nel testo (`trova;sostituisci;motivo;fonte`) | ricercatori |
 | `config/taxon_aliases.csv` | AphiaID imposto per un nome, con precedenza su WoRMS (`nome;aphia_id;motivo;fonte`) | ricercatori |
@@ -57,8 +58,8 @@ Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worm
 | `config/pipeline.toml` | Percorsi, soglie, volume delle repliche, classi EQS, gruppi di cluster, limiti SQA | ricercatori |
 | `config/worms_cache.json` | Risposte WoRMS salvate (generato) | nessuno |
 
-Non vengono più letti: la tabella `ALL`, `Elenco specie*`, `Densità faunistica`, `Shannon_H` e `ORDINE` della
-geochimica, `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
+Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `Elenco specie*`, `Densità faunistica`,
+`Shannon_H` e `ORDINE` della geochimica), `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
 
 ## Operazioni frequenti
 
@@ -68,8 +69,7 @@ geochimica, `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
   2. compilare a mano le conte nel nuovo foglio `MC_XX01` e la riga del campione in `Geochimica_campioni`;
   3. eseguire `uv run foramqs check`: finché mancano dati compaiono gli errori V26 (conte) e V27 (geochimica).
 
-  La prima volta il workbook perde le query Power Query del vecchio flusso, che restano nel backup e non servono
-  alla pipeline. Il campione si può anche aggiungere a mano: vedi [input_data/README.md](input_data/README.md).
+  Il campione si può anche aggiungere a mano: vedi [input_data/README.md](input_data/README.md).
 - **Correggere un refuso**: aggiungere una riga a `config/name_corrections.csv` e rilanciare `check`.
 - **Un nome non trovato o con suggerimento WoRMS** (codice T01): verificare su marinespecies.org e aggiungere
   `nome;AphiaID;motivo;fonte` a `config/taxon_aliases.csv`.
@@ -82,18 +82,25 @@ geochimica, `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
 | Codice | Severità | Significato |
 |---|---|---|
 | V01-V05 | errore | Tabelle mancanti, posizioni/conte/deformati/guscio non validi |
-| V06 | avviso | Specie senza N°INDIVIDUI e senza commento che lo spieghi |
 | V07-V08 | avviso | Caselle duplicate, repliche mancanti o non consecutive |
-| V09-V10 | avviso | Nomi con struttura anomala; non determinati senza guscio |
+| V09-V10 | avviso | Nomi con struttura anomala; non determinati senza guscio (scartati) |
 | V11 | avviso | Stesso taxon con gusci diversi nei campioni (taxa senza tratti) |
 | V12 | avviso | Nomi molto simili (possibili refusi) |
+| V13 | errore | Riga con N°INDIVIDUI o DEFORMATI ma senza SPECIE (verrebbe scartata) |
 | V20-V25 | errore/avviso | Geochimica: campioni, valori non numerici o censurati, granulometria ≠ 100%, righe copiate, colonne di config mancanti |
 | V26 | errore | Tabella di un campione senza righe compilate |
 | V27 | errore/avviso | Valore di geochimica mancante (errore se la colonna serve alla CCA) |
+| V28 | errore | Campione ripetuto in più righe della geochimica |
+| V29 | errore | Campione con righe compilate ma nessun foraminifero conteggiato |
+| V30 | errore | Campione in `[input.copied_replicas]` inesistente o con più di una replica |
 | T01-T04 | avviso/info | WoRMS: nome non risolto, alias applicato, sinonimo risolto, nomi uniti |
-| R01-R05 | errore/avviso | Tratti: valore non ammesso o conflitto, righe in contrasto, taxa senza tratti, guscio diverso |
-| C01-C02 | errore/avviso | Gruppi di cluster: campioni sconosciuti, gruppo che non è un ramo del dendrogramma |
-| I01-I02 | info | Giovanili sommati a `Genere spp.`; righe di individui morti non conteggiate |
+| T05 | avviso | Alias verso un AphiaID che per WoRMS è un sinonimo: il taxon resta separato da quello accettato |
+| T06 | avviso | Il nome corrisponde a più taxa in WoRMS (omonimi): scelto il record accettato |
+| R01-R04 | errore/avviso | Tratti: valore non ammesso o conflitto, righe in contrasto, taxa senza tratti |
+| R05 | info | Guscio nei fogli diverso dalla tabella dei tratti: vale sempre quello dei tratti |
+| C01 | errore/avviso | Gruppi di cluster: campioni sconosciuti o in più gruppi (errore), campioni senza gruppo (avviso) |
+| C02 | avviso | Gruppo che non è un ramo del dendrogramma (solo in `run`, serve il cluster) |
+| I01-I03 | info | Giovanili sommati a `Genere spp.`; righe senza N°INDIVIDUI (individui morti) non conteggiate; replica R1 copiata (`[input.copied_replicas]`) |
 
 ## Indici e metodi
 

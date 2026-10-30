@@ -62,11 +62,18 @@ def check_coverage(observations: pd.DataFrame, traits: pd.DataFrame) -> list[Iss
 
 
 def check_shell_against_traits(observations: pd.DataFrame, traits: pd.DataFrame) -> list[Issue]:
-    """R05: tipo di guscio registrato nei campioni diverso da quello della tabella dei tratti."""
+    """R05: tipo di guscio registrato nei campioni diverso da quello della tabella dei tratti, una nota per taxon.
+
+    Il guscio corretto è sempre quello della tabella dei tratti (decisione dei ricercatori): è l'unico usato nei
+    calcoli, quello scritto nei fogli vale solo per i non determinati. La nota serve a tracciare le differenze.
+    """
     data = observations[observations["guscio"] != ""].join(traits["guscio"].rename("guscio_tratti"), on="taxon_id")
     data = data[data["guscio_tratti"].notna() & (data["guscio"] != data["guscio_tratti"])]
-    return [
-        Issue("R05", WARNING, f"{r.nome_valido}: guscio '{r.guscio}' nel campione, '{r.guscio_tratti}' nella tabella dei tratti",
-              r.campione, r.riga_excel, r.testo_originale)
-        for r in data.itertuples()
-    ]
+    issues = []
+    for (name, shell), group in data.groupby(["nome_valido", "guscio_tratti"]):
+        raw = ", ".join(f"{k}×{v}" for k, v in group["guscio"].value_counts().items())
+        issues.append(Issue(
+            "R05", INFO, f"{name}: {len(group)} {'riga' if len(group) == 1 else 'righe'} con guscio {raw} nei fogli; usato '{shell}' della tabella dei tratti",
+            dettagli="; ".join(f"{c} riga {r}" for c, r in zip(group["campione"], group["riga_excel"])),
+        ))
+    return issues

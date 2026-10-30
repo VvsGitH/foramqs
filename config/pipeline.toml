@@ -2,7 +2,8 @@
 # (quella che contiene pyproject.toml).
 
 [paths]
-data_workbook = "input_data/Campioni_P_2025_Data.xlsx"
+# Fonte primaria: solo le Tabelle dei campioni e della geochimica, senza Power Query né fogli derivati.
+data_workbook = "input_data/Campioni_P_2025_Data_Raw.xlsx"
 species_traits = "reference/species_traits.csv"
 non_foram_terms = "config/non_foram_terms.csv"
 name_corrections = "config/name_corrections.csv"
@@ -15,8 +16,6 @@ output_dir = "output"
 sample_columns = ["REPLICA", "N°SLIDE", "CASELLA", "SPECIE (LONG FORMAT)", "TIPO GUSCIO", "N°INDIVIDUI", "DEFORMATI"]
 # Colonna di note scritta subito a destra della tabella del campione (fuori dalla Tabella Excel): viene letta anch'essa.
 sample_comment_column = "COMMENTI & DUBBI"
-# Una riga senza N°INDIVIDUI il cui commento contiene questo testo (minuscolo) è un individuo morto, non conteggiato.
-dead_comment_text = "mort"
 geochemistry_table = "Geochimica_campioni"
 geochemistry_sample_column = "Colonna1"
 # Colonne della geochimica che sono risultati di calcolo e quindi vengono ignorate (ora calcolate dalla pipeline).
@@ -28,6 +27,11 @@ grain_size_tolerance_pct = 1.0
 # Valori censurati nella geochimica: testo trovato → valore numerico usato (regola storica di Power Query).
 [input.censored_values]
 "> 200" = 201
+
+# Campioni con una sola replica registrata (R1) da trattare come N repliche identiche: R1 viene copiata come R2..RN,
+# quindi le conte entrano N volte negli indici (decisione dei ricercatori, 2026-10-30). Campione → numero di repliche.
+[input.copied_replicas]
+MC_FO02 = 3
 
 [cleaning]
 # I giovanili ("Genere Juvenile") confluiscono in "Genere spp." (decisione dei ricercatori, 2026-10-30).
@@ -55,6 +59,8 @@ fsi_groups = ["Sen", "Str", "ND"]
 
 # Fonti storiche usate una sola volta da `foramqs migrate-traits` per creare reference/species_traits.csv
 [migration]
+# Il vecchio workbook (con Power Query e le tabelle tecniche) serve solo alla migrazione dei tratti, già eseguita.
+workbook = "input_data/Campioni_P_2025_Data.xlsx"
 traits_table = "specie_stilevita"
 foram_ambi_list = "../lists_for_feqs/Lista_Foram_AMBI.csv"
 fsi_list = "../lists_for_feqs/Lista_FSI.csv"
@@ -76,7 +82,7 @@ genera_threshold = 0.03            # Tabella_comunità_3%
 # Come applicare le soglie:
 #   "cella"  = un valore resta solo dove quella specie supera la soglia in quel campione (metodo Power Query storico);
 #   "specie" = si tengono tutti i valori delle specie che superano la soglia in almeno un campione.
-threshold_mode = "cella"
+threshold_mode = "specie"
 # Indice esterno (non calcolato dalla pipeline) presente nella geochimica; il nome della colonna è anche l'etichetta nei grafici.
 external_index_column = "M-AMBI_ 2022"
 # Colonna del carbonio organico totale, usata nella tabella Specie&TOC.
@@ -97,10 +103,11 @@ method = "average"     # UPGMA
 metric = "braycurtis"
 # Gruppi di campioni definiti dai ricercatori leggendo il dendrogramma (dato tecnico, non calcolato).
 # La validazione segnala i gruppi che non corrispondono a un ramo del dendrogramma calcolato.
+# Dal 2026-10-30 (decisione 2.5): taglio del dendrogramma in 3 rami.
 [cluster.groups]
 G1 = ["MC_FL01", "MC_FO02", "MC_FO01", "MC_VI01", "MC_ML01", "MC_FL02", "MC_ML02", "MC_VI02"]
-G2 = ["MC_PN01", "MC_PN02"]
-G3 = ["MC_PP01", "MC_PP02", "MC_CB02", "MC_CE01", "MC_CB01", "MC_SV01", "MC_CE02", "MC_SV02"]
+G2 = ["MC_CB01", "MC_CE01"]
+G3 = ["MC_CB02", "MC_PP01", "MC_PP02", "MC_PN01", "MC_PN02", "MC_SV01", "MC_CE02", "MC_SV02"]
 
 [sqa]
 # Standard di qualità ambientale dei sedimenti (mg/kg s.s.) per lo Specchietto_limiti HMe.

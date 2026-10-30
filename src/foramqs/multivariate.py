@@ -19,7 +19,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage, to_tree
 from scipy.spatial.distance import pdist
 from skbio.stats.ordination import OrdinationResults, cca
 
-from foramqs.validate import ERROR, WARNING, Issue
+from foramqs.validate import WARNING, Issue
 
 
 @dataclass(frozen=True)
@@ -51,25 +51,15 @@ def branches(clustering: SampleClustering) -> list[frozenset[str]]:
     return found
 
 
-def check_groups(clustering: SampleClustering, groups: dict[str, list[str]]) -> list[Issue]:
-    """C01-C02: gruppi con campioni sconosciuti o ripetuti; gruppi che non sono un ramo del dendrogramma."""
-    issues = []
-    known = set(clustering.samples)
-    assigned = [s for members in groups.values() for s in members]
-    for sample in sorted(set(assigned) - known):
-        issues.append(Issue("C01", ERROR, f"Campione '{sample}' in [cluster.groups] ma non nei dati", sample))
-    for sample in sorted({s for s in assigned if assigned.count(s) > 1}):
-        issues.append(Issue("C01", ERROR, f"Campione '{sample}' assegnato a più gruppi in [cluster.groups]", sample))
-    for sample in sorted(known - set(assigned)):
-        issues.append(Issue("C01", WARNING, f"Campione '{sample}' non assegnato ad alcun gruppo di cluster", sample))
+def check_group_branches(clustering: SampleClustering, groups: dict[str, list[str]]) -> list[Issue]:
+    """C02: gruppi che non sono un ramo del dendrogramma (C01, sui campioni dei gruppi, è in validate.py)."""
     tree_branches = set(branches(clustering))
-    for name, members in groups.items():
-        if len(members) > 1 and frozenset(members) not in tree_branches:
-            issues.append(Issue(
-                "C02", WARNING, f"Il gruppo {name} non corrisponde a un ramo del dendrogramma UPGMA/Bray-Curtis",
-                dettagli=", ".join(members),
-            ))
-    return issues
+    return [
+        Issue("C02", WARNING, f"Il gruppo {name} non corrisponde a un ramo del dendrogramma UPGMA/Bray-Curtis",
+              dettagli=", ".join(members))
+        for name, members in groups.items()
+        if len(members) > 1 and frozenset(members) not in tree_branches
+    ]
 
 
 def canonical_correspondence(species: pd.DataFrame, environment: pd.DataFrame) -> OrdinationResults:

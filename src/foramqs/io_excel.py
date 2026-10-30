@@ -25,8 +25,8 @@ def read_tables(path: Path, adjacent_columns: tuple[str, ...] = ()) -> dict[str,
 
     `adjacent_columns`: intestazioni di colonne scritte subito a destra di una tabella ma fuori dal suo intervallo
     (es. note dei ricercatori); se presenti vengono lette insieme alla tabella.
-    Le righe completamente vuote vengono scartate; i valori restano quelli grezzi di Excel (nessuna conversione),
-    così la validazione può segnalare tipi sbagliati.
+    Le righe completamente vuote vengono scartate e le celle con soli spazi diventano vuote (None); gli altri valori
+    restano quelli grezzi di Excel (nessuna conversione), così la validazione può segnalare tipi sbagliati.
     """
     wb = openpyxl.load_workbook(path, data_only=True)
     tables: dict[str, ExcelTable] = {}
@@ -45,7 +45,7 @@ def read_tables(path: Path, adjacent_columns: tuple[str, ...] = ()) -> dict[str,
             for excel_row, values in enumerate(rows, start=min_row + 1):
                 if all(_is_blank(v) for v in values[: len(columns)]):
                     continue
-                records.append([*values, excel_row])
+                records.append([None if _is_blank(v) else v for v in values] + [excel_row])
             data = pd.DataFrame(records, columns=[*columns, *extra, EXCEL_ROW], dtype=object)
             tables[table.name] = ExcelTable(name=table.name, sheet=ws.title, data=data, columns=columns)
     return tables

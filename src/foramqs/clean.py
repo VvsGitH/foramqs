@@ -8,7 +8,8 @@ Regole (nell'ordine in cui sono applicate):
      spazi multipli;
   2. correzioni testuali da config/name_corrections.csv (refusi);
   3. scarto delle righe vuote e dei termini in config/non_foram_terms.csv;
-  4. individui non determinati ("Not determined", "Specie anomala") → "ND <tipo guscio>";
+  4. individui non determinati ("Not determined", "Specie anomala") → "ND <tipo guscio>"; senza tipo di guscio
+     vengono scartati (decisione dei ricercatori, come nel vecchio flusso Power Query);
   5. separazione di genere, epiteto, autore e qualificatore: l'autore attaccato all'epiteto viene staccato,
      "sp."/"spp." diventano "spp.", i giovanili confluiscono in "Genere spp." (se previsto dalla config).
 """
@@ -98,9 +99,9 @@ def parse_name(
     if text.casefold() in non_foram_terms:
         return ParsedName(original, text, rules=(*rules, "scartato:non_foraminifero"))
     if text.casefold() in not_determined_labels:
-        taxon = f"{ND} {shell_type}" if shell_type else ND
-        rules.append("non_determinato" if shell_type else "non_determinato_senza_guscio")
-        return ParsedName(original, text, taxon=taxon, qualifier=ND, rules=tuple(rules))
+        if not shell_type:
+            return ParsedName(original, text, rules=(*rules, "scartato:non_determinato_senza_guscio"))
+        return ParsedName(original, text, taxon=f"{ND} {shell_type}", qualifier=ND, rules=(*rules, "non_determinato"))
 
     genus, *rest = text.split(" ")
     if not _GENUS.match(genus):
@@ -211,6 +212,23 @@ def build_observations(
     return pd.DataFrame(records, columns=OBSERVATION_COLUMNS), cleaned_rows
 
 
+def copy_single_replica(observations: pd.DataFrame, copies: dict[str, int]) -> pd.DataFrame:
+    """Per i campioni in `copies` che hanno solo la replica 1, aggiunge le repliche 2..N identiche alla prima.
+
+    Le righe aggiunte hanno `replica_copiata` = True e la stessa `riga_excel` dell'originale. I campioni con più di
+    una replica non vengono toccati (la validazione li segnala con V30).
+    """
+    observations = observations.assign(replica_copiata=False)
+    replicas = observations.groupby("campione")["replica"].agg(lambda s: set(s.dropna()))
+    added = [
+        observations[observations["campione"] == sample].assign(replica=k, replica_copiata=True)
+        for sample, n in copies.items()
+        if replicas.get(sample) == {1}
+        for k in range(2, n + 1)
+    ]
+    return pd.concat([observations, *added], ignore_index=True)
+
+
 def cleaning_log(cleaned_rows: list[CleanedRow]) -> pd.DataFrame:
     """Una riga per testo originale distinto: in che cosa è stato trasformato, con quali regole, dove compare."""
     rows = {}
@@ -230,7 +248,8 @@ def cleaning_log(cleaned_rows: list[CleanedRow]) -> pd.DataFrame:
         entry["campioni"].add(r.sample)
     for entry in rows.values():
         entry["campioni"] = ", ".join(sorted(entry["campioni"]))
-    log = pd.DataFrame(rows.values())
+    columns = ["testo_originale", "testo_normalizzato", "taxon", "regole", "n_righe", "individui", "campioni"]
+    log = pd.DataFrame(list(rows.values()), columns=columns)
     return log.sort_values(["taxon", "testo_originale"]).reset_index(drop=True)
 
 

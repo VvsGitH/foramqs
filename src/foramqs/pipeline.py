@@ -12,7 +12,7 @@ from foramqs import plots
 from foramqs import tables as tb
 from foramqs import traits as tr
 from foramqs import validate as v
-from foramqs.clean import build_observations, clean_taxon_name, cleaning_log
+from foramqs.clean import build_observations, clean_taxon_name, cleaning_log, copy_single_replica
 from foramqs.config import Config, read_config_csv
 from foramqs.indices.diversity import diversity_table
 from foramqs.indices.foramecoqs import foramecoqs_table
@@ -70,15 +70,22 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
         "guscio": cfg.cleaning["valid_shell_types"],
     }
 
+    # Le repliche copiate servono ai calcoli e al controllo del numero di repliche (V08); gli altri controlli
+    # guardano le righe del workbook, che non vanno segnalate più volte.
+    copies = cfg.input.get("copied_replicas", {})
+    with_copies = copy_single_replica(observations, copies)
     issues = [
         *v.check_sample_tables(inputs.samples),
         *v.check_row_values(inputs.samples, cfg),
-        *v.check_missing_counts(observations, cfg.input["dead_comment_text"]),
-        *v.check_positions(observations),
+        *v.check_missing_counts(observations),
+        *v.check_copied_replicas(observations, copies),
+        *v.check_positions(with_copies),
+        *v.check_counted_individuals(inputs.samples, observations),
         *v.check_parsed_names(cleaned_rows),
         *v.check_shell_consistency(observations[~observations["taxon_id"].isin(traits_table.index)]),
         *v.check_similar_names(observations, cfg.cleaning["similar_names_threshold"]),
         *v.check_juveniles(cleaned_rows),
+        *v.check_cluster_groups(cfg.raw["cluster"]["groups"], set(inputs.samples)),
         *v.check_geochemistry_columns(geochemistry, cfg),
         *v.check_geochemistry(inputs.geochemistry, geochemistry, set(inputs.samples), cfg),
         *resolution_issues(resolutions[resolutions["taxon"].isin(observations["taxon"])]),
@@ -87,7 +94,7 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
         *tr.check_shell_against_traits(observations, traits_table),
     ]
     return CheckResult(
-        observations=observations,
+        observations=with_copies,
         cleaning_log=cleaning_log(cleaned_rows),
         name_review=_name_review(resolutions, observations),
         traits=traits_table,
@@ -224,7 +231,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
 
     issues = v.issues_frame([
         *[v.Issue(**row) for row in checked.issues.to_dict("records")],
-        *mv.check_groups(clustering, groups),
+        *mv.check_group_branches(clustering, groups),
     ])
     sheets = {name: frame.rename_axis(frame.index.name or "Campione") for name, frame in sheets.items()}
     return RunResult(checked=checked, sheets=sheets, figures=figures, issues=issues)

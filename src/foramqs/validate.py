@@ -51,15 +51,21 @@ def check_sample_tables(samples: dict[str, ExcelTable]) -> list[Issue]:
 
 
 def check_row_values(samples: dict[str, ExcelTable], cfg: Config) -> list[Issue]:
-    """V02-V05: posizione (replica/slide/casella), conteggi, deformati e tipo di guscio di ogni riga con una specie."""
+    """V02-V05: posizione (replica/slide/casella), conteggi, deformati e tipo di guscio di ogni riga con una specie.
+
+    V13: riga senza specie ma con individui o deformati: la pulizia la scarterebbe, perdendo il conteggio.
+    """
     valid_shells = set(cfg.cleaning["valid_shell_types"])
     issues = []
     for sample, table in samples.items():
         for row in table.data.to_dict("records"):
             text = row["SPECIE (LONG FORMAT)"]
-            if text is None or not str(text).strip():
-                continue
             where = dict(campione=sample, riga_excel=row[EXCEL_ROW])
+            if text is None or not str(text).strip():
+                filled = {c: row[c] for c in ("N°INDIVIDUI", "DEFORMATI") if not _is_zero_or_empty(row[c])}
+                if filled:
+                    issues.append(Issue("V13", ERROR, "Conteggio senza SPECIE: la riga verrebbe scartata", dettagli=repr(filled), **where))
+                continue
             for col in ("REPLICA", "N°SLIDE", "CASELLA"):
                 if not _is_positive_int(row[col]):
                     issues.append(Issue("V02", ERROR, f"{col} mancante o non intero positivo", dettagli=repr(row[col]), **where))
@@ -76,25 +82,18 @@ def check_row_values(samples: dict[str, ExcelTable], cfg: Config) -> list[Issue]
     return issues
 
 
-def check_missing_counts(observations: pd.DataFrame, dead_comment_text: str) -> list[Issue]:
-    """V06 / I02: riga con una specie ma senza N°INDIVIDUI.
+def check_missing_counts(observations: pd.DataFrame) -> list[Issue]:
+    """I02: righe con una specie ma senza N°INDIVIDUI, una nota per campione.
 
-    Se il commento accanto alla riga indica un individuo morto è una scelta di registrazione (I02, info);
-    altrimenti è un possibile conteggio dimenticato (V06, avviso). In entrambi i casi la riga vale 0.
+    Per convenzione del laboratorio sono individui morti (o frammenti), registrati ma non conteggiati: valgono 0.
+    La nota elenca le righe con il commento accanto, se c'è.
     """
-    missing = observations[observations["conteggio_mancante"]]
-    is_dead = missing["commento"].str.casefold().str.contains(dead_comment_text, regex=False)
-    issues = [
-        Issue("V06", WARNING, "Specie senza N°INDIVIDUI e senza commento che lo spieghi: conteggiata come 0",
-              r.campione, r.riga_excel, r.testo_originale)
-        for r in missing[~is_dead].itertuples()
+    missing = observations.loc[observations["conteggio_mancante"].astype(bool)]
+    return [
+        Issue("I02", INFO, f"{len(group)} {'riga' if len(group) == 1 else 'righe'} senza N°INDIVIDUI (individui morti), non conteggiate", sample,
+              dettagli="; ".join(f"riga {r}: {c}" if c else f"riga {r}" for r, c in zip(group["riga_excel"], group["commento"])))
+        for sample, group in missing.groupby("campione")
     ]
-    for sample, group in missing[is_dead].groupby("campione"):
-        issues.append(Issue(
-            "I02", INFO, f"{len(group)} righe di individui morti (commento '{dead_comment_text}…'), non conteggiate", sample,
-            dettagli=", ".join(f"riga {r}" for r in group["riga_excel"]),
-        ))
-    return issues
 
 
 def check_positions(observations: pd.DataFrame) -> list[Issue]:
@@ -108,6 +107,8 @@ def check_positions(observations: pd.DataFrame) -> list[Issue]:
             int(group["riga_excel"].min()), "; ".join(f"riga {r}: {t}" for r, t in zip(group["riga_excel"], group["testo_originale"])),
         ))
     replicas = observations.groupby("campione")["replica"].agg(lambda s: sorted(set(s.dropna().astype(int))))
+    if replicas.empty:
+        return issues
     usual = replicas.map(len).mode().iloc[0]
     for sample, reps in replicas.items():
         if reps != list(range(1, len(reps) + 1)):
@@ -117,13 +118,41 @@ def check_positions(observations: pd.DataFrame) -> list[Issue]:
     return issues
 
 
+def check_counted_individuals(samples: dict[str, ExcelTable], observations: pd.DataFrame) -> list[Issue]:
+    """V29: campione con righe compilate ma nessun foraminifero conteggiato (conte vuote o a 0, solo righe scartate).
+
+    Le abbondanze relative di un campione così non sono definite: va completato o tolto dal workbook.
+    """
+    totals = observations.groupby("campione")["individui"].sum()
+    return [
+        Issue("V29", ERROR, "Nessun foraminifero conteggiato nel campione: completare le conte o togliere il campione", name)
+        for name, table in samples.items()
+        if not table.data.empty and totals.get(name, 0) == 0
+    ]
+
+
+def check_copied_replicas(observations: pd.DataFrame, copies: dict[str, int]) -> list[Issue]:
+    """V30 / I03: campioni di [input.copied_replicas]. La copia vale solo per campioni con la sola replica 1."""
+    replicas = observations.groupby("campione")["replica"].agg(lambda s: sorted(set(s.dropna().astype(int))))
+    issues = []
+    for sample, n in copies.items():
+        if sample not in replicas:
+            issues.append(Issue("V30", ERROR, "Campione in [input.copied_replicas] senza osservazioni nei dati", sample))
+        elif replicas[sample] != [1]:
+            issues.append(Issue("V30", ERROR, "[input.copied_replicas] vale solo per campioni con la sola replica 1: "
+                                f"togliere il campione dalla config", sample, dettagli=f"repliche: {replicas[sample]}"))
+        else:
+            issues.append(Issue("I03", INFO, f"Una sola replica registrata: R1 copiata come R2-R{n} ([input.copied_replicas])", sample))
+    return issues
+
+
 def check_parsed_names(cleaned_rows: list[CleanedRow]) -> list[Issue]:
     """V09-V10: nomi con struttura anomala e non determinati senza tipo di guscio."""
     messages = {
         "genere_anomalo": ("V09", "Il genere non è una parola con iniziale maiuscola"),
         "epiteto_anomalo": ("V09", "L'epiteto non è una parola minuscola"),
         "solo_genere_senza_qualificatore": ("V09", "Solo il genere, senza 'spp.': trattato come 'Genere spp.'"),
-        "non_determinato_senza_guscio": ("V10", "Individuo non determinato senza TIPO GUSCIO: conteggiato come 'ND'"),
+        "scartato:non_determinato_senza_guscio": ("V10", "Individuo non determinato senza TIPO GUSCIO: scartato, non conteggiato"),
     }
     return [
         Issue(code, WARNING, message, r.sample, r.excel_row, r.parsed.original)
@@ -178,6 +207,22 @@ def check_juveniles(cleaned_rows: list[CleanedRow]) -> list[Issue]:
     return [Issue("I01", INFO, f"Giovanili sommati a '{SPP}' del genere", dettagli=", ".join(merged))]
 
 
+def check_cluster_groups(groups: dict[str, list[str]], samples: set[str]) -> list[Issue]:
+    """C01: gruppi di [cluster.groups] con campioni sconosciuti o ripetuti; campioni senza gruppo.
+
+    Il confronto dei gruppi con il dendrogramma (C02) richiede il cluster ed è in multivariate.py.
+    """
+    issues = []
+    assigned = [s for members in groups.values() for s in members]
+    for sample in sorted(set(assigned) - samples):
+        issues.append(Issue("C01", ERROR, f"Campione '{sample}' in [cluster.groups] ma non nei dati", sample))
+    for sample in sorted({s for s in assigned if assigned.count(s) > 1}):
+        issues.append(Issue("C01", ERROR, f"Campione '{sample}' assegnato a più gruppi in [cluster.groups]", sample))
+    for sample in sorted(samples - set(assigned)):
+        issues.append(Issue("C01", WARNING, f"Campione '{sample}' non assegnato ad alcun gruppo di cluster", sample))
+    return issues
+
+
 # --- Geochimica ----------------------------------------------------------------------------------------------------
 
 def configured_geochemistry_columns(cfg: Config) -> dict[str, list[str]]:
@@ -205,27 +250,32 @@ def check_geochemistry_columns(values: pd.DataFrame, cfg: Config) -> list[Issue]
 
 
 def check_geochemistry(geochemistry: ExcelTable, values: pd.DataFrame, sample_names: set[str], cfg: Config) -> list[Issue]:
-    """V20-V24, V27: campioni coerenti con le conte, valori mancanti, non numerici o censurati, granulometria,
-    righe copiate."""
+    """V20-V24, V27-V28: campioni coerenti con le conte, valori mancanti, non numerici o censurati, granulometria,
+    righe copiate, campioni ripetuti.
+
+    `values` ha le stesse righe, nello stesso ordine, di `geochemistry.data`: il confronto è per posizione, così un
+    campione ripetuto non rende ambiguo il valore da controllare.
+    """
     issues = []
     geo_samples = set(values.index)
     for s in sorted(sample_names - geo_samples):
         issues.append(Issue("V20", ERROR, "Campione con conte ma senza geochimica", s))
     for s in sorted(geo_samples - sample_names):
         issues.append(Issue("V20", ERROR, "Campione in geochimica ma senza tabella di conte", s))
+    for s in sorted(set(values.index[values.index.duplicated()])):
+        issues.append(Issue("V28", ERROR, f"Campione presente in più righe della geochimica ({(values.index == s).sum()} righe)", s))
 
-    raw = geochemistry.data.set_index(cfg.input["geochemistry_sample_column"])
     censored = cfg.input.get("censored_values", {})
     needed = set(cfg.raw["tables"]["past_geochemistry_columns"])  # usate dalla CCA: non possono mancare
     for col in values.columns:
-        for sample, raw_value in raw[col].items():
-            if raw_value is None or (isinstance(raw_value, str) and not raw_value.strip()):
+        for sample, raw_value, value in zip(values.index, geochemistry.data[col], values[col]):
+            if raw_value is None:
                 severity, effect = (ERROR, "serve alla CCA") if col in needed else (WARNING, "resterà vuoto nelle tabelle")
-                issues.append(Issue("V27", severity, f"{col}: valore mancante ({effect})", str(sample)))
+                issues.append(Issue("V27", severity, f"{col}: valore mancante ({effect})", sample))
             elif isinstance(raw_value, str) and raw_value.strip() in censored:
-                issues.append(Issue("V21", WARNING, f"{col}: valore censurato '{raw_value}' sostituito con {censored[raw_value.strip()]}", str(sample)))
-            elif pd.isna(values.at[str(sample).strip(), col]) and raw_value is not None:
-                issues.append(Issue("V22", ERROR, f"{col}: valore non numerico", str(sample), dettagli=repr(raw_value)))
+                issues.append(Issue("V21", WARNING, f"{col}: valore censurato '{raw_value}' sostituito con {censored[raw_value.strip()]}", sample))
+            elif pd.isna(value):
+                issues.append(Issue("V22", ERROR, f"{col}: valore non numerico", sample, dettagli=repr(raw_value)))
 
     grain = [c for c in cfg.input["grain_size_columns"] if c in values.columns]  # le mancanti sono già errori V25
     tolerance = cfg.input["grain_size_tolerance_pct"]
@@ -234,11 +284,15 @@ def check_geochemistry(geochemistry: ExcelTable, values: pd.DataFrame, sample_na
         if abs(total - 100) > tolerance:
             issues.append(Issue("V23", WARNING, f"Granulometria {' + '.join(grain)} = {total:.2f}% (atteso 100%)", sample))
 
-    for a, b in combinations(values.index, 2):
-        same = [c for c in values.columns if values.at[a, c] == values.at[b, c] and values.at[a, c] != 0]
+    for (a, row_a), (b, row_b) in combinations(values.iterrows(), 2):
+        same = [c for c in values.columns if row_a[c] == row_b[c] and row_a[c] != 0]
         if len(same) >= len(values.columns) / 2:
             issues.append(Issue("V24", WARNING, f"{a} e {b} hanno {len(same)} valori identici su {len(values.columns)}: possibile copia-incolla", a, dettagli=", ".join(same)))
     return issues
+
+
+def _is_zero_or_empty(value: object) -> bool:
+    return value is None or (_is_non_negative_int(value) and float(value) == 0)
 
 
 def _is_positive_int(value: object) -> bool:

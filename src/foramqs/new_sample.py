@@ -38,7 +38,10 @@ _POWER_QUERY_PARTS = ("customXml/", "xl/connections.xml", "xl/queryTables/")
 
 
 class NewSampleError(Exception):
-    """Il campione non può essere aggiunto; il messaggio spiega perché. Nessun file è stato modificato."""
+    """Il campione non può essere aggiunto; il messaggio spiega perché. Nessun file è stato modificato.
+
+    Anche un errore durante il salvataggio non lascia modifiche a metà: il workbook viene ripristinato dal backup.
+    """
 
 
 @dataclass(frozen=True)
@@ -73,14 +76,19 @@ def add_sample(cfg: Config, config_path: Path, name: str, group: str) -> AddedSa
     removed_power_query = _has_power_query(workbook_path)
     _add_sample_sheet(wb, name, samples)
     row = _add_geochemistry_row(geo_sheet, geo_table, name)
-    wb.save(workbook_path)
-
     group_created = group not in groups
     if group_created:
         groups[group] = [name]
     else:
         groups[group].append(name)
-    config_path.write_text(tomlkit.dumps(config_doc), encoding="utf-8")
+
+    # Workbook e config cambiano insieme: se uno dei due salvataggi fallisce, il workbook torna quello del backup.
+    try:
+        wb.save(workbook_path)
+        config_path.write_text(tomlkit.dumps(config_doc), encoding="utf-8")
+    except Exception:
+        shutil.copy2(backup, workbook_path)
+        raise
     return AddedSample(name, backup, row, group, group_created, removed_power_query)
 
 
