@@ -30,6 +30,9 @@ copiati lì.
 
 Se i due file storici mancano, i test in `tests/legacy` vengono saltati.
 
+Il formato atteso (Tabelle Excel dei campioni, colonne obbligatorie, geochimica) è descritto in
+[input_data/README.md](input_data/README.md).
+
 ## Comandi
 
 | Comando | Cosa fa |
@@ -37,6 +40,7 @@ Se i due file storici mancano, i test in `tests/legacy` vengono saltati.
 | `uv run foramqs check` | Legge, valida e pulisce gli input e risolve i nomi in WoRMS. Scrive `output/check_<data>.xlsx` senza calcolare indici. |
 | `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` e `output/figures_<data>/`. Se ci sono errori negli input si ferma e li elenca. |
 | `uv run foramqs diff input_data/Campioni_P_2025_Results.xlsx` | Confronta gli indici con un vecchio Results ed elenca, per campione, i cambiamenti che spiegano le differenze. |
+| `uv run foramqs add-sample MC_XX01 --gruppo G1` | Aggiunge un campione vuoto da compilare a mano: foglio con la Tabella delle conte, riga in `Geochimica_campioni`, campione nel gruppo di cluster indicato. Fa prima un backup del workbook in `input_data/backup/`. |
 | `uv run foramqs migrate-traits` | Crea `reference/species_traits.csv` dalle fonti storiche. **Già eseguito**: da qui in poi la tabella dei tratti si modifica a mano. |
 
 Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worms_cache.json`).
@@ -58,9 +62,14 @@ geochimica, `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
 
 ## Operazioni frequenti
 
-- **Aggiungere un campione**: nel workbook dei dati, creare una Tabella Excel con le 7 colonne standard
-  (`REPLICA`, `N°SLIDE`, `CASELLA`, `SPECIE (LONG FORMAT)`, `TIPO GUSCIO`, `N°INDIVIDUI`, `DEFORMATI`) e chiamarla
-  come il campione (es. `MC_XX01`). Aggiungere la riga in `Geochimica_campioni`. Non serve toccare il codice.
+- **Aggiungere un campione**:
+  1. con il workbook chiuso in Excel, eseguire `uv run foramqs add-sample MC_XX01 --gruppo G1`. Il gruppo è quello
+     di `[cluster.groups]`; se non esiste viene creato;
+  2. compilare a mano le conte nel nuovo foglio `MC_XX01` e la riga del campione in `Geochimica_campioni`;
+  3. eseguire `uv run foramqs check`: finché mancano dati compaiono gli errori V26 (conte) e V27 (geochimica).
+
+  La prima volta il workbook perde le query Power Query del vecchio flusso, che restano nel backup e non servono
+  alla pipeline. Il campione si può anche aggiungere a mano: vedi [input_data/README.md](input_data/README.md).
 - **Correggere un refuso**: aggiungere una riga a `config/name_corrections.csv` e rilanciare `check`.
 - **Un nome non trovato o con suggerimento WoRMS** (codice T01): verificare su marinespecies.org e aggiungere
   `nome;AphiaID;motivo;fonte` a `config/taxon_aliases.csv`.
@@ -78,7 +87,9 @@ geochimica, `Raw_ForamsEcoQs.xlsx` e `lists_for_feqs/`.
 | V09-V10 | avviso | Nomi con struttura anomala; non determinati senza guscio |
 | V11 | avviso | Stesso taxon con gusci diversi nei campioni (taxa senza tratti) |
 | V12 | avviso | Nomi molto simili (possibili refusi) |
-| V20-V24 | errore/avviso | Geochimica: campioni, valori non numerici o censurati, granulometria ≠ 100%, righe copiate |
+| V20-V25 | errore/avviso | Geochimica: campioni, valori non numerici o censurati, granulometria ≠ 100%, righe copiate, colonne di config mancanti |
+| V26 | errore | Tabella di un campione senza righe compilate |
+| V27 | errore/avviso | Valore di geochimica mancante (errore se la colonna serve alla CCA) |
 | T01-T04 | avviso/info | WoRMS: nome non risolto, alias applicato, sinonimo risolto, nomi uniti |
 | R01-R05 | errore/avviso | Tratti: valore non ammesso o conflitto, righe in contrasto, taxa senza tratti, guscio diverso |
 | C01-C02 | errore/avviso | Gruppi di cluster: campioni sconosciuti, gruppo che non è un ramo del dendrogramma |
@@ -106,6 +117,7 @@ src/foramqs/
   indices/                            ForamEcoQS e PAST
   multivariate.py, plots.py           cluster, CCA, grafici
   reconcile.py                        confronto con un vecchio Results
+  new_sample.py                       aggiunta di un campione vuoto (comando add-sample)
   pipeline.py, cli.py, report.py      collegamento dei passi, comandi, scrittura Excel
 ```
 

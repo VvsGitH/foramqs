@@ -77,8 +77,10 @@ genera_threshold = 0.03            # Tabella_comunità_3%
 #   "cella"  = un valore resta solo dove quella specie supera la soglia in quel campione (metodo Power Query storico);
 #   "specie" = si tengono tutti i valori delle specie che superano la soglia in almeno un campione.
 threshold_mode = "cella"
-# Indice esterno (non calcolato dalla pipeline) presente nella geochimica.
+# Indice esterno (non calcolato dalla pipeline) presente nella geochimica; il nome della colonna è anche l'etichetta nei grafici.
 external_index_column = "M-AMBI_ 2022"
+# Colonna del carbonio organico totale, usata nella tabella Specie&TOC.
+toc_column = "TOC (%)"
 # Variabili ambientali accanto alle specie nella tabella per PAST (Abbondanza_relativa_PAST_5%).
 past_geochemistry_columns = ["DEPTH (m)", "GRAVEL", "SAND", "SILT", "TOC (%)", "As", "Cr", "Hg", "Ni"]
 # Colonne della geochimica escluse da Tabella_completa.

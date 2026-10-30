@@ -10,6 +10,7 @@ import typer
 from foramqs import pipeline, reconcile
 from foramqs.config import DEFAULT_CONFIG, load_config
 from foramqs.migrate import migrate_traits
+from foramqs.new_sample import NewSampleError, add_sample
 from foramqs.report import issue_summary, write_workbook
 from foramqs.taxonomy import WormsClient
 
@@ -116,3 +117,28 @@ def diff(
         "Cause_note": reconcile.KNOWN_CAUSES,
     })
     typer.echo(f"Confronto: {out}")
+
+
+@app.command("add-sample")
+def add_sample_command(
+    nome: str = typer.Argument(..., help="Nome del nuovo campione, es. MC_XX01"),
+    gruppo: str = typer.Option(..., "--gruppo", help="Gruppo di cluster a cui assegnarlo (es. G1; se non esiste viene creato)"),
+    config: Path = typer.Option(DEFAULT_CONFIG, help="File di configurazione"),
+) -> None:
+    """Aggiunge un campione vuoto: Tabella delle conte, riga di geochimica e gruppo di cluster, da compilare a mano."""
+    cfg = load_config(config)
+    try:
+        added = add_sample(cfg, config, nome, gruppo)
+    except NewSampleError as error:
+        typer.echo(f"Campione non aggiunto: {error}")
+        raise typer.Exit(code=1)
+    workbook = cfg.path("data_workbook").name
+    typer.echo(f"Backup del workbook: {added.backup}")
+    if added.removed_power_query:
+        typer.echo("Attenzione: le query Power Query e le connessioni dati del workbook sono state rimosse "
+                   "(non servono alla pipeline; restano nel backup).")
+    typer.echo(f"1. {workbook}: nuovo foglio '{added.name}' con la Tabella '{added.name}' vuota")
+    typer.echo(f"2. {workbook}: riga {added.geochemistry_row} della tabella {cfg.input['geochemistry_table']} con il solo nome")
+    action = "creato" if added.group_created else "aggiornato"
+    typer.echo(f"3. {config.name}: gruppo di cluster {added.group} {action}")
+    typer.echo("Compilare conte e geochimica, poi `uv run foramqs check` (V26/V27 indicano cosa manca).")

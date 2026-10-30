@@ -17,6 +17,7 @@ dependencies = [
     "requests>=2.34.2",
     "scikit-bio>=0.7.4",
     "scipy>=1.18.1",
+    "tomlkit>=0.15.2",
     "typer>=0.27.3",
 ]
 

@@ -40,10 +40,14 @@ def issues_frame(issues: list[Issue]) -> pd.DataFrame:
 # --- Tabelle dei campioni ------------------------------------------------------------------------------------------
 
 def check_sample_tables(samples: dict[str, ExcelTable]) -> list[Issue]:
-    """V01: deve esistere almeno una tabella campione."""
+    """V01: deve esistere almeno una tabella campione. V26: tabelle campione ancora senza righe compilate."""
     if not samples:
         return [Issue("V01", ERROR, "Nessuna tabella con le colonne di un campione trovata nel workbook dei dati")]
-    return []
+    return [
+        Issue("V26", ERROR, f"La Tabella del campione è vuota: compilare le conte nel foglio '{t.sheet}'", name)
+        for name, t in samples.items()
+        if t.data.empty
+    ]
 
 
 def check_row_values(samples: dict[str, ExcelTable], cfg: Config) -> list[Issue]:
@@ -176,8 +180,33 @@ def check_juveniles(cleaned_rows: list[CleanedRow]) -> list[Issue]:
 
 # --- Geochimica ----------------------------------------------------------------------------------------------------
 
+def configured_geochemistry_columns(cfg: Config) -> dict[str, list[str]]:
+    """Le colonne della geochimica nominate in config, raggruppate per voce di config che le usa."""
+    t = cfg.raw["tables"]
+    return {
+        "input.grain_size_columns": cfg.input["grain_size_columns"],
+        "tables.past_geochemistry_columns": t["past_geochemistry_columns"],
+        "tables.complete_table_excluded_columns": t["complete_table_excluded_columns"],
+        "tables.external_index_column": [t["external_index_column"]],
+        "tables.toc_column": [t["toc_column"]],
+        "sqa": list(cfg.raw["sqa"]),
+    }
+
+
+def check_geochemistry_columns(values: pd.DataFrame, cfg: Config) -> list[Issue]:
+    """V25: colonne nominate in config/pipeline.toml che non esistono nella tabella della geochimica."""
+    return [
+        Issue("V25", ERROR, f"Colonna '{column}' (config: {key}) assente dalla tabella della geochimica",
+              dettagli=f"colonne presenti: {', '.join(values.columns)}")
+        for key, columns in configured_geochemistry_columns(cfg).items()
+        for column in columns
+        if column not in values.columns
+    ]
+
+
 def check_geochemistry(geochemistry: ExcelTable, values: pd.DataFrame, sample_names: set[str], cfg: Config) -> list[Issue]:
-    """V20-V24: campioni coerenti con le conte, valori numerici, valori censurati, granulometria, righe copiate."""
+    """V20-V24, V27: campioni coerenti con le conte, valori mancanti, non numerici o censurati, granulometria,
+    righe copiate."""
     issues = []
     geo_samples = set(values.index)
     for s in sorted(sample_names - geo_samples):
@@ -187,16 +216,21 @@ def check_geochemistry(geochemistry: ExcelTable, values: pd.DataFrame, sample_na
 
     raw = geochemistry.data.set_index(cfg.input["geochemistry_sample_column"])
     censored = cfg.input.get("censored_values", {})
+    needed = set(cfg.raw["tables"]["past_geochemistry_columns"])  # usate dalla CCA: non possono mancare
     for col in values.columns:
         for sample, raw_value in raw[col].items():
-            if isinstance(raw_value, str) and raw_value.strip() in censored:
+            if raw_value is None or (isinstance(raw_value, str) and not raw_value.strip()):
+                severity, effect = (ERROR, "serve alla CCA") if col in needed else (WARNING, "resterà vuoto nelle tabelle")
+                issues.append(Issue("V27", severity, f"{col}: valore mancante ({effect})", str(sample)))
+            elif isinstance(raw_value, str) and raw_value.strip() in censored:
                 issues.append(Issue("V21", WARNING, f"{col}: valore censurato '{raw_value}' sostituito con {censored[raw_value.strip()]}", str(sample)))
             elif pd.isna(values.at[str(sample).strip(), col]) and raw_value is not None:
                 issues.append(Issue("V22", ERROR, f"{col}: valore non numerico", str(sample), dettagli=repr(raw_value)))
 
-    grain = cfg.input["grain_size_columns"]
+    grain = [c for c in cfg.input["grain_size_columns"] if c in values.columns]  # le mancanti sono già errori V25
     tolerance = cfg.input["grain_size_tolerance_pct"]
-    for sample, total in values[grain].sum(axis=1).items():
+    complete = values[grain].dropna() if grain else values.iloc[0:0]  # i valori mancanti sono già segnalati da V27
+    for sample, total in complete.sum(axis=1).items():
         if abs(total - 100) > tolerance:
             issues.append(Issue("V23", WARNING, f"Granulometria {' + '.join(grain)} = {total:.2f}% (atteso 100%)", sample))
 
