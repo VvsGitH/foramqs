@@ -11,10 +11,49 @@ Principi:
 
 ## Installazione
 
+Serve solo [uv](https://docs.astral.sh/uv/), che scarica da sé Python 3.12 e tutte le dipendenze: non occorre
+installare Python a parte. Per scaricare il progetto serve anche [git](https://git-scm.com/), oppure si scarica lo
+ZIP da GitHub (*Code → Download ZIP*).
+
+### macOS
+
+Nel Terminale:
+
 ```bash
-brew install uv          # una volta sola
+brew install uv                                   # una volta sola (senza Homebrew: curl -LsSf https://astral.sh/uv/install.sh | sh)
+git clone https://github.com/VvsGitH/foramqs.git data-elaboration-python
 cd data-elaboration-python
-uv sync                  # crea l'ambiente Python 3.12 con le dipendenze
+uv sync                                           # crea l'ambiente Python 3.12 con le dipendenze
+```
+
+### Windows 11
+
+In PowerShell (o nel Terminale di Windows):
+
+```powershell
+winget install --id=astral-sh.uv -e               # una volta sola, poi chiudere e riaprire PowerShell
+git clone https://github.com/VvsGitH/foramqs.git data-elaboration-python
+cd data-elaboration-python
+uv sync                                           # crea l'ambiente Python 3.12 con le dipendenze
+```
+
+Senza `winget`, uv si installa con `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`.
+
+Note per Windows:
+- i comandi `uv run foramqs …` sono identici a macOS; nei percorsi si possono usare sia `/` sia `\`;
+- i file Excel vanno chiusi prima di `add-sample`: Windows non permette di modificare un file aperto in Excel;
+- per salvare l'output dei comandi su un file (`uv run foramqs check > log.txt`) impostare prima
+  `$env:PYTHONUTF8 = "1"`, altrimenti alcuni simboli dei messaggi (→, ≥) possono dare errore;
+- conviene non tenere il progetto in una cartella sincronizzata da OneDrive: la sincronizzazione può bloccare i
+  file mentre la pipeline li scrive.
+
+### Dopo l'installazione
+
+Copiare i file Excel in `input_data/` (vedi [Dati](#dati)), poi verificare che tutto funzioni:
+
+```bash
+uv run pytest                                     # test
+uv run foramqs check                              # controllo degli input
 ```
 
 ## Dati
