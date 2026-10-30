@@ -4,7 +4,6 @@ Servono solo a verificare che le formule siano portate correttamente: si danno a
 stessi input usati allora e si confrontano i risultati con i valori salvati nei vecchi file.
 """
 
-import csv
 import warnings
 from dataclasses import dataclass
 
@@ -13,10 +12,10 @@ import pytest
 
 from foramqs.config import PROJECT_ROOT
 
-LEGACY_DIR = PROJECT_ROOT.parent
-RESULTS = LEGACY_DIR / "Campioni_P_2025_Results.xlsx"
-DATA = LEGACY_DIR / "Campioni_P_2025_Data.xlsx"
-RAW_FEQS = LEGACY_DIR / "Raw_ForamsEcoQs.xlsx"
+INPUT_DIR = PROJECT_ROOT / "input_data"  # non versionata: i workbook vanno copiati qui
+RESULTS = INPUT_DIR / "Campioni_P_2025_Results.xlsx"
+DATA = INPUT_DIR / "Campioni_P_2025_Data.xlsx"
+RAW_FEQS = INPUT_DIR / "Raw_ForamsEcoQs.xlsx"
 
 
 @dataclass(frozen=True)
@@ -26,6 +25,8 @@ class Matrix:
 
 
 def _sheet_rows(path, sheet):
+    if not path.exists():
+        pytest.skip(f"{path.name} non è in input_data/")
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")  # immagini WMF non supportate da openpyxl
         wb = openpyxl.load_workbook(path, data_only=True)
@@ -80,9 +81,3 @@ def indici_past() -> dict[str, dict]:
 @pytest.fixture(scope="session")
 def specie_stilevita() -> dict[str, dict]:
     return _table_by_first_column(_sheet_rows(DATA, "specie_stilivita"))
-
-
-@pytest.fixture(scope="session")
-def lista_fsi() -> dict[str, str]:
-    with open(LEGACY_DIR / "lists_for_feqs" / "Lista_FSI.csv", encoding="utf-8-sig") as f:
-        return {row["Species"]: row["Classification"] for row in csv.DictReader(f, delimiter=";")}

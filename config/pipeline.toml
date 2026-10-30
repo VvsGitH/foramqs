@@ -2,7 +2,7 @@
 # (quella che contiene pyproject.toml).
 
 [paths]
-data_workbook = "../Campioni_P_2025_Data.xlsx"
+data_workbook = "input_data/Campioni_P_2025_Data.xlsx"
 species_traits = "reference/species_traits.csv"
 non_foram_terms = "config/non_foram_terms.csv"
 name_corrections = "config/name_corrections.csv"

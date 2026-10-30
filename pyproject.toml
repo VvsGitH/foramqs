@@ -3,6 +3,8 @@ name = "foramqs"
 version = "0.1.0"
 description = "Pipeline di elaborazione per campioni di foraminiferi bentonici"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [
     { name = "Vito Paparella Santorsola", email = "vito.paparella@rcsinnovation.it" }
 ]

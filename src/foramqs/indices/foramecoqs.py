@@ -1,7 +1,7 @@
 """Indici calcolati oggi con ForamEcoQS, portati dal sorgente C# con la stessa aritmetica.
 
 Sorgente: ForamEcoQS/src/ForamEcoQS.Core/BioticIndicesCalculator.cs (BIC) e SpecializedDatabankLoader.cs (SDL).
-Citazione: Mangiagalli et al. 2026, SoftwareX 35, 102921.
+Citazione: Mangiagalli et al. 2026, SoftwareX 35, 102921. Licenza MIT di ForamEcoQS: THIRD_PARTY_NOTICES.md.
 
 Ogni funzione riceve le abbondanze di un singolo campione (conteggi, nell'ordine delle righe della matrice).
 """

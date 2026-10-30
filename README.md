@@ -1,7 +1,7 @@
 # foramqs: elaborazione dei campioni di foraminiferi bentonici
 
 Pipeline unica che sostituisce Power Query, ForamEcoQS e i passaggi manuali in PAST. Parte **solo** dai dati
-grezzi (le tabelle `MC_*` e la geochimica di `Campioni_P_2025_Data.xlsx`) e da poche tabelle tecniche non
+grezzi (le tabelle `MC_*` e la geochimica di `input_data/Campioni_P_2025_Data.xlsx`) e da poche tabelle tecniche non
 derivabili, e produce un `Results_<data>.xlsx` con gli stessi fogli di prima, più i grafici e i report di controllo.
 
 Principi:
@@ -17,13 +17,26 @@ cd data-elaboration-python
 uv sync                  # crea l'ambiente Python 3.12 con le dipendenze
 ```
 
+## Dati
+
+I workbook Excel stanno in `input_data/` e **non sono versionati** (`.gitignore`): dopo aver clonato la repo vanno
+copiati lì.
+
+| File | Uso |
+|---|---|
+| `input_data/Campioni_P_2025_Data.xlsx` | input della pipeline (percorso in `config/pipeline.toml`) |
+| `input_data/Campioni_P_2025_Results.xlsx` | vecchi risultati: `foramqs diff` e test di parità |
+| `input_data/Raw_ForamsEcoQs.xlsx` | vecchio input di ForamEcoQS: test di parità |
+
+Se i due file storici mancano, i test in `tests/legacy` vengono saltati.
+
 ## Comandi
 
 | Comando | Cosa fa |
 |---|---|
 | `uv run foramqs check` | Legge, valida e pulisce gli input e risolve i nomi in WoRMS. Scrive `output/check_<data>.xlsx` senza calcolare indici. |
 | `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` e `output/figures_<data>/`. Se ci sono errori negli input si ferma e li elenca. |
-| `uv run foramqs diff ../Campioni_P_2025_Results.xlsx` | Confronta gli indici con un vecchio Results ed elenca, per campione, i cambiamenti che spiegano le differenze. |
+| `uv run foramqs diff input_data/Campioni_P_2025_Results.xlsx` | Confronta gli indici con un vecchio Results ed elenca, per campione, i cambiamenti che spiegano le differenze. |
 | `uv run foramqs migrate-traits` | Crea `reference/species_traits.csv` dalle fonti storiche. **Già eseguito**: da qui in poi la tabella dei tratti si modifica a mano. |
 
 Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worms_cache.json`).
@@ -32,7 +45,7 @@ Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worm
 
 | File | Contenuto | Chi lo modifica |
 |---|---|---|
-| `../Campioni_P_2025_Data.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
+| `input_data/Campioni_P_2025_Data.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
 | `reference/species_traits.csv` | Tratti per taxon: stile di vita, gruppo ecologico Foram-AMBI (1-5/NA), gruppo FSI (Sen/Str/ND), guscio (A/I/P) | ricercatori |
 | `config/name_corrections.csv` | Refusi da correggere nel testo (`trova;sostituisci;motivo;fonte`) | ricercatori |
 | `config/taxon_aliases.csv` | AphiaID imposto per un nome, con precedenza su WoRMS (`nome;aphia_id;motivo;fonte`) | ricercatori |
@@ -97,3 +110,8 @@ src/foramqs/
 ```
 
 Test: `uv run pytest` (`tests/unit` = regole e formule; `tests/legacy` = parità con i vecchi risultati).
+
+## Licenza
+
+MIT, vedi [LICENSE](LICENSE). Il calcolo degli indici ForamEcoQS è un port del codice di ForamEcoQS (MIT,
+Mangiagalli et al. 2026): nota di copyright e citazione in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
