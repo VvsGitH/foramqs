@@ -76,6 +76,12 @@ fsi_list = "../lists_for_feqs/Lista_FSI.csv"
 
 # Classi di qualità ecologica (EQS): regole [classe, operatore, limite] valutate in ordine; l'ultima è [classe].
 # Valori predefiniti di ForamEcoQS (BioticIndicesCalculator.cs).
+[foram_ambi]
+# true: gli individui senza gruppo ecologico (NA, anche i non determinati) sono ridistribuiti nei gruppi 1–5
+# in proporzione ai taxa assegnati (percentuali sul totale degli assegnati). false: come ForamEcoQS (NA pesano come GI).
+# Vale per la colonna Foram-AMBI di tutti i campioni; il Foram-AMBI alternativo resta come ForamEcoQS.
+redistribute_unassigned = true
+
 [eqs]
 # Dimiza et al. 2016
 fsi = [["Azoic", "==", 0], ["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]]

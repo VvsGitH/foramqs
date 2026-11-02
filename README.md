@@ -149,6 +149,8 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
 
 - **ForamEcoQS** (`indices/foramecoqs.py`): S, exp(H'bc) (Chao–Shen), FSI, Foram-AMBI e classi EQS, portati dal
   sorgente C# con la stessa aritmetica (arrotondamenti .NET). Verificati sui vecchi risultati in `tests/legacy`.
+  Unica differenza voluta: con `[foram_ambi].redistribute_unassigned = true` il Foram-AMBI ridistribuisce gli
+  individui senza gruppo ecologico nei gruppi assegnati, in proporzione (il Foram-AMBI alternativo no).
 - **PAST** (`indices/diversity.py`): i 16 indici del foglio `Indici_PAST` (Shannon con correzione di
   Miller–Madow, Simpson non distorto, Chao-1, iChao-1, ACE…), verificati sui valori di PAST.
 - **Cluster**: UPGMA + Bray-Curtis sulle abbondanze relative.

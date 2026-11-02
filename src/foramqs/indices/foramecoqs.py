@@ -75,6 +75,8 @@ def foram_ambi(eco_group_abundance: dict[int, float], named_total: float) -> flo
     Come in ForamEcoQS, le percentuali dei gruppi ecologici sono calcolate sul totale di TUTTE le righe della
     matrice: anche i taxa senza gruppo (NA) e i non determinati (ND) sono nel denominatore e pesano quindi come il
     gruppo I. L'FSI invece usa solo i taxa assegnati a Sen/Str.
+    Passando come `named_total` il solo totale degli assegnati si ottiene invece la ridistribuzione degli NA nei
+    gruppi 1–5 in proporzione alle loro abbondanze (vedi `foramecoqs_table(redistribute_unassigned=True)`).
     """
     if named_total == 0:
         return 0.0
@@ -112,11 +114,15 @@ def foramecoqs_table(
     alt_eco_group: pd.Series | None = None,
     alt_samples: set[str] | Sequence[str] | None = None,
     alt_label: str = "Foram-AMBI (Alt)",
+    redistribute_unassigned: bool = False,
 ) -> pd.DataFrame:
     """Indici ForamEcoQS per ogni campione (una riga per campione).
 
     `fsi_group` ("Sen"/"Str"/altro) ed `eco_group` ("1".."5"/"NA") sono indicizzati come le righe della matrice.
     Se `alt_eco_group` e `alt_samples` sono forniti, calcola anche Foram-AMBI alternativo per i campioni indicati.
+    Con `redistribute_unassigned` il Foram-AMBI principale ridistribuisce gli individui NA nei gruppi 1–5 in
+    proporzione agli assegnati (percentuali sul totale degli assegnati; NaN se non ce n'è nessuno); il Foram-AMBI
+    alternativo resta come ForamEcoQS.
     """
     rows = []
     has_alt = alt_eco_group is not None and bool(alt_samples)
@@ -126,12 +132,17 @@ def foramecoqs_table(
         total = total_abundance(counts.tolist())
         sensitive, tolerant = counts[fsi_group == "Sen"].sum(), counts[fsi_group == "Str"].sum()
         by_group = {g: counts[eco_group == str(g)].sum() for g in ECO_GROUP_WEIGHTS}
+        if redistribute_unassigned:
+            assigned = sum(by_group.values())
+            ambi = foram_ambi(by_group, assigned) if assigned else math.nan
+        else:
+            ambi = foram_ambi(by_group, total)
         values = {
             "Species Richness (S)": species_richness(counts.tolist()),
             "N": total,
             "exp(H'bc)": exp_hbc(counts.tolist()),
             "FSI": fsi(sensitive, tolerant),
-            "Foram-AMBI": foram_ambi(by_group, total),
+            "Foram-AMBI": ambi,
         }
         if has_alt:
             if sample in alt_set:

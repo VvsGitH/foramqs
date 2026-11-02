@@ -204,6 +204,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_eco_group=alt_eco_series,
         alt_samples=alt_samples,
         alt_label=alt_label,
+        redistribute_unassigned=cfg.raw.get("foram_ambi", {}).get("redistribute_unassigned", False),
     )
     past = diversity_table(counts).rename_axis("Indice")
     eco_labels = {"1": "GI", "2": "GII", "3": "GIII", "4": "GIV", "5": "GV"}

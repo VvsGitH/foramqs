@@ -113,7 +113,7 @@ Porting matematico dal codice C# originale (*Mangiagalli et al. 2026, SoftwareX*
 5. **Foram-AMBI (Alve et al. 2016, Jorissen et al. 2018)**:
    $$Foram\text{-}AMBI = \frac{\sum (W_g \cdot \%EG_g)}{100}$$
    Pesi: $EG_1 = 0.0, EG_2 = 1.5, EG_3 = 3.0, EG_4 = 4.5, EG_5 = 6.0$.
-   *Importante*: le percentuali sono calcolate sul totale assoluto di tutti i foraminiferi (inclusi i non assegnati NA e ND, che agiscono come $EG_1$ con peso 0.0).
+   *Importante*: con `[foram_ambi].redistribute_unassigned = true` (impostazione attuale) gli individui senza gruppo (NA, compresi gli ND) sono ridistribuiti nei gruppi 1–5 in proporzione agli assegnati, cioè le percentuali sono calcolate sul totale dei soli individui assegnati; se nessuno è assegnato il Foram-AMBI è vuoto (EQS `N/A`). Vale per la colonna `Foram-AMBI` di tutti i campioni, mentre il Foram-AMBI alternativo resta come ForamEcoQS. Con `false` si torna al calcolo di ForamEcoQS: percentuali sul totale di tutti i foraminiferi, con NA e ND che agiscono come $EG_1$ (peso 0.0). La colonna `% non assegnati Foram-AMBI` indica la quota ridistribuita.
 6. **Classificazione EQS (Ecological Quality Status)**:
    Regole a soglie per $FSI$, $Foram\text{-}AMBI$ ed $\exp(H'_{bc})$ (assegnazione a classi: High, Good, Moderate, Poor, Bad, Azoic).
 
@@ -197,7 +197,7 @@ L'esecuzione del comando `uv run foramqs run` produce:
 
 1. **Protocollo biologico e frazione**: Colorazione con soluzione di **Rosa Bengala**; frazione analizzata al microscopio **$> 125\ \mu\text{m}$**.
 2. **Gestione individui morti**: Le righe con specie registrata ma con cella `N°INDIVIDUI` vuota rappresentano foraminiferi morti (non colorati con Rosa Bengala o gusci vuoti). Vengono escluse dalle conte del vivente ma tracciate con la nota informativa `I02` e commento associato.
-3. **Individui non determinati**: Le etichette "Not determined" o "Specie anomala" prive dell'indicazione del guscio vengono scartate (V10). Se è presente il guscio (`ND A`, `ND I`, `ND P`), vengono conteggiate e contribuiscono al totale degli individui $N$, alla densità e al denominatore del Foram-AMBI (pesando come $EG_1$), ma sono escluse da FSI.
+3. **Individui non determinati**: Le etichette "Not determined" o "Specie anomala" prive dell'indicazione del guscio vengono scartate (V10). Se è presente il guscio (`ND A`, `ND I`, `ND P`), vengono conteggiate e contribuiscono al totale degli individui $N$, alla densità e, come i taxa NA, al Foram-AMBI (ridistribuiti nei gruppi assegnati, oppure come $EG_1$ con `redistribute_unassigned = false`), ma sono escluse da FSI.
 4. **Giovanili**: I record "Genere Juvenile" confluiscono sistematicamente in "Genere spp." per evitare sovrastima artificiale della ricchezza specifica.
 5. **Trattamento replica singola MC_FO02**: Avendo una sola replica campionata (R1), è stato deciso di replicare R1 tre volte (`[input.copied_replicas]`) per renderla comparabile con il volume standard delle altre stazioni (450 ml totali = 3 repliche da 150 ml).
 6. **Classi EQS**: Confermata la soglia norvegese per $\exp(H'_{bc})$ (High $\ge 22$, Good $\ge 13$, Moderate $\ge 7$, Poor $> 3$, Bad), con l'alternativa italiana documentata in config.
