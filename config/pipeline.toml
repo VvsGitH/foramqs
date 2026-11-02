@@ -57,6 +57,14 @@ lifestyles = ["Epifaunale", "Epifita", "Infaunale superficiale", "Infaunale prof
 eco_groups = ["1", "2", "3", "4", "5", "NA"]
 fsi_groups = ["Sen", "Str", "ND"]
 
+# Calcolo facoltativo del Foram-AMBI con una diversa lista di assegnazione ai 5 gruppi ecologici
+# per un sottoinsieme di campioni. Fanno fede solo le specie presenti nel file; le altre risultano non assegnate (NA).
+[foram_ambi_alternative]
+file = "reference/foram_ambi_alt.csv"
+label = "Foram-AMBI (Alt)"
+groups_sheet = "Abbondanza_rel%_gruppiecologici_alt"
+samples = []
+
 # Fonti storiche usate una sola volta da `foramqs migrate-traits` per creare reference/species_traits.csv
 [migration]
 # Il vecchio workbook (con Power Query e le tabelle tecniche) serve solo alla migrazione dei tratti, già eseguita.

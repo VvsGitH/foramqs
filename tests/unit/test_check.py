@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 
 import openpyxl
+import pandas as pd
 import pytest
 from openpyxl.worksheet.table import Table
 
@@ -24,9 +25,11 @@ def make_project(tmp_path):
     cfg = load_config(tmp_path / "config" / DEFAULT_CONFIG.name)
 
     def build(samples: dict[str, list[list]], geochemistry: list[str] | None = None, copied_replicas: dict | None = None,
-              full: bool = False):
+              full: bool = False, alt_ambi: dict | None = None):
         if copied_replicas is not None:
             cfg.raw["input"]["copied_replicas"] = copied_replicas
+        if alt_ambi is not None:
+            cfg.raw["foram_ambi_alternative"] = {**cfg.raw.get("foram_ambi_alternative", {}), **alt_ambi}
         wb = openpyxl.Workbook()
         wb.remove(wb.active)
         for name, rows in samples.items():
@@ -108,3 +111,48 @@ def test_single_replica_is_copied_only_where_configured(make_project):
     assert issues.loc[issues["codice"] == "I03", "campione"].tolist() == ["MC_B01"]
     assert issues.loc[issues["codice"] == "V30", "campione"].tolist() == ["MC_C01"]
     assert "V08" not in codes(issues)  # MC_B01 ora ha 2 repliche come gli altri
+
+
+def test_alternative_ambi_unknown_sample_is_an_error(make_project):
+    issues = make_project({"MC_A01": [TEPIDA]}, alt_ambi={"samples": ["MC_UNKNOWN"]})
+    assert "A01" in codes(issues, "errore")
+    assert issues.loc[issues["codice"] == "A01", "campione"].tolist() == ["MC_UNKNOWN"]
+
+
+def test_alternative_ambi_missing_file_is_an_error(make_project):
+    issues = make_project({"MC_A01": [TEPIDA]}, alt_ambi={"samples": ["MC_A01"], "file": "reference/nonexistent.csv"})
+    assert "A02" in codes(issues, "errore")
+
+
+def test_alternative_ambi_invalid_eco_group_is_an_error(make_project, tmp_path):
+    alt_file = tmp_path / "reference" / "foram_ambi_alt.csv"
+    alt_file.write_text("nome;gruppo_ecologico\nAmmonia tepida;99\n", encoding="utf-8")
+    issues = make_project({"MC_A01": [TEPIDA]}, alt_ambi={"samples": ["MC_A01"], "file": str(alt_file)})
+    assert "A03" in codes(issues, "errore")
+
+
+def test_pipeline_run_with_alternative_foram_ambi(tmp_path):
+    from foramqs.pipeline import run
+
+    shutil.copytree(DEFAULT_CONFIG.parent, tmp_path / "config")
+    shutil.copytree(PROJECT_ROOT / "reference", tmp_path / "reference")
+    cfg = load_config(tmp_path / "config" / DEFAULT_CONFIG.name)
+    cfg.raw["paths"]["data_workbook"] = str(PROJECT_ROOT / "input_data" / "Campioni_P_2025_Data_Raw.xlsx")
+
+    alt_file = tmp_path / "reference" / "foram_ambi_alt.csv"
+    alt_file.write_text("nome;gruppo_ecologico\nAmmonia tepida;3\n", encoding="utf-8")
+
+    cfg.raw["foram_ambi_alternative"]["samples"] = ["MC_CB01", "MC_CE01"]
+
+    res = run(cfg, figures_dir=tmp_path / "figures", offline=True)
+    assert "Abbondanza_rel%_gruppiecologici_alt" in res.sheets
+    alt_sheet = res.sheets["Abbondanza_rel%_gruppiecologici_alt"]
+    assert set(alt_sheet.index) == {"MC_CB01", "MC_CE01"}
+    assert "Foram-AMBI (Alt)" in alt_sheet.columns
+
+    feqs = res.sheets["Foram Echo QS"]
+    assert "Foram-AMBI (Alt)" in feqs.columns
+    assert "EQS Foram-AMBI (Alt)" in feqs.columns
+    assert pd.notna(feqs.loc["MC_CB01", "Foram-AMBI (Alt)"])
+    assert pd.notna(feqs.loc["MC_CE01", "Foram-AMBI (Alt)"])
+    assert pd.isna(feqs.loc["MC_FL01", "Foram-AMBI (Alt)"])

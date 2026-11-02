@@ -286,6 +286,45 @@ def check_geochemistry(geochemistry: ExcelTable, values: pd.DataFrame, sample_na
     return issues
 
 
+# --- Foram-AMBI alternativo ----------------------------------------------------------------------------------------
+
+def check_alternative_ambi_samples(samples: list[str], sample_names: set[str]) -> list[Issue]:
+    """A01: campioni in [foram_ambi_alternative.samples] non presenti nei dati."""
+    issues = []
+    for s in samples:
+        if s not in sample_names:
+            issues.append(Issue("A01", ERROR, f"Campione '{s}' in [foram_ambi_alternative.samples] non presente nei dati", s))
+    return issues
+
+
+def check_alternative_ambi_traits(alt_traits: pd.DataFrame, allowed_groups: list[str], file_name: str) -> list[Issue]:
+    """A03-A04: colonne, valori non ammessi e conflitti nella tabella alternativa dei gruppi ecologici."""
+    issues = []
+    if "nome" not in alt_traits.columns or "gruppo_ecologico" not in alt_traits.columns:
+        issues.append(Issue("A03", ERROR, f"{file_name} deve contenere le colonne 'nome' e 'gruppo_ecologico'"))
+        return issues
+    for i, row in alt_traits.iterrows():
+        csv_line = i + 2
+        val = str(row["gruppo_ecologico"]).strip()
+        if val not in allowed_groups:
+            issues.append(Issue(
+                "A03", ERROR, f"{file_name} riga {csv_line}, {row['nome']}: gruppo_ecologico non ammesso ({val!r})",
+                dettagli=f"ammessi: {', '.join(allowed_groups)}",
+            ))
+    for taxon_id, group in alt_traits.groupby("taxon_id"):
+        if len(group) < 2:
+            continue
+        vals = set(group["gruppo_ecologico"].str.strip())
+        names = ", ".join(f"{n} (riga {i + 2})" for i, n in group["nome"].items())
+        if len(vals) > 1:
+            issues.append(Issue(
+                "A04", ERROR,
+                f"Righe dello stesso taxon con gruppo ecologico diverso in {file_name}: {group['nome_valido'].iloc[0]}",
+                dettagli=names,
+            ))
+    return issues
+
+
 def _is_zero_or_empty(value: object) -> bool:
     return value is None or (_is_non_negative_int(value) and float(value) == 0)
 

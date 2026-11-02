@@ -93,6 +93,7 @@ Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worm
 |---|---|---|
 | `input_data/Campioni_P_2025_Data_Raw.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
 | `reference/species_traits.csv` | Tratti per taxon: stile di vita, gruppo ecologico Foram-AMBI (1-5/NA), gruppo FSI (Sen/Str/ND), guscio (A/I/P) | ricercatori |
+| `reference/foram_ambi_alt.csv` | Assegnazione alternativa ai gruppi ecologici Foram-AMBI per campioni specifici (`nome;gruppo_ecologico`) | ricercatori |
 | `config/name_corrections.csv` | Refusi da correggere nel testo (`trova;sostituisci;motivo;fonte`) | ricercatori |
 | `config/taxon_aliases.csv` | AphiaID imposto per un nome, con precedenza su WoRMS (`nome;aphia_id;motivo;fonte`) | ricercatori |
 | `config/non_foram_terms.csv` | Voci da scartare (diatomee, "No Forams"…) | ricercatori |
@@ -141,6 +142,7 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
 | R05 | info | Guscio nei fogli diverso dalla tabella dei tratti: vale sempre quello dei tratti |
 | C01 | errore/avviso | Gruppi di cluster: campioni sconosciuti o in più gruppi (errore), campioni senza gruppo (avviso) |
 | C02 | avviso | Gruppo che non è un ramo del dendrogramma (solo in `run`, serve il cluster) |
+| A01-A04 | errore | Foram-AMBI alternativo: campioni sconosciuti, file non trovato, valori non ammessi o conflitti |
 | I01-I03 | info | Giovanili sommati a `Genere spp.`; righe senza N°INDIVIDUI (individui morti) non conteggiate; replica R1 copiata (`[input.copied_replicas]`) |
 
 ## Indici e metodi

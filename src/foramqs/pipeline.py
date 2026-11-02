@@ -29,6 +29,7 @@ class CheckResult:
     traits: pd.DataFrame  # tratti indicizzati per taxon_id
     geochemistry: pd.DataFrame
     issues: pd.DataFrame
+    alt_traits: pd.DataFrame | None = None
 
     @property
     def has_errors(self) -> bool:
@@ -55,8 +56,24 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
     traits = read_config_csv(traits_path)
     traits_names = {n: clean_taxon_name(n, inputs.name_corrections, juveniles) for n in traits["nome"]}
 
+    alt_cfg = cfg.raw.get("foram_ambi_alternative", {})
+    alt_samples_cfg = alt_cfg.get("samples", [])
+    alt_file = alt_cfg.get("file", "reference/foram_ambi_alt.csv")
+    alt_path = cfg.resolve(alt_file) if alt_file else None
+    alt_traits_raw = None
+    alt_names = {}
+    alt_issues = []
+
+    if alt_samples_cfg and alt_path:
+        if not alt_path.exists():
+            alt_issues.append(v.Issue("A02", v.ERROR, f"File alternativo dei gruppi ecologici non trovato: {alt_path}"))
+        else:
+            alt_traits_raw = read_config_csv(alt_path)
+            if "nome" in alt_traits_raw.columns:
+                alt_names = {n: clean_taxon_name(n, inputs.name_corrections, juveniles) for n in alt_traits_raw["nome"]}
+
     resolutions = resolve_taxa(
-        sorted(set(observations["taxon"]) | set(traits_names.values())),
+        sorted(set(observations["taxon"]) | set(traits_names.values()) | set(alt_names.values())),
         read_config_csv(cfg.path("taxon_aliases")),
         WormsClient(cfg.path("worms_cache"), offline=offline),
         cfg.taxonomy["required_phylum"],
@@ -64,6 +81,16 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
     observations = observations.join(resolutions.set_index("taxon")[["taxon_id", "nome_valido"]], on="taxon")
     traits = tr.attach_taxon_ids(traits, traits_names, resolutions)
     traits_table = tr.traits_by_taxon(traits)
+
+    alt_traits_table = None
+    if alt_traits_raw is not None and "nome" in alt_traits_raw.columns:
+        alt_traits_attached = tr.attach_taxon_ids(alt_traits_raw, alt_names, resolutions)
+        alt_issues.extend(v.check_alternative_ambi_traits(alt_traits_attached, cfg.traits["eco_groups"], alt_path.name))
+        alt_traits_table = alt_traits_attached
+
+    if alt_samples_cfg:
+        alt_issues.extend(v.check_alternative_ambi_samples(alt_samples_cfg, set(inputs.samples)))
+
     allowed = {
         "stile_di_vita": cfg.traits["lifestyles"],
         "gruppo_ecologico": cfg.traits["eco_groups"],
@@ -93,6 +120,7 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
         *tr.check_traits(traits, allowed),
         *tr.check_coverage(observations, traits_table),
         *tr.check_shell_against_traits(observations, traits_table),
+        *alt_issues,
     ]
     return CheckResult(
         observations=with_copies,
@@ -101,6 +129,7 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
         traits=traits_table,
         geochemistry=geochemistry,
         issues=v.issues_frame(issues),
+        alt_traits=alt_traits_table,
     )
 
 
@@ -152,7 +181,25 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
     def trait(column: str, name: str) -> pd.Series:
         return tb.trait_of(counts, traits, column).rename(name)
 
-    feqs = foramecoqs_table(counts, trait("gruppo_fsi", "FSI"), trait("gruppo_ecologico", "EG"), cfg.raw["eqs"])
+    alt_cfg = cfg.raw.get("foram_ambi_alternative", {})
+    configured_alt_samples = alt_cfg.get("samples", [])
+    alt_samples = [s for s in order if s in configured_alt_samples]
+    alt_label = alt_cfg.get("label", "Foram-AMBI (Alt)")
+
+    alt_eco_series = None
+    if alt_samples and checked.alt_traits is not None:
+        alt_traits_table = checked.alt_traits.drop_duplicates("taxon_id")[["nome_valido", "gruppo_ecologico"]]
+        alt_eco_series = tb.trait_of(counts, alt_traits_table, "gruppo_ecologico")
+
+    feqs = foramecoqs_table(
+        counts,
+        trait("gruppo_fsi", "FSI"),
+        trait("gruppo_ecologico", "EG"),
+        cfg.raw["eqs"],
+        alt_eco_group=alt_eco_series,
+        alt_samples=alt_samples,
+        alt_label=alt_label,
+    )
     past = diversity_table(counts).rename_axis("Indice")
     eco_labels = {"1": "GI", "2": "GII", "3": "GIII", "4": "GIV", "5": "GV"}
     shell = tb.by_trait(counts, trait("guscio", "TIPO GUSCIO"), labels["shell"])
@@ -198,6 +245,13 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         f"{cca}_norm": tb.zscore(main_indices).join(tb.zscore(environment)).join(species_cut).loc[order],
     }
 
+    if alt_samples and alt_eco_series is not None:
+        eco_alt = tb.by_trait(counts, alt_eco_series.rename("Gruppo ecologico"), eco_labels)
+        canonical_order = ["GI", "GII", "GIII", "GIV", "GV", "NA"]
+        eco_alt = eco_alt.reindex([c for c in canonical_order if c in eco_alt.index])
+        alt_sheet_name = alt_cfg.get("groups_sheet", "Abbondanza_rel%_gruppiecologici_alt")
+        sheets[alt_sheet_name] = eco_alt[alt_samples].T.join(feqs.loc[alt_samples, [alt_label]])
+
     species_chart_sheet = "Grafico_specie"
     sheets[species_chart_sheet] = tb.above_cut_by_sample(rel, cut).loc[order]
 
@@ -225,6 +279,15 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
             stacked=True, percent=True, source=species_chart_sheet, width=34, height=24,
         )],
     }
+    if alt_samples and alt_eco_series is not None:
+        alt_sheet_name = alt_cfg.get("groups_sheet", "Abbondanza_rel%_gruppiecologici_alt")
+        charts[alt_sheet_name] = [
+            Chart(f"Gruppi ecologici ({alt_label})", tuple(eco_alt.index), stacked=True, percent=True),
+            Chart(alt_label, (alt_label,), y_title=alt_label, limits=_limits(eqs["foram_ambi"])),
+        ]
+        charts["Foram Echo QS"].append(
+            Chart(alt_label, (alt_label,), y_title=alt_label, limits=_limits(eqs["foram_ambi"]))
+        )
     figures = {"Tabella_Cluster": [plots.dendrogram_chart(clustering, groups, figures_dir / "dendrogramma.png")]}
 
     issues = v.issues_frame([

@@ -105,13 +105,22 @@ def eqs_class(value: float, rules: list[list]) -> str:
 
 
 def foramecoqs_table(
-    abundance_table: pd.DataFrame, fsi_group: pd.Series, eco_group: pd.Series, eqs_rules: dict[str, list[list]],
+    abundance_table: pd.DataFrame,
+    fsi_group: pd.Series,
+    eco_group: pd.Series,
+    eqs_rules: dict[str, list[list]],
+    alt_eco_group: pd.Series | None = None,
+    alt_samples: set[str] | Sequence[str] | None = None,
+    alt_label: str = "Foram-AMBI (Alt)",
 ) -> pd.DataFrame:
     """Indici ForamEcoQS per ogni campione (una riga per campione).
 
     `fsi_group` ("Sen"/"Str"/altro) ed `eco_group` ("1".."5"/"NA") sono indicizzati come le righe della matrice.
+    Se `alt_eco_group` e `alt_samples` sono forniti, calcola anche Foram-AMBI alternativo per i campioni indicati.
     """
     rows = []
+    has_alt = alt_eco_group is not None and bool(alt_samples)
+    alt_set = set(alt_samples) if alt_samples else set()
     for sample in abundance_table.columns:
         counts = abundance_table[sample]
         total = total_abundance(counts.tolist())
@@ -123,11 +132,29 @@ def foramecoqs_table(
             "exp(H'bc)": exp_hbc(counts.tolist()),
             "FSI": fsi(sensitive, tolerant),
             "Foram-AMBI": foram_ambi(by_group, total),
-            "% non assegnati FSI": 100 * (1 - (sensitive + tolerant) / total) if total else math.nan,
-            "% non assegnati Foram-AMBI": 100 * (1 - sum(by_group.values()) / total) if total else math.nan,
         }
+        if has_alt:
+            if sample in alt_set:
+                by_group_alt = {g: counts[alt_eco_group == str(g)].sum() for g in ECO_GROUP_WEIGHTS}
+                val_alt = foram_ambi(by_group_alt, total)
+                unassigned_alt = 100 * (1 - sum(by_group_alt.values()) / total) if total else math.nan
+                eqs_alt = eqs_class(val_alt, eqs_rules["foram_ambi"])
+            else:
+                val_alt = math.nan
+                unassigned_alt = math.nan
+                eqs_alt = ""
+            values[alt_label] = val_alt
+
+        values["% non assegnati FSI"] = 100 * (1 - (sensitive + tolerant) / total) if total else math.nan
+        values["% non assegnati Foram-AMBI"] = 100 * (1 - sum(by_group.values()) / total) if total else math.nan
+        if has_alt:
+            values[f"% non assegnati {alt_label}"] = unassigned_alt
+
         values["EQS exp(H'bc)"] = eqs_class(values["exp(H'bc)"], eqs_rules["exp_hbc"])
         values["EQS FSI"] = eqs_class(values["FSI"], eqs_rules["fsi"])
         values["EQS Foram-AMBI"] = eqs_class(values["Foram-AMBI"], eqs_rules["foram_ambi"])
+        if has_alt:
+            values[f"EQS {alt_label}"] = eqs_alt
+
         rows.append({"Campione": sample, **values})
     return pd.DataFrame(rows).set_index("Campione")

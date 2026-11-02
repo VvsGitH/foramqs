@@ -64,3 +64,37 @@ def test_diversity_indices_on_tiny_samples_do_not_raise(counts):
 def test_squares_is_undefined_when_all_taxa_are_singletons():
     assert math.isnan(diversity_indices([1, 1, 1])["Squares"])
     assert diversity_indices([1, 1, 3])["Squares"] == pytest.approx(3 + 4 * 11 / (25 - 6))
+
+
+def test_foramecoqs_table_with_alternative_foram_ambi():
+    from foramqs.indices.foramecoqs import foramecoqs_table
+
+    abundance = pd.DataFrame({"S1": [10, 20, 10], "S2": [5, 5, 10]}, index=["Sp1", "Sp2", "Sp3"])
+    fsi_group = pd.Series(["Sen", "Str", "ND"], index=["Sp1", "Sp2", "Sp3"])
+    eco_group = pd.Series(["1", "2", "3"], index=["Sp1", "Sp2", "Sp3"])
+    # Nella lista alternativa: Sp1 è 3, Sp2 è NA (non presente), Sp3 è 4
+    alt_eco = pd.Series(["3", "NA", "4"], index=["Sp1", "Sp2", "Sp3"])
+    eqs_rules = {
+        "exp_hbc": [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor", ">", 3], ["Bad"]],
+        "fsi": [["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]],
+        "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]],
+    }
+    table = foramecoqs_table(
+        abundance, fsi_group, eco_group, eqs_rules,
+        alt_eco_group=alt_eco, alt_samples=["S1"], alt_label="Foram-AMBI (Alt)",
+    )
+    assert "Foram-AMBI (Alt)" in table.columns
+    assert "EQS Foram-AMBI (Alt)" in table.columns
+    assert "% non assegnati Foram-AMBI (Alt)" in table.columns
+
+    # S1 (N = 40): Sp1=10 (EG 3: peso 3.0), Sp2=20 (NA: peso 0), Sp3=10 (EG 4: peso 4.5)
+    # AMBI alt = (10*3.0 + 10*4.5) / 40 = 75 / 40 = 1.875 -> EQS Good (<= 3.3)
+    # Non assegnati alt = 20 / 40 = 50.0%
+    assert table.loc["S1", "Foram-AMBI (Alt)"] == 1.875
+    assert table.loc["S1", "EQS Foram-AMBI (Alt)"] == "Good"
+    assert table.loc["S1", "% non assegnati Foram-AMBI (Alt)"] == 50.0
+
+    # S2 non è in alt_samples: deve essere NaN e vuoto
+    assert math.isnan(table.loc["S2", "Foram-AMBI (Alt)"])
+    assert table.loc["S2", "EQS Foram-AMBI (Alt)"] == ""
+    assert math.isnan(table.loc["S2", "% non assegnati Foram-AMBI (Alt)"])

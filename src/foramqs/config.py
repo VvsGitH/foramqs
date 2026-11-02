@@ -21,8 +21,9 @@ class Config:
         """Percorso assoluto di una voce di [paths], risolto rispetto alla cartella del progetto."""
         return self.resolve(self.raw["paths"][key])
 
-    def resolve(self, relative: str) -> Path:
-        return (self.root / relative).resolve()
+    def resolve(self, relative: str | Path) -> Path:
+        p = Path(relative)
+        return p if p.is_absolute() else (self.root / p).resolve()
 
     @property
     def input(self) -> dict:
