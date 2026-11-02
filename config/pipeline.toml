@@ -83,6 +83,8 @@ fsi = [["Azoic", "==", 0], ["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", 
 foram_ambi = [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]]
 # Soglie norvegesi, frazione 63 µm (alternativa italiana 63 µm: >=5, >=4, >=3, >2)
 exp_hbc = [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor", ">", 3], ["Bad"]]
+# Colonna "E. Quality": exp(H'bc) EQR = exp(H'bc) / massimo di exp(H'bc) tra i campioni, in 5 classi da 0.2
+exp_hbc_eqr = [["HIGH", ">=", 0.8], ["GOOD", ">=", 0.6], ["MODERATE", ">=", 0.4], ["POOR", ">=", 0.2], ["BAD"]]
 
 [tables]
 # Soglie (frazioni 0-1) per le tabelle di comunità.

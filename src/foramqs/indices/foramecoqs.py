@@ -157,4 +157,11 @@ def foramecoqs_table(
             values[f"EQS {alt_label}"] = eqs_alt
 
         rows.append({"Campione": sample, **values})
-    return pd.DataFrame(rows).set_index("Campione")
+    table = pd.DataFrame(rows).set_index("Campione")
+
+    # EQR: exp(H'bc) normalizzato sul massimo tra i campioni della tabella, 4 decimali; la classe usa il valore arrotondato.
+    eqr = (table["exp(H'bc)"] / table["exp(H'bc)"].max()).map(lambda v: cs_round(v, 4))
+    position = table.columns.get_loc("exp(H'bc)") + 1
+    table.insert(position, "exp(H'bc) EQR", eqr)
+    table.insert(position + 1, "E. Quality", eqr.map(lambda v: eqs_class(v, eqs_rules["exp_hbc_eqr"])))
+    return table

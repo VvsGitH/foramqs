@@ -8,6 +8,31 @@ from foramqs.indices.diversity import diversity_indices
 from foramqs.indices.foramecoqs import eqs_class, exp_hbc, foram_ambi, fsi, species_richness
 
 FSI_RULES = [["Azoic", "==", 0], ["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]]
+EXP_HBC_EQR_RULES = [["HIGH", ">=", 0.8], ["GOOD", ">=", 0.6], ["MODERATE", ">=", 0.4], ["POOR", ">=", 0.2], ["BAD"]]
+
+
+@pytest.mark.parametrize("eqr, quality", [
+    (1.0, "HIGH"), (0.8, "HIGH"), (0.7999, "GOOD"), (0.6, "GOOD"), (0.4, "MODERATE"),
+    (0.3999, "POOR"), (0.2, "POOR"), (0.1999, "BAD"), (0.0, "BAD"),
+])
+def test_exp_hbc_eqr_classes_are_five_steps_of_0_2(eqr, quality):
+    assert eqs_class(eqr, EXP_HBC_EQR_RULES) == quality
+
+
+def test_exp_hbc_eqr_is_normalised_on_the_column_maximum():
+    from foramqs.indices.foramecoqs import foramecoqs_table
+
+    abundance = pd.DataFrame({"S1": [10, 10, 10, 10], "S2": [37, 1, 1, 1]}, index=["Sp1", "Sp2", "Sp3", "Sp4"])
+    groups = pd.Series(["ND"] * 4, index=abundance.index)
+    rules = {"exp_hbc": [["Bad"]], "fsi": FSI_RULES, "foram_ambi": [["Bad"]], "exp_hbc_eqr": EXP_HBC_EQR_RULES}
+    table = foramecoqs_table(abundance, groups, groups, rules)
+
+    cols = table.columns.tolist()
+    assert cols[cols.index("exp(H'bc)") + 1:cols.index("exp(H'bc)") + 3] == ["exp(H'bc) EQR", "E. Quality"]
+    assert table.loc["S1", "exp(H'bc) EQR"] == 1.0 and table.loc["S1", "E. Quality"] == "HIGH"
+    expected = cs_round(table.loc["S2", "exp(H'bc)"] / table.loc["S1", "exp(H'bc)"], 4)
+    assert table.loc["S2", "exp(H'bc) EQR"] == expected
+    assert table.loc["S2", "E. Quality"] == eqs_class(expected, EXP_HBC_EQR_RULES)
 
 
 def test_cs_round_matches_dotnet_midpoints():
@@ -78,6 +103,7 @@ def test_foramecoqs_table_with_alternative_foram_ambi():
         "exp_hbc": [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor", ">", 3], ["Bad"]],
         "fsi": [["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]],
         "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]],
+        "exp_hbc_eqr": EXP_HBC_EQR_RULES,
     }
     table = foramecoqs_table(
         abundance, fsi_group, eco_group, eqs_rules,

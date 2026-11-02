@@ -145,7 +145,7 @@ Calcolati secondo il manuale di riferimento di PAST 4 (*Hammer et al. 2001*):
 L'esecuzione del comando `uv run foramqs run` produce:
 - **`output/Results_<timestamp>.xlsx`** contenente i fogli:
   - `Indici_PAST` (con grafici nativi: Ricchezza S, Shannon H)
-  - `Foram Echo QS` (con grafici nativi e linee di soglia EQS: exp(H'bc), Foram-AMBI)
+  - `Foram Echo QS` (con grafici nativi e linee di soglia EQS: exp(H'bc), Foram-AMBI; colonne `exp(H'bc) EQR` = exp(H'bc) / massimo tra i campioni ed `E. Quality` = classe dell'EQR in 5 intervalli da 0.2, BAD → HIGH, soglie in `[eqs].exp_hbc_eqr`)
   - `Abbondanze_assolute`
   - `Abbondanza_relativa%`
   - `Abbondanza_rel%_deformati` (grafico % deformati)
