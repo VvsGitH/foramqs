@@ -10,7 +10,7 @@ def test_missing_configured_geochemistry_column_is_an_error():
     values = pd.DataFrame(columns=columns)
     assert check_geochemistry_columns(values, cfg) == []
 
-    renamed = values.rename(columns={"TOC (%)": "TOC"})
+    renamed = values.rename(columns={"M-AMBI_ 2022": "M-AMBI"})
     issues = check_geochemistry_columns(renamed, cfg)
     assert {i.codice for i in issues} == {"V25"}
-    assert any("tables.toc_column" in i.messaggio for i in issues)
+    assert any("tables.external_index_column" in i.messaggio for i in issues)

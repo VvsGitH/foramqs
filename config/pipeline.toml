@@ -77,20 +77,13 @@ exp_hbc = [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor
 
 [tables]
 # Soglie (frazioni 0-1) per le tabelle di comunità.
-dominant_species_threshold = 0.05  # Abb_rel%_cut5, tabelle per PAST e CCA
-genera_threshold = 0.03            # Tabella_comunità_3%
+dominant_species_threshold = 0.03  # Tabella_Cluster e Tabella_CCA_<soglia>% (anche _norm)
 # Come applicare le soglie:
 #   "cella"  = un valore resta solo dove quella specie supera la soglia in quel campione (metodo Power Query storico);
 #   "specie" = si tengono tutti i valori delle specie che superano la soglia in almeno un campione.
 threshold_mode = "specie"
-# Indice esterno (non calcolato dalla pipeline) presente nella geochimica; il nome della colonna è anche l'etichetta nei grafici.
+# Indice esterno (non calcolato dalla pipeline) presente nella geochimica, riportato in Abbondanza_rel%_gruppiecologici.
 external_index_column = "M-AMBI_ 2022"
-# Colonna del carbonio organico totale, usata nella tabella Specie&TOC.
-toc_column = "TOC (%)"
-# Variabili ambientali accanto alle specie nella tabella per PAST (Abbondanza_relativa_PAST_5%).
-past_geochemistry_columns = ["DEPTH (m)", "GRAVEL", "SAND", "SILT", "TOC (%)", "As", "Cr", "Hg", "Ni"]
-# Colonne della geochimica escluse da Tabella_completa.
-complete_table_excluded_columns = ["Mn", "Fe", "Co", "Cd"]
 
 [labels]
 shell = { A = "Agglutinated", I = "Hyaline", P = "Porcellaneous" }
@@ -108,9 +101,3 @@ metric = "braycurtis"
 G1 = ["MC_FL01", "MC_FO02", "MC_FO01", "MC_VI01", "MC_ML01", "MC_FL02", "MC_ML02", "MC_VI02"]
 G2 = ["MC_CB01", "MC_CE01"]
 G3 = ["MC_CB02", "MC_PP01", "MC_PP02", "MC_PN01", "MC_PN02", "MC_SV01", "MC_CE02", "MC_SV02"]
-
-[sqa]
-# Standard di qualità ambientale dei sedimenti (mg/kg s.s.) per lo Specchietto_limiti HMe.
-Hg = 0.3
-As = 12
-Cr = 50

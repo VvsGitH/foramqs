@@ -57,15 +57,11 @@ Le colonne citate per nome in `config/pipeline.toml` devono esistere, altrimenti
 | Colonna | Voce di config | Uso |
 |---|---|---|
 | `GRAVEL`, `SAND`, `SILT` | `input.grain_size_columns` | granulometria: la somma deve essere circa 100% |
-| `DEPTH (m)`, `GRAVEL`, `SAND`, `SILT`, `TOC (%)`, `As`, `Cr`, `Hg`, `Ni` | `tables.past_geochemistry_columns` | tabella per PAST e variabili della CCA |
-| `TOC (%)` | `tables.toc_column` | tabella `Specie&TOC` |
-| `Mn`, `Fe`, `Co`, `Cd` | `tables.complete_table_excluded_columns` | escluse da `Tabella_completa` |
-| `M-AMBI_ 2022` | `tables.external_index_column` | indice esterno della macrofauna (anche etichetta nei grafici) |
-| `Hg`, `As`, `Cr` | `[sqa]` | confronto con gli standard di qualità |
+| `M-AMBI_ 2022` | `tables.external_index_column` | indice esterno della macrofauna (foglio `Abbondanza_rel%_gruppiecologici`) |
 
 Se una colonna viene rinominata nel file, va aggiornato il nome corrispondente in config.
 
-Ogni altra colonna numerica (es. `Cu`, `Zn`, `Sn`, `Pb`) entra comunque nelle tabelle ambientali e negli z-score.
+Tutte le colonne numeriche entrano in `Tabella_matrice` e nelle tabelle per la CCA (`Tabella_CCA_*`): un valore mancante è quindi un errore (V27).
 
 Le colonne `Shannon_H` e `ORDINE` vengono ignorate, perché ora sono calcolate dalla pipeline.
 

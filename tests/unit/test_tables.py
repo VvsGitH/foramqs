@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from foramqs.tables import above_threshold, density, genera_composition, relative
+from foramqs.tables import above_threshold, density, relative
 
 REL = relative(pd.DataFrame(
     {"A": [6, 4, 90], "B": [4, 6, 90]}, index=["Ammonia tepida", "Ammonia beccarii", "Bulimina elongata"],
@@ -22,13 +22,6 @@ def test_threshold_by_species_keeps_all_values_of_dominant_species():
 def test_unknown_threshold_mode_is_an_error():
     with pytest.raises(ValueError):
         above_threshold(REL, 0.05, "altro")
-
-
-def test_genera_composition_adds_others():
-    genera = genera_composition(REL, 0.05, "cella")
-    assert genera.loc["Ammonia", "A"] == pytest.approx(0.06)
-    assert genera.loc["Others", "A"] == pytest.approx(0.04)
-    assert genera.sum().tolist() == pytest.approx([1.0, 1.0])
 
 
 def test_density_is_mean_over_replicas():

@@ -1,12 +1,11 @@
-"""Analisi multivariate dei campioni: cluster gerarchico (come in PAST) e CCA.
+"""Cluster gerarchico dei campioni (come in PAST).
 
 Cluster: UPGMA (`method="average"`) su distanze di Bray-Curtis tra le abbondanze relative dei campioni.
 L'ordine delle foglie del dendrogramma dà l'ordine dei campioni nelle tabelle e nei grafici. I gruppi di campioni
 sono invece definiti dai ricercatori in config ([cluster.groups]): qui si controlla solo che corrispondano a rami
 del dendrogramma calcolato.
 
-CCA: Canonical Correspondence Analysis (ter Braak 1986), implementazione di scikit-bio (Legendre & Legendre 2012),
-lo stesso algoritmo usato da PAST.
+La CCA non è calcolata qui: si fa in PAST sulle tabelle Tabella_CCA_*.
 """
 
 from __future__ import annotations
@@ -17,7 +16,6 @@ import numpy as np
 import pandas as pd
 from scipy.cluster.hierarchy import dendrogram, linkage, to_tree
 from scipy.spatial.distance import pdist
-from skbio.stats.ordination import OrdinationResults, cca
 
 from foramqs.validate import WARNING, Issue
 
@@ -60,21 +58,3 @@ def check_group_branches(clustering: SampleClustering, groups: dict[str, list[st
         for name, members in groups.items()
         if len(members) > 1 and frozenset(members) not in tree_branches
     ]
-
-
-def canonical_correspondence(species: pd.DataFrame, environment: pd.DataFrame) -> OrdinationResults:
-    """CCA: `species` = campioni × specie (abbondanze), `environment` = campioni × variabili ambientali."""
-    return cca(species, environment.loc[species.index], scaling=2)
-
-
-def cca_axes(result: OrdinationResults, environment: pd.DataFrame) -> pd.DataFrame:
-    """Autovalori e % di inerzia per asse; i primi (rango delle variabili ambientali) sono gli assi vincolati.
-
-    Variabili ambientali collineari (es. GRAVEL + SAND + SILT = 100) riducono il numero di assi vincolati.
-    """
-    rank = np.linalg.matrix_rank((environment - environment.mean()).to_numpy())
-    kind = ["vincolato" if i < rank else "residuo" for i in range(len(result.eigvals))]
-    return pd.DataFrame(
-        {"tipo": kind, "autovalore": result.eigvals.to_numpy(), "% inerzia": result.proportion_explained.to_numpy() * 100},
-        index=pd.Index(result.eigvals.index, name="Asse"),
-    )

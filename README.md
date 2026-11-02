@@ -3,6 +3,8 @@
 Pipeline unica che sostituisce Power Query, ForamEcoQS e i passaggi manuali in PAST. Parte **solo** dai dati
 grezzi (le tabelle `MC_*` e la geochimica di `input_data/Campioni_P_2025_Data_Raw.xlsx`) e da poche tabelle tecniche non
 derivabili, e produce un `Results_<data>.xlsx` con gli stessi fogli di prima, più i grafici e i report di controllo.
+I grafici sono grafici Excel collegati alle celle dei fogli: si possono modificare in Excel come qualsiasi altro.
+Fa eccezione il dendrogramma, che è un'immagine perché Excel non ha un tipo di grafico equivalente.
 
 Principi:
 - **nessun dato derivato viene copiato a mano**: Shannon, densità, liste per ForamEcoQS, etichette PAST… sono calcolati;
@@ -78,7 +80,7 @@ Il formato atteso (Tabelle Excel dei campioni, colonne obbligatorie, geochimica)
 | Comando | Cosa fa |
 |---|---|
 | `uv run foramqs check` | Legge, valida e pulisce gli input e risolve i nomi in WoRMS. Scrive `output/check_<data>.xlsx` senza calcolare indici. |
-| `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` e `output/figures_<data>/`. Se ci sono errori negli input si ferma e li elenca. |
+| `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` (con i grafici) e `output/figures_<data>/dendrogramma.png`. Se ci sono errori negli input si ferma e li elenca. |
 | `uv run foramqs diff input_data/Campioni_P_2025_Results.xlsx` | Confronta gli indici con un vecchio Results ed elenca, per campione, i cambiamenti che spiegano le differenze. |
 | `uv run foramqs add-sample MC_XX01 --gruppo G1` | Aggiunge un campione vuoto da compilare a mano: foglio con la Tabella delle conte, riga in `Geochimica_campioni`, campione nel gruppo di cluster indicato. Fa prima un backup del workbook in `input_data/backup/`. |
 | `uv run foramqs migrate-traits` | Crea `reference/species_traits.csv` dalle fonti storiche. **Già eseguito**: da qui in poi la tabella dei tratti si modifica a mano. |
@@ -94,7 +96,7 @@ Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worm
 | `config/name_corrections.csv` | Refusi da correggere nel testo (`trova;sostituisci;motivo;fonte`) | ricercatori |
 | `config/taxon_aliases.csv` | AphiaID imposto per un nome, con precedenza su WoRMS (`nome;aphia_id;motivo;fonte`) | ricercatori |
 | `config/non_foram_terms.csv` | Voci da scartare (diatomee, "No Forams"…) | ricercatori |
-| `config/pipeline.toml` | Percorsi, soglie, volume delle repliche, classi EQS, gruppi di cluster, limiti SQA | ricercatori |
+| `config/pipeline.toml` | Percorsi, soglie, volume delle repliche, classi EQS, gruppi di cluster | ricercatori |
 | `config/worms_cache.json` | Risposte WoRMS salvate (generato) | nessuno |
 
 Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `Elenco specie*`, `Densità faunistica`,
@@ -128,7 +130,7 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
 | V13 | errore | Riga con N°INDIVIDUI o DEFORMATI ma senza SPECIE (verrebbe scartata) |
 | V20-V25 | errore/avviso | Geochimica: campioni, valori non numerici o censurati, granulometria ≠ 100%, righe copiate, colonne di config mancanti |
 | V26 | errore | Tabella di un campione senza righe compilate |
-| V27 | errore/avviso | Valore di geochimica mancante (errore se la colonna serve alla CCA) |
+| V27 | errore | Valore di geochimica mancante (tutte le colonne servono alle tabelle per la CCA) |
 | V28 | errore | Campione ripetuto in più righe della geochimica |
 | V29 | errore | Campione con righe compilate ma nessun foraminifero conteggiato |
 | V30 | errore | Campione in `[input.copied_replicas]` inesistente o con più di una replica |
@@ -147,8 +149,15 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
   sorgente C# con la stessa aritmetica (arrotondamenti .NET). Verificati sui vecchi risultati in `tests/legacy`.
 - **PAST** (`indices/diversity.py`): i 16 indici del foglio `Indici_PAST` (Shannon con correzione di
   Miller–Madow, Simpson non distorto, Chao-1, iChao-1, ACE…), verificati sui valori di PAST.
-- **Cluster**: UPGMA + Bray-Curtis sulle abbondanze relative. **CCA**: scikit-bio, sulle specie dominanti e sulle
-  variabili ambientali standardizzate.
+- **Cluster**: UPGMA + Bray-Curtis sulle abbondanze relative.
+- **CCA**: non è calcolata dalla pipeline, si fa in PAST. Le tabelle da incollare hanno le stesse colonne di
+  parametri (exp(H'bc), FSI, S, Foram-AMBI, tutta la geochimica, Shannon_H) e le specie in % con lo stile di vita:
+  - `Tabella_CCA_All`: tutte le specie;
+  - `Tabella_CCA_<soglia>%` (oggi `Tabella_CCA_5%`): solo le specie sopra `tables.dominant_species_threshold`;
+  - `Tabella_CCA_<soglia>%_norm`: come la precedente, con i parametri in z-score (deviazione standard campionaria).
+- **Grafico delle specie** (foglio `Tabella_Cluster`): per ogni campione le specie sopra la soglia in quel
+  campione, il resto in Others. I dati del grafico stanno nel foglio nascosto `Grafico_specie`
+  (in Excel: tasto destro su una scheda → Scopri).
 
 ## Struttura del codice
 
@@ -161,7 +170,8 @@ src/foramqs/
   traits.py, migrate.py               tabella dei tratti e sua migrazione
   tables.py                           abbondanze e tabelle di sintesi
   indices/                            ForamEcoQS e PAST
-  multivariate.py, plots.py           cluster, CCA, grafici
+  multivariate.py                     cluster
+  charts.py, plots.py                 grafici Excel; dendrogramma (unica immagine)
   reconcile.py                        confronto con un vecchio Results
   new_sample.py                       aggiunta di un campione vuoto (comando add-sample)
   pipeline.py, cli.py, report.py      collegamento dei passi, comandi, scrittura Excel

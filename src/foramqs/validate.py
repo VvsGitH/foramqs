@@ -230,11 +230,7 @@ def configured_geochemistry_columns(cfg: Config) -> dict[str, list[str]]:
     t = cfg.raw["tables"]
     return {
         "input.grain_size_columns": cfg.input["grain_size_columns"],
-        "tables.past_geochemistry_columns": t["past_geochemistry_columns"],
-        "tables.complete_table_excluded_columns": t["complete_table_excluded_columns"],
         "tables.external_index_column": [t["external_index_column"]],
-        "tables.toc_column": [t["toc_column"]],
-        "sqa": list(cfg.raw["sqa"]),
     }
 
 
@@ -266,12 +262,11 @@ def check_geochemistry(geochemistry: ExcelTable, values: pd.DataFrame, sample_na
         issues.append(Issue("V28", ERROR, f"Campione presente in più righe della geochimica ({(values.index == s).sum()} righe)", s))
 
     censored = cfg.input.get("censored_values", {})
-    needed = set(cfg.raw["tables"]["past_geochemistry_columns"])  # usate dalla CCA: non possono mancare
     for col in values.columns:
         for sample, raw_value, value in zip(values.index, geochemistry.data[col], values[col]):
             if raw_value is None:
-                severity, effect = (ERROR, "serve alla CCA") if col in needed else (WARNING, "resterà vuoto nelle tabelle")
-                issues.append(Issue("V27", severity, f"{col}: valore mancante ({effect})", sample))
+                # Tutte le colonne entrano nelle tabelle per la CCA in PAST: nessun valore può mancare.
+                issues.append(Issue("V27", ERROR, f"{col}: valore mancante (serve alle tabelle per la CCA)", sample))
             elif isinstance(raw_value, str) and raw_value.strip() in censored:
                 issues.append(Issue("V21", WARNING, f"{col}: valore censurato '{raw_value}' sostituito con {censored[raw_value.strip()]}", sample))
             elif pd.isna(value):

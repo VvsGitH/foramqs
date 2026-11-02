@@ -70,19 +70,13 @@ def above_threshold(relative_table: pd.DataFrame, threshold: float, mode: str) -
     raise ValueError(f"threshold_mode sconosciuto: {mode!r} (ammessi: 'cella', 'specie')")
 
 
-def genera_composition(relative_table: pd.DataFrame, threshold: float, mode: str) -> pd.DataFrame:
-    """Abbondanza relativa per genere dei taxa sopra soglia, più la riga 'Others' con il resto."""
-    dominant = above_threshold(relative_table, threshold, mode)
-    genera = dominant.groupby(dominant.index.str.split(" ").str[0]).sum()
-    genera.loc["Others"] = 1 - genera.sum()
-    genera.index.name = "Genere"
-    return genera
-
-
 def species_columns_for_past(
     relative_table: pd.DataFrame, traits: pd.DataFrame, threshold: float, mode: str, abbreviations: dict[str, str],
 ) -> pd.DataFrame:
-    """Specie dominanti in percentuale, una riga per campione, con l'etichetta 'Specie (stile di vita)' usata in PAST."""
+    """Specie sopra soglia in percentuale, una riga per campione, con l'etichetta 'Specie (stile di vita)' usata in PAST.
+
+    Con `threshold=0` restano tutte le specie.
+    """
     dominant = above_threshold(relative_table, threshold, mode) * 100
     lifestyle = trait_of(dominant, traits, "stile_di_vita").map(lambda v: abbreviations.get(v, v))
     dominant.index = [f"{name} ({lifestyle[name]})" for name in dominant.index]
@@ -91,14 +85,22 @@ def species_columns_for_past(
     return table
 
 
+def above_cut_by_sample(relative_table: pd.DataFrame, cut: float) -> pd.DataFrame:
+    """Per ogni campione (riga) le specie con abbondanza ≥ `cut` in quel campione; il resto in 'Others (< cut)'.
+
+    Le colonne sono le specie sopra il cut in almeno un campione, dalla più abbondante nel complesso; frazioni 0-1,
+    ogni riga somma a 1. È la tabella del grafico delle specie dominanti.
+    """
+    shown = relative_table.where(relative_table >= cut, 0)
+    shown = shown[(shown > 0).any(axis=1)]
+    shown = shown.loc[shown.sum(axis=1).sort_values(ascending=False).index]
+    table = shown.T
+    table[f"Others (specie < {cut * 100:g}%)"] = 1 - table.sum(axis=1)
+    table.index.name = "Campione"
+    table.columns.name = None
+    return table
+
+
 def zscore(table: pd.DataFrame) -> pd.DataFrame:
     """Standardizzazione per colonna con la deviazione standard campionaria (come List.StandardDeviation di PQ)."""
     return (table - table.mean()) / table.std(ddof=1)
-
-
-def sqa_exceedances(geochemistry: pd.DataFrame, limits: dict[str, float]) -> pd.DataFrame:
-    """Campioni che superano almeno uno standard di qualità (SQA) dei metalli, con i limiti nell'ultima riga."""
-    values = geochemistry[list(limits)]
-    exceeding = values[(values > pd.Series(limits)).any(axis=1)].copy()
-    exceeding.loc["SQA (mg/kg s.s.)"] = pd.Series(limits)
-    return exceeding

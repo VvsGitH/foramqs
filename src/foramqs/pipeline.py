@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from foramqs import multivariate as mv
+from foramqs.charts import Chart
 from foramqs import plots
 from foramqs import tables as tb
 from foramqs import traits as tr
@@ -122,12 +123,17 @@ class PipelineBlocked(Exception):
 class RunResult:
     checked: CheckResult
     sheets: dict[str, pd.DataFrame]  # nome del foglio → tabella (l'indice diventa la prima colonna)
-    figures: dict[str, list[Path]]  # nome del foglio → grafici da inserire accanto alla tabella
+    figures: dict[str, list[Path]]  # nome del foglio → immagini da inserire accanto alla tabella (dendrogramma)
+    charts: dict[str, list[Chart]]  # nome del foglio → grafici Excel accanto alla tabella
+    hidden_sheets: set[str]  # fogli con i soli dati di supporto ai grafici
     issues: pd.DataFrame
 
 
 def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
-    """Pipeline completa: controlli, tabelle, indici, analisi multivariate e grafici."""
+    """Pipeline completa: controlli, tabelle, indici, cluster e grafici.
+
+    I grafici sono grafici Excel (`charts`) collegati alle celle; solo il dendrogramma è un'immagine in `figures_dir`.
+    """
     checked = check(cfg, offline=offline)
     if checked.has_errors:
         raise PipelineBlocked(checked)
@@ -154,11 +160,12 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
     eco = tb.by_trait(counts, trait("gruppo_ecologico", "Gruppo ecologico"), eco_labels)
     fsi_groups = tb.by_trait(counts, trait("gruppo_fsi", "Gruppo FSI"))
     deformed = tb.deformed_fraction(obs, samples)
-    per_replica, density = tb.density(obs, samples, cfg.density["replica_volume_ml"], cfg.density["per_ml"])
+    _, density = tb.density(obs, samples, cfg.density["replica_volume_ml"], cfg.density["per_ml"])
     dominant = tb.above_threshold(rel, t["dominant_species_threshold"], mode)
-    genera = tb.genera_composition(rel, t["genera_threshold"], mode)
-    past5 = tb.species_columns_for_past(rel, traits, t["dominant_species_threshold"], mode,
-                                        labels["lifestyle_abbreviation"])
+    cut = t["dominant_species_threshold"]
+    abbreviations = labels["lifestyle_abbreviation"]
+    species_all = tb.species_columns_for_past(rel, traits, 0, mode, abbreviations)
+    species_cut = tb.species_columns_for_past(rel, traits, cut, mode, abbreviations)
 
     environment = geo.assign(Shannon_H=past.loc["Shannon_H"])
     main_indices = feqs[["exp(H'bc)", "FSI", "Species Richness (S)", "Foram-AMBI"]]
@@ -168,15 +175,14 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         "Deformed_rel%_abundance": deformed * 100,
         "Densità faunistica media": density,
     }))
-    env_z = tb.zscore(environment)
-    cca_env_columns = t["past_geochemistry_columns"]
-    cca_environment = tb.zscore(geo[cca_env_columns])
-    cca_result = mv.canonical_correspondence(past5, cca_environment)
+    # Tabelle da incollare in PAST per la CCA: indici, variabili ambientali (anche z-score) e specie (%).
+    parameters = main_indices.join(environment)
+    cut_pct = f"{cut * 100:g}%"
+    cca = f"Tabella_CCA_{cut_pct}"
 
     sheets = {
         "Indici_PAST": past[order],
         "Foram Echo QS": feqs.loc[order],
-        "Foram_Echo_QS_Norm": tb.zscore(main_indices).loc[order],
         "Abbondanze_assolute": counts,
         "Abbondanza_relativa%": rel,
         "Abbondanza_rel%_deformati": deformed.loc[order].to_frame(),
@@ -184,59 +190,52 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         "Abbondanza_rel%_stilivita": lifestyle[order],
         "Abbondanza_rel%_gruppiecologici": eco[order].T.join(feqs["Foram-AMBI"]).join(geo[t["external_index_column"]]),
         "FSI": fsi_groups[order].T.join(feqs["FSI"]),
-        "FSI-M-AMBI": feqs[["FSI", "Foram-AMBI"]].join(geo[t["external_index_column"]]).loc[order],
         "Densità_faunistica_media": density.loc[order].to_frame(),
-        "Densità_per_replica": per_replica.set_index("campione"),
         "Tabella_Cluster": dominant[order],
-        **{f"Tabella_Cluster_{g}": dominant[[s for s in order if s in members]] for g, members in groups.items()},
-        "Tabella_comunità_3%": genera[order],
-        "Abb_rel%_cut5": dominant[order],
-        "Abbondanza_relativa_PAST_5%": geo[cca_env_columns].join(past5).loc[order],
-        "Specie&TOC": geo[[t["toc_column"]]].join(past5).loc[order],
         "Tabella_matrice": matrix.loc[order],
-        "Tabella_completa": matrix.drop(columns=t["complete_table_excluded_columns"]).join(past5).loc[order],
-        "Variabili_campioni_normalizzate": env_z.loc[order],
-        "Tabella_CCA_normalizzata": tb.zscore(main_indices).join(env_z).join(past5).loc[order],
-        "CCA_assi": mv.cca_axes(cca_result, cca_environment),
-        "CCA_campioni": cca_result.samples,
-        "CCA_variabili": cca_result.biplot_scores.rename_axis("Variabile"),
-        "Specchietto_limiti HMe": tb.sqa_exceedances(geo, cfg.raw["sqa"]),
+        "Tabella_CCA_All": parameters.join(species_all).loc[order],
+        cca: parameters.join(species_cut).loc[order],
+        f"{cca}_norm": tb.zscore(main_indices).join(tb.zscore(environment)).join(species_cut).loc[order],
     }
 
-    fig = figures_dir
+    species_chart_sheet = "Grafico_specie"
+    sheets[species_chart_sheet] = tb.above_cut_by_sample(rel, cut).loc[order]
+
     eqs = cfg.raw["eqs"]
-    figures = {
+    per_ml = cfg.density["per_ml"]
+    charts = {
         "Indici_PAST": [
-            plots.bar_chart(past.loc["Taxa_S"], order, "Ricchezza specifica (S)", "Taxa", fig / "ricchezza.png"),
-            plots.bar_chart(past.loc["Shannon_H"], order, "Indice di Shannon (PAST, Miller–Madow)", "H'", fig / "shannon.png"),
+            Chart("Ricchezza specifica (S)", ("Taxa_S",), by="rows", y_title="Taxa"),
+            Chart("Indice di Shannon (PAST, Miller–Madow)", ("Shannon_H",), by="rows", y_title="H'"),
         ],
         "Foram Echo QS": [
-            plots.bar_chart(feqs["exp(H'bc)"], order, "exp(H'bc)", "exp(H'bc)", fig / "exp_hbc.png", _limits(eqs["exp_hbc"])),
-            plots.bar_chart(feqs["Foram-AMBI"], order, "Foram-AMBI", "Foram-AMBI", fig / "foram_ambi.png", _limits(eqs["foram_ambi"])),
+            Chart("exp(H'bc)", ("exp(H'bc)",), y_title="exp(H'bc)", limits=_limits(eqs["exp_hbc"])),
+            Chart("Foram-AMBI", ("Foram-AMBI",), y_title="Foram-AMBI", limits=_limits(eqs["foram_ambi"])),
         ],
-        "FSI": [plots.bar_chart(feqs["FSI"], order, "Foram Stress Index (FSI)", "FSI", fig / "fsi.png", _limits(eqs["fsi"]))],
-        "FSI-M-AMBI": [plots.panels({
-            "FSI": feqs["FSI"], "Foram-AMBI": feqs["Foram-AMBI"], t["external_index_column"]: geo[t["external_index_column"]],
-        }, order, f"FSI, Foram-AMBI e {t['external_index_column']}", fig / "fsi_ambi_mambi.png")],
-        "Abbondanza_rel%_deformati": [plots.bar_chart(deformed * 100, order, "Individui deformati", "%", fig / "deformati.png")],
-        "Abbondanza_relativa%_guscio": [plots.stacked_composition(shell, order, "Tipi di guscio", fig / "guscio.png")],
-        "Abbondanza_rel%_stilivita": [plots.stacked_composition(lifestyle, order, "Stili di vita", fig / "stili_di_vita.png")],
-        "Abbondanza_rel%_gruppiecologici": [plots.stacked_composition(eco, order, "Gruppi ecologici", fig / "gruppi_ecologici.png")],
-        "Densità_faunistica_media": [plots.bar_chart(density, order, "Densità faunistica media", "individui / 10 ml", fig / "densita.png")],
-        "Tabella_comunità_3%": [plots.stacked_composition(genera, order, "Generi (specie ≥ 3%)", fig / "generi.png")],
-        "Abb_rel%_cut5": [plots.stacked_composition(dominant, order, "Specie dominanti (≥ 5%)", fig / "specie_dominanti.png")],
-        "Tabella_Cluster": [plots.dendrogram_chart(clustering, groups, fig / "dendrogramma.png")],
-        "CCA_campioni": [plots.cca_biplot(cca_result, fig / "cca.png")],
+        "FSI": [Chart("Foram Stress Index (FSI)", ("FSI",), y_title="FSI", limits=_limits(eqs["fsi"]))],
+        "Abbondanza_rel%_deformati": [Chart("Individui deformati", (deformed.name,), percent=True)],
+        "Abbondanza_relativa%_guscio": [Chart("Tipi di guscio", tuple(shell.index), by="rows", stacked=True, percent=True)],
+        "Abbondanza_rel%_stilivita": [Chart("Stili di vita", tuple(lifestyle.index), by="rows", stacked=True, percent=True)],
+        "Abbondanza_rel%_gruppiecologici": [Chart("Gruppi ecologici", tuple(eco.index), stacked=True, percent=True)],
+        "Densità_faunistica_media": [
+            Chart("Densità faunistica media", (density.name,), y_title=f"individui / {per_ml:g} ml"),
+        ],
+        "Tabella_Cluster": [Chart(
+            f"Specie con abbondanza ≥ {cut_pct} nel campione", tuple(sheets[species_chart_sheet].columns),
+            stacked=True, percent=True, source=species_chart_sheet, width=34, height=24,
+        )],
     }
+    figures = {"Tabella_Cluster": [plots.dendrogram_chart(clustering, groups, figures_dir / "dendrogramma.png")]}
 
     issues = v.issues_frame([
         *[v.Issue(**row) for row in checked.issues.to_dict("records")],
         *mv.check_group_branches(clustering, groups),
     ])
     sheets = {name: frame.rename_axis(frame.index.name or "Campione") for name, frame in sheets.items()}
-    return RunResult(checked=checked, sheets=sheets, figures=figures, issues=issues)
+    return RunResult(checked=checked, sheets=sheets, figures=figures, charts=charts,
+                     hidden_sheets={species_chart_sheet}, issues=issues)
 
 
-def _limits(rules: list[list]) -> list[tuple[str, float]]:
+def _limits(rules: list[list]) -> tuple[tuple[str, float], ...]:
     """Limiti di classe EQS da disegnare: una linea per regola con soglia (esclusa l'uguaglianza esatta)."""
-    return [(label, limit) for label, operator, limit in (r for r in rules if len(r) == 3) if operator != "=="]
+    return tuple((label, limit) for label, operator, limit in (r for r in rules if len(r) == 3) if operator != "==")
