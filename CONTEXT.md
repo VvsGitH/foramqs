@@ -152,7 +152,8 @@ L'esecuzione del comando `uv run foramqs run` produce:
   - `Abbondanza_relativa%_guscio` (grafico a barre 100% impilate)
   - `Abbondanza_rel%_stilivita` (grafico a barre 100% impilate)
   - `Abbondanza_rel%_gruppiecologici` (grafico a barre 100% impilate + colonna indice esterno M-AMBI)
-  - `Abbondanza_rel%_gruppiecologici_alt` (presente se configurato `foram_ambi_alternative`: ripartizione dei gruppi e Foram-AMBI alternativo con grafici dedicati per i soli campioni selezionati)
+  - `Abbondanza_rel%_gruppiecol_alt` (presente se configurato `foram_ambi_alternative`: ripartizione dei gruppi e Foram-AMBI alternativo con grafici dedicati per i soli campioni selezionati)
+  - `Confronto_gruppi_ecologici` (presente se configurato `foram_ambi_alternative`: per ogni specie dei campioni, gruppo ecologico della lista principale Jorissen et al. 2018 e della lista alternativa, colonna `groups_column`)
   - `FSI` (grafico nativo con soglie EQS)
   - `Densità_faunistica_media` (grafico densità)
   - `Tabella_Cluster` (dati specie dominanti + dendrogramma PNG ad alta definizione + grafico a barre impilate delle specie)
@@ -187,7 +188,7 @@ L'esecuzione del comando `uv run foramqs run` produce:
 | **R01–R04** | Errore/Avviso | `species_traits.csv`: valori non ammessi, conflitti tra righe, specie prive di tratti |
 | **R05** | Info | Guscio nel foglio grezzo corretto dal guscio autoritativo della tabella dei tratti |
 | **C01–C02** | Errore/Avviso | Gruppi cluster non presenti nei campioni o non formanti un ramo valido del dendrogramma |
-| **A01–A04** | Errore | Foram-AMBI alternativo: campioni sconosciuti, file non trovato, valori non ammessi o conflitti |
+| **A01–A05** | Errore | Foram-AMBI alternativo: campioni sconosciuti, file non trovato, valori non ammessi, conflitti o nome del foglio non valido per Excel |
 | **I01–I03** | Info | Giovanili sommati a `spp.`; individui morti (righe senza conteggio); repliche duplicate da config |
 
 ---
@@ -202,7 +203,7 @@ L'esecuzione del comando `uv run foramqs run` produce:
 6. **Classi EQS**: Confermata la soglia norvegese per $\exp(H'_{bc})$ (High $\ge 22$, Good $\ge 13$, Moderate $\ge 7$, Poor $> 3$, Bad), con l'alternativa italiana documentata in config.
 7. **Deformità morfologiche**: Si utilizza esclusivamente l'abbondanza relativa complessiva dei deformati ($\sum DEFORMATI / \sum INDIVIDUI$), senza calcolo di indici teratologici secondari (FDI).
 8. **Analisi multivariata CCA**: Flusso ibrido Python/PAST confermato: `foramqs` prepara e formatta le matrici complete e standardizzate (`Tabella_CCA_*`), mentre l'elaborazione biplot/triplot e l'esplorazione dell'ordinamento sono demandate all'ambiente interattivo di PAST.
-9. **Foram-AMBI Alternativo Configurabile**: Possibilità di calcolare, per un sottoinsieme di campioni configurato in `[foram_ambi_alternative]`, un Foram-AMBI secondario basato su un file CSV dedicato (`reference/foram_ambi_alt.csv`). La lista è indipendente (solo le specie presenti nel file ricevono il gruppo ecologico 1–5, le altre sono `NA`), valorizza le colonne dedicate in `Foram Echo QS` ed esporta il foglio/grafico `Abbondanza_rel%_gruppiecologici_alt`.
+9. **Foram-AMBI Alternativo Configurabile**: Possibilità di calcolare, per un sottoinsieme di campioni configurato in `[foram_ambi_alternative]`, un Foram-AMBI secondario basato su un file CSV dedicato (`reference/foram_ambi_alt.csv`). La lista è indipendente (solo le specie presenti nel file ricevono il gruppo ecologico 1–5, le altre sono `NA`), valorizza le colonne dedicate in `Foram Echo QS` ed esporta il foglio/grafico `Abbondanza_rel%_gruppiecol_alt`.
 10. **Geochimica e valori censurati**: Nessun valore censurato aggiuntivo (LOD/LOQ) da gestire oltre alla regola storica dello Stagno ($>200 \to 201$).
 11. **Grafici Excel Nativi**: Tutti i grafici nel file dei risultati (tranne il dendrogramma) sono inseriti come grafici Excel collegati dinamicamente alle celle, rendendoli personalizzabili per tesi e presentazioni.
 

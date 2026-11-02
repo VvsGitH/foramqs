@@ -9,6 +9,7 @@ Severità:
 from __future__ import annotations
 
 import difflib
+import re
 from dataclasses import asdict, dataclass
 from itertools import combinations
 
@@ -295,6 +296,16 @@ def check_alternative_ambi_samples(samples: list[str], sample_names: set[str]) -
         if s not in sample_names:
             issues.append(Issue("A01", ERROR, f"Campione '{s}' in [foram_ambi_alternative.samples] non presente nei dati", s))
     return issues
+
+
+def check_alternative_ambi_sheet(name: str) -> list[Issue]:
+    """A05: il nome del foglio deve essere accettato da Excel (max 31 caratteri, senza \\ / ? * [ ] :)."""
+    if 0 < len(name) <= 31 and not re.search(r"[\\/?*\[\]:]", name) and not name.startswith("'") and not name.endswith("'"):
+        return []
+    return [Issue(
+        "A05", ERROR, f"Nome foglio non valido per Excel in [foram_ambi_alternative.groups_sheet]: '{name}'",
+        dettagli=f"{len(name)} caratteri (max 31), senza \\ / ? * [ ] : e senza apostrofo iniziale o finale",
+    )]
 
 
 def check_alternative_ambi_traits(alt_traits: pd.DataFrame, allowed_groups: list[str], file_name: str) -> list[Issue]:

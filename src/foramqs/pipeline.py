@@ -20,6 +20,9 @@ from foramqs.indices.foramecoqs import foramecoqs_table
 from foramqs.inputs import geochemistry_values, load_inputs
 from foramqs.taxonomy import WormsClient, resolution_issues, resolve_taxa
 
+ALT_GROUPS_SHEET = "Abbondanza_rel%_gruppiecol_alt"  # i nomi dei fogli Excel hanno al massimo 31 caratteri
+ECO_GROUPS_COMPARISON_SHEET = "Confronto_gruppi_ecologici"
+
 
 @dataclass(frozen=True)
 class CheckResult:
@@ -90,6 +93,7 @@ def check(cfg: Config, offline: bool = False) -> CheckResult:
 
     if alt_samples_cfg:
         alt_issues.extend(v.check_alternative_ambi_samples(alt_samples_cfg, set(inputs.samples)))
+        alt_issues.extend(v.check_alternative_ambi_sheet(alt_cfg.get("groups_sheet", ALT_GROUPS_SHEET)))
 
     allowed = {
         "stile_di_vita": cfg.traits["lifestyles"],
@@ -185,6 +189,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
     configured_alt_samples = alt_cfg.get("samples", [])
     alt_samples = [s for s in order if s in configured_alt_samples]
     alt_label = alt_cfg.get("label", "Foram-AMBI (Alt)")
+    alt_sheet_name = alt_cfg.get("groups_sheet", ALT_GROUPS_SHEET)
 
     alt_eco_series = None
     if alt_samples and checked.alt_traits is not None:
@@ -249,8 +254,12 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         eco_alt = tb.by_trait(counts, alt_eco_series.rename("Gruppo ecologico"), eco_labels)
         canonical_order = ["GI", "GII", "GIII", "GIV", "GV", "NA"]
         eco_alt = eco_alt.reindex([c for c in canonical_order if c in eco_alt.index])
-        alt_sheet_name = alt_cfg.get("groups_sheet", "Abbondanza_rel%_gruppiecologici_alt")
         sheets[alt_sheet_name] = eco_alt[alt_samples].T.join(feqs.loc[alt_samples, [alt_label]])
+        # Gruppo ecologico di ogni specie dei campioni nella lista principale (Jorissen et al. 2018) e in quella alternativa.
+        sheets[ECO_GROUPS_COMPARISON_SHEET] = pd.DataFrame({
+            "GE Jorissen": trait("gruppo_ecologico", "GE Jorissen").replace(eco_labels),
+            alt_cfg.get("groups_column", "GE (Alt)"): alt_eco_series.replace(eco_labels),
+        }).rename_axis("Specie")
 
     species_chart_sheet = "Grafico_specie"
     sheets[species_chart_sheet] = tb.above_cut_by_sample(rel, cut).loc[order]
@@ -280,7 +289,6 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         )],
     }
     if alt_samples and alt_eco_series is not None:
-        alt_sheet_name = alt_cfg.get("groups_sheet", "Abbondanza_rel%_gruppiecologici_alt")
         charts[alt_sheet_name] = [
             Chart(f"Gruppi ecologici ({alt_label})", tuple(eco_alt.index), stacked=True, percent=True),
             Chart(alt_label, (alt_label,), y_title=alt_label, limits=_limits(eqs["foram_ambi"])),

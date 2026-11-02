@@ -131,6 +131,11 @@ def test_alternative_ambi_invalid_eco_group_is_an_error(make_project, tmp_path):
     assert "A03" in codes(issues, "errore")
 
 
+def test_alternative_ambi_sheet_name_too_long_for_excel_is_an_error(make_project):
+    issues = make_project({"MC_A01": [TEPIDA]}, alt_ambi={"samples": ["MC_A01"], "groups_sheet": "Abbondanza_rel%_gruppiecologici_alt"})
+    assert "A05" in codes(issues, "errore")
+
+
 def test_pipeline_run_with_alternative_foram_ambi(tmp_path):
     from foramqs.pipeline import run
 
@@ -143,12 +148,19 @@ def test_pipeline_run_with_alternative_foram_ambi(tmp_path):
     alt_file.write_text("nome;gruppo_ecologico\nAmmonia tepida;3\n", encoding="utf-8")
 
     cfg.raw["foram_ambi_alternative"]["samples"] = ["MC_CB01", "MC_CE01"]
+    cfg.raw["foram_ambi_alternative"]["label"] = "Foram-AMBI (Alt)"
 
     res = run(cfg, figures_dir=tmp_path / "figures", offline=True)
-    assert "Abbondanza_rel%_gruppiecologici_alt" in res.sheets
-    alt_sheet = res.sheets["Abbondanza_rel%_gruppiecologici_alt"]
+    assert all(len(name) <= 31 for name in res.sheets)  # limite di Excel: oltre, i grafici perdono il foglio di origine
+    assert "Abbondanza_rel%_gruppiecol_alt" in res.sheets
+    alt_sheet = res.sheets["Abbondanza_rel%_gruppiecol_alt"]
     assert set(alt_sheet.index) == {"MC_CB01", "MC_CE01"}
     assert "Foram-AMBI (Alt)" in alt_sheet.columns
+
+    comparison = res.sheets["Confronto_gruppi_ecologici"]
+    assert comparison.columns.tolist() == ["GE Jorissen", "GE Bouchet"]
+    assert comparison.loc["Ammonia tepida", "GE Bouchet"] == "GIII"
+    assert set(comparison["GE Bouchet"]) == {"GIII", "NA"}  # solo Ammonia tepida è nel file alternativo del test
 
     feqs = res.sheets["Foram Echo QS"]
     assert "Foram-AMBI (Alt)" in feqs.columns

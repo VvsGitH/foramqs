@@ -61,9 +61,10 @@ fsi_groups = ["Sen", "Str", "ND"]
 # per un sottoinsieme di campioni. Fanno fede solo le specie presenti nel file; le altre risultano non assegnate (NA).
 [foram_ambi_alternative]
 file = "reference/foram_ambi_alt.csv"
-label = "Foram-AMBI (Alt)"
-groups_sheet = "Abbondanza_rel%_gruppiecologici_alt"
-samples = []
+label = "Foram-AMBI (Bouchet 2021)"
+groups_sheet = "Abbondanza_rel%_gruppiecol_alt"  # max 31 caratteri (limite di Excel)
+groups_column = "GE Bouchet"  # colonna del foglio Confronto_gruppi_ecologici
+samples = ["MC_FL01", "MC_FL02", "MC_FO01", "MC_FO02"]
 
 # Fonti storiche usate una sola volta da `foramqs migrate-traits` per creare reference/species_traits.csv
 [migration]

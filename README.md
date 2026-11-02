@@ -142,7 +142,7 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
 | R05 | info | Guscio nei fogli diverso dalla tabella dei tratti: vale sempre quello dei tratti |
 | C01 | errore/avviso | Gruppi di cluster: campioni sconosciuti o in più gruppi (errore), campioni senza gruppo (avviso) |
 | C02 | avviso | Gruppo che non è un ramo del dendrogramma (solo in `run`, serve il cluster) |
-| A01-A04 | errore | Foram-AMBI alternativo: campioni sconosciuti, file non trovato, valori non ammessi o conflitti |
+| A01-A05 | errore | Foram-AMBI alternativo: campioni sconosciuti, file non trovato, valori non ammessi, conflitti o nome del foglio non valido per Excel |
 | I01-I03 | info | Giovanili sommati a `Genere spp.`; righe senza N°INDIVIDUI (individui morti) non conteggiate; replica R1 copiata (`[input.copied_replicas]`) |
 
 ## Indici e metodi
