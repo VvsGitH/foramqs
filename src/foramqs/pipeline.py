@@ -196,6 +196,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_traits_table = checked.alt_traits.drop_duplicates("taxon_id")[["nome_valido", "gruppo_ecologico"]]
         alt_eco_series = tb.trait_of(counts, alt_traits_table, "gruppo_ecologico")
 
+    redistribute = cfg.raw.get("foram_ambi", {}).get("redistribute_unassigned", False)
     feqs = foramecoqs_table(
         counts,
         trait("gruppo_fsi", "FSI"),
@@ -204,13 +205,20 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_eco_group=alt_eco_series,
         alt_samples=alt_samples,
         alt_label=alt_label,
-        redistribute_unassigned=cfg.raw.get("foram_ambi", {}).get("redistribute_unassigned", False),
+        redistribute_unassigned=redistribute,
     )
     past = diversity_table(counts).rename_axis("Indice")
     eco_labels = {"1": "GI", "2": "GII", "3": "GIII", "4": "GIV", "5": "GV"}
     shell = tb.by_trait(counts, trait("guscio", "TIPO GUSCIO"), labels["shell"])
     lifestyle = tb.by_trait(counts, trait("stile_di_vita", "STILE DI VITA"), labels["lifestyle"])
     eco = tb.by_trait(counts, trait("gruppo_ecologico", "Gruppo ecologico"), eco_labels)
+    eco_sheet = eco[order].T
+    if redistribute:
+        # Come nel Foram-AMBI: GI–GV sul totale dei soli assegnati (sommano a 1), NA a parte e fuori dal grafico.
+        assigned = eco.drop(index=tb.NOT_ASSIGNED, errors="ignore")
+        eco_sheet = (assigned / assigned.sum())[order].T
+        eco_sheet["NA (ridistribuiti)"] = eco.loc[tb.NOT_ASSIGNED, order] if tb.NOT_ASSIGNED in eco.index else 0.0
+    eco_groups = tuple(g for g in eco.index if not (redistribute and g == tb.NOT_ASSIGNED))
     fsi_groups = tb.by_trait(counts, trait("gruppo_fsi", "Gruppo FSI"))
     deformed = tb.deformed_fraction(obs, samples)
     _, density = tb.density(obs, samples, cfg.density["replica_volume_ml"], cfg.density["per_ml"])
@@ -241,7 +249,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         "Abbondanza_rel%_deformati": deformed.loc[order].to_frame(),
         "Abbondanza_relativa%_guscio": shell[order],
         "Abbondanza_rel%_stilivita": lifestyle[order],
-        "Abbondanza_rel%_gruppiecologici": eco[order].T.join(feqs["Foram-AMBI"]).join(geo[t["external_index_column"]]),
+        "Abbondanza_rel%_gruppiecologici": eco_sheet.join(feqs["Foram-AMBI"]).join(geo[t["external_index_column"]]),
         "FSI": fsi_groups[order].T.join(feqs["FSI"]),
         "Densità_faunistica_media": density.loc[order].to_frame(),
         "Tabella_Cluster": dominant[order],
@@ -280,7 +288,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         "Abbondanza_rel%_deformati": [Chart("Individui deformati", (deformed.name,), percent=True)],
         "Abbondanza_relativa%_guscio": [Chart("Tipi di guscio", tuple(shell.index), by="rows", stacked=True, percent=True)],
         "Abbondanza_rel%_stilivita": [Chart("Stili di vita", tuple(lifestyle.index), by="rows", stacked=True, percent=True)],
-        "Abbondanza_rel%_gruppiecologici": [Chart("Gruppi ecologici", tuple(eco.index), stacked=True, percent=True)],
+        "Abbondanza_rel%_gruppiecologici": [Chart("Gruppi ecologici", eco_groups, stacked=True, percent=True)],
         "Densità_faunistica_media": [
             Chart("Densità faunistica media", (density.name,), y_title=f"individui / {per_ml:g} ml"),
         ],

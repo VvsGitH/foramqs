@@ -151,7 +151,7 @@ L'esecuzione del comando `uv run foramqs run` produce:
   - `Abbondanza_rel%_deformati` (grafico % deformati)
   - `Abbondanza_relativa%_guscio` (grafico a barre 100% impilate)
   - `Abbondanza_rel%_stilivita` (grafico a barre 100% impilate)
-  - `Abbondanza_rel%_gruppiecologici` (grafico a barre 100% impilate + colonna indice esterno M-AMBI)
+  - `Abbondanza_rel%_gruppiecologici` (grafico a barre 100% impilate + colonna indice esterno M-AMBI; con `redistribute_unassigned = true` GI–GV sono frazioni dei soli individui assegnati, come nel calcolo del Foram-AMBI, e la quota NA è nella colonna `NA (ridistribuiti)`, fuori dal grafico)
   - `Abbondanza_rel%_gruppiecol_alt` (presente se configurato `foram_ambi_alternative`: ripartizione dei gruppi e Foram-AMBI alternativo con grafici dedicati per i soli campioni selezionati)
   - `Confronto_gruppi_ecologici` (presente se configurato `foram_ambi_alternative`: per ogni specie dei campioni, gruppo ecologico della lista principale Jorissen et al. 2018 e della lista alternativa, colonna `groups_column`)
   - `FSI` (grafico nativo con soglie EQS)
