@@ -1,83 +1,275 @@
 nome;gruppo_ecologico;fonte;note
-Cribroelphidium incertum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113240, optimum TOC 0.1%, tolleranza 0.1-0.2%
-Sigmavirgulina tortuosa;1;Bouchet et al. 2021 (Appendix D);AphiaID 113392, optimum TOC 0.2%, tolleranza 0.1-0.5%
-Cibicides refulgens;1;Bouchet et al. 2021 (Appendix D);AphiaID 112877, optimum TOC 0.2%, tolleranza 0.1-0.7%
-Sigmoilina costata;1;Bouchet et al. 2021 (Appendix D);AphiaID 112693, optimum TOC 0.2%, tolleranza 0.1-0.5%
-Astrononion stelligerum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113552, optimum TOC 0.2%, tolleranza 0.1-0.7%
-Asterigerinata mamilla;1;Bouchet et al. 2021 (Appendix D);AphiaID 112933, optimum TOC 0.4%, tolleranza 0.2-1.1%
-Haynesina depressula;1;Bouchet et al. 2021 (Appendix D);AphiaID 113293, optimum TOC 0.5%, tolleranza 0.2-1.2%
-Elphidium complanatum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113261, optimum TOC 0.5%, tolleranza 0.2-1.2%
-Rosalina macropora;1;Bouchet et al. 2021 (Appendix D);AphiaID 113173, optimum TOC 0.7%, tolleranza 0.2-3.1%
-Cibicidoides lobatulus;1;Bouchet et al. 2021 (Appendix D);AphiaID 988323, optimum TOC 0.7%, tolleranza 0.3-1.9%
-Rosalina bradyi;1;Bouchet et al. 2021 (Appendix D);AphiaID 113167, optimum TOC 0.8%, tolleranza 0.3-2.1%
-Triloculina trigonula;1;Bouchet et al. 2021 (Appendix D);AphiaID 112772, optimum TOC 0.8%, tolleranza 0.2-2.4%
-Textularia agglutinans;1;Bouchet et al. 2021 (Appendix D);AphiaID 114264, optimum TOC 0.8%, tolleranza 0.5-1.3%
-Elphidium crispum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113262, optimum TOC 0.8%, tolleranza 0.3-2.4%
-Cassidulina carinata;1;Bouchet et al. 2021 (Appendix D);AphiaID 183041, optimum TOC 0.9%, tolleranza 0.7-1.0%
-Rosalina globularis;1;Bouchet et al. 2021 (Appendix D);AphiaID 113171, optimum TOC 0.9%, tolleranza 0.2-4.2%
-Planorbulina mediterranensis;1;Bouchet et al. 2021 (Appendix D);AphiaID 113634, optimum TOC 0.9%, tolleranza 0.3-2.7%
-Elphidium advenum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113254, optimum TOC 0.9%, tolleranza 0.2-4.0%
-Peneroplis pertusus;1;Bouchet et al. 2021 (Appendix D);AphiaID 112815, optimum TOC 0.9%, tolleranza 0.3-2.8%
-Quinqueloculina laevigata;1;Bouchet et al. 2021 (Appendix D);AphiaID 112642, optimum TOC 1.0%, tolleranza 0.2-4.2%
-Ammonia beccarii;1;Bouchet et al. 2021 (Appendix D);AphiaID 112849, optimum TOC 1.1%, tolleranza 0.3-3.4%
-Porosononion granosum;1;Bouchet et al. 2021 (Appendix D);AphiaID 954808, optimum TOC 1.1%, tolleranza 0.5-2.2%
-Massilina secans;1;Bouchet et al. 2021 (Appendix D);AphiaID 163641, optimum TOC 1.1%, tolleranza 0.3-4.7%
-Quinqueloculina stelligera;1;Bouchet et al. 2021 (Appendix D);AphiaID 920885, optimum TOC 1.1%, tolleranza 0.3-4.5%
-Nonionoides grateloupii;1;Bouchet et al. 2021 (Appendix D);AphiaID 418051, optimum TOC 1.2%, tolleranza 0.7-2.1%
-Ammonia parkinsoniana;1;Bouchet et al. 2021 (Appendix D);AphiaID 418095, optimum TOC 1.2%, tolleranza 0.2-6.1%
-Quinqueloculina berthelotiana;1;Bouchet et al. 2021 (Appendix D);AphiaID 112816, optimum TOC 1.2%, tolleranza 0.7-2.2%
-Bolivina variabilis;1;Bouchet et al. 2021 (Appendix D);AphiaID 112998, optimum TOC 1.3%, tolleranza 0.4-4.1%
-Peneroplis planatus;1;Bouchet et al. 2021 (Appendix D);AphiaID 112817, optimum TOC 1.4%, tolleranza 0.6-3.3%
-Adelosina mediterranensis;1;Bouchet et al. 2021 (Appendix D);AphiaID 112536, optimum TOC 1.4%, tolleranza 0.5-4.2%
-Miliolinella subrotunda;1;Bouchet et al. 2021 (Appendix D);AphiaID 112564, optimum TOC 1.5%, tolleranza 0.5-4.4%
-Discorinopsis aguayoi;1;Bouchet et al. 2021 (Appendix D);AphiaID 417645, optimum TOC 1.5%, tolleranza 0.4-6.1%
-Quinqueloculina carinatastriata;1;Bouchet et al. 2021 (Appendix D);AphiaID 466057, optimum TOC 1.6%, tolleranza 0.8-3.0%
-Quinqueloculina bicostata;1;Bouchet et al. 2021 (Appendix D);AphiaID 417701, optimum TOC 1.6%, tolleranza 0.8-3.1%
-Cribroelphidium williamsoni;1;Bouchet et al. 2021 (Appendix D);AphiaID 1026169, optimum TOC 1.6%, tolleranza 0.9-2.7%
-Siphonaperta aspera;1;Bouchet et al. 2021 (Appendix D);AphiaID 593433, optimum TOC 1.6%, tolleranza 2.9/0.8% (valori invertiti nella fonte)
-Spirillina vivipara;1;Bouchet et al. 2021 (Appendix D);AphiaID 113737, optimum TOC 1.6%, tolleranza 0.3-8.8%
-Bolivina striatula;1;Bouchet et al. 2021 (Appendix D);AphiaID 112989, optimum TOC 1.7%, tolleranza 0.4-7.9%
-Quinqueloculina seminula;1;Bouchet et al. 2021 (Appendix D);AphiaID 112674, optimum TOC 1.8%, tolleranza 0.7-4.7%
-Cycloforina contorta;1;Bouchet et al. 2021 (Appendix D);AphiaID 112516, optimum TOC 1.8%, tolleranza 0.8-3.9%
-Adelosina longirostra;1;Bouchet et al. 2021 (Appendix D);AphiaID 112535, optimum TOC 1.8%, tolleranza 1.0-3.5%
-Adelosina milletti;1;Bouchet et al. 2021 (Appendix D);AphiaID 522161, optimum TOC 1.9%, tolleranza 1.1-3.3%
 Adelosina cliarensis;2;Bouchet et al. 2021 (Appendix D);AphiaID 112529, optimum TOC 2.0%, tolleranza 0.9-4.1%
-Bulimina marginata;2;Bouchet et al. 2021 (Appendix D);AphiaID 113042, optimum TOC 2.1%, tolleranza 1.2-3.8%
-Quinqueloculina lata;2;Bouchet et al. 2021 (Appendix D);AphiaID 112644, optimum TOC 2.2%, tolleranza 0.6-8.5%
-Valvulineria bradyana;2;Bouchet et al. 2021 (Appendix D);AphiaID 112960, optimum TOC 2.2%, tolleranza 1.2-3.9%
-Bolivina dilatata;2;Bouchet et al. 2021 (Appendix D);AphiaID 112973, optimum TOC 2.2%, tolleranza 0.9-5.7%
-Rectuvigerina phlegeri;2;Bouchet et al. 2021 (Appendix D);AphiaID 113755, optimum TOC 2.3%, tolleranza 1.3-4.0%
-Ammobaculites exiguus;2;Bouchet et al. 2021 (Appendix D);AphiaID 417589, optimum TOC 2.3%, tolleranza 2.0-2.7%
-Quinqueloculina jugosa;3;Bouchet et al. 2021 (Appendix D);AphiaID 112641, optimum TOC 2.4%, tolleranza 1.1-5.0%
-Vertebralina striata;3;Bouchet et al. 2021 (Appendix D);AphiaID 112785, optimum TOC 2.4%, tolleranza 1.0-5.5%
-Ammonia tepida;3;Bouchet et al. 2021 (Appendix D);AphiaID 112857, optimum TOC 2.4%, tolleranza 0.9-6.1%
+Adelosina colomi;1;species_traits.csv;
+Adelosina dubia;1;species_traits.csv;
+Adelosina duthiersi;1;species_traits.csv;
+Adelosina elegans;1;species_traits.csv;
+Adelosina intricata;1;species_traits.csv;
+Adelosina italica;1;species_traits.csv;
+Adelosina laevigata;1;species_traits.csv;
+Adelosina longirostra;1;Bouchet et al. 2021 (Appendix D);AphiaID 112535, optimum TOC 1.8%, tolleranza 1.0-3.5%
+Adelosina mediterranensis;1;Bouchet et al. 2021 (Appendix D);AphiaID 112536, optimum TOC 1.4%, tolleranza 0.5-4.2%
+Adelosina milletti;1;Bouchet et al. 2021 (Appendix D);AphiaID 522161, optimum TOC 1.9%, tolleranza 1.1-3.3%
+Adelosina partschii;1;species_traits.csv;
+Adelosina schreibersii;3;Bouchet et al. 2021 (Appendix D);AphiaID 112538, optimum TOC 3.3%, tolleranza 1.8-6.1%, nome in Bouchet: Adelosina pulchella
+Adelosina spp.;1;species_traits.csv;
+Affinetrina gualtieriana;2;species_traits.csv;
+Affinetrina planciana;2;species_traits.csv;
+Affinetrina spp.;2;species_traits.csv;
+Affinetrina ucrainica;2;species_traits.csv;
 Ammobaculites balkwilli;3;Bouchet et al. 2021 (Appendix D);AphiaID 163639, optimum TOC 2.4%, tolleranza 1.4-4.2%
-Ammoscalaria runiana;3;Bouchet et al. 2021 (Appendix D);AphiaID 113919, optimum TOC 2.4%, tolleranza 2.0-3.0%
-Bulimina elongata;3;Bouchet et al. 2021 (Appendix D);AphiaID 933974, optimum TOC 2.5%, tolleranza 1.3-4.9%
-Cribroelphidium excavatum;3;Bouchet et al. 2021 (Appendix D);AphiaID 254680, optimum TOC 2.5%, tolleranza 2.0-3.3%
-Triloculina marioni;3;Bouchet et al. 2021 (Appendix D);AphiaID 112763, optimum TOC 2.6%, tolleranza 1.3-5.0%
-Cribroelphidium selseyense;3;Bouchet et al. 2021 (Appendix D);AphiaID 754247, optimum TOC 2.6%, tolleranza 1.7-4.1%
-Buliminella elegantissima;3;Bouchet et al. 2021 (Appendix D);AphiaID 113747, optimum TOC 2.7%, tolleranza 0.4-16.2%
-Haynesina germanica;3;Bouchet et al. 2021 (Appendix D);AphiaID 113294, optimum TOC 3.0%, tolleranza 1.5-5.8%
-Nonionoides turgidus;3;Bouchet et al. 2021 (Appendix D);AphiaID 466471, optimum TOC 3.0%, tolleranza 2.3-4.0%
-Cribroelphidium poeyanum;3;Bouchet et al. 2021 (Appendix D);AphiaID 113244, optimum TOC 3.2%, tolleranza 2.5-4.1%
-Textularia bocki;3;Bouchet et al. 2021 (Appendix D);AphiaID 114267, optimum TOC 3.2%, tolleranza 2.7-3.7%
-Miliammina fusca;3;Bouchet et al. 2021 (Appendix D);AphiaID 114064, optimum TOC 3.2%, tolleranza 2.4-4.3%
-Discorbinella bertheloti;3;Bouchet et al. 2021 (Appendix D);AphiaID 113143, optimum TOC 3.3%, tolleranza 2.5-4.3%
-Adelosina pulchella;3;Bouchet et al. 2021 (Appendix D);AphiaID 112538, optimum TOC 3.3%, tolleranza 1.8-6.1%
+Ammobaculites exiguus;2;Bouchet et al. 2021 (Appendix D);AphiaID 417589, optimum TOC 2.3%, tolleranza 2.0-2.7%
+Ammolagena clavata;NA;species_traits.csv;
 Ammonia batava subsp. compacta;4;Bouchet et al. 2021 (Appendix D);AphiaID 1381806, optimum TOC 3.4%, tolleranza 2.6-4.5%
-Bolivina spathulata;4;Bouchet et al. 2021 (Appendix D);AphiaID 112988, optimum TOC 3.6%, tolleranza 1.5-8.5%
-Porosononion subgranosus;4;Bouchet et al. 2021 (Appendix D);AphiaID 556479, optimum TOC 3.8%, tolleranza 2.7-5.2%
-Hopkinsina atlantica;4;Bouchet et al. 2021 (Appendix D);AphiaID 582285, optimum TOC 3.9%, tolleranza 3.1-4.8%
-Bolivina ordinaria;5;Bouchet et al. 2021 (Appendix D);AphiaID 112978, optimum TOC 4.2%, tolleranza 3.4-5.1%
-Bolivina pseudoplicata;5;Bouchet et al. 2021 (Appendix D);AphiaID 112982, optimum TOC 4.3%, tolleranza 3.3-5.5%
-Cribroelphidium gunteri;5;Bouchet et al. 2021 (Appendix D);AphiaID 1026170, optimum TOC 4.7%, tolleranza 2.1-10.7%
-Rosalina irregularis;5;Bouchet et al. 2021 (Appendix D);AphiaID 113172, optimum TOC 4.8%, tolleranza 4.1-5.6%
+Ammonia beccarii;1;Bouchet et al. 2021 (Appendix D);AphiaID 112849, optimum TOC 1.1%, tolleranza 0.3-3.4%
+Ammonia parkinsoniana;1;Bouchet et al. 2021 (Appendix D);AphiaID 418095, optimum TOC 1.2%, tolleranza 0.2-6.1%
+Ammonia spp.;3;species_traits.csv;
+Ammonia tepida;3;Bouchet et al. 2021 (Appendix D);AphiaID 112857, optimum TOC 2.4%, tolleranza 0.9-6.1%
+Ammoscalaria pseudospiralis;NA;species_traits.csv;
+Ammoscalaria runiana;3;Bouchet et al. 2021 (Appendix D);AphiaID 113919, optimum TOC 2.4%, tolleranza 2.0-3.0%
+Amphicoryna scalaris;2;species_traits.csv;
+Articulina carinata;NA;species_traits.csv;
+Articulina mucronata;1;species_traits.csv;
+Articulina spp.;NA;species_traits.csv;
+Asterigerinata adriatica;3;species_traits.csv;
+Asterigerinata mamilla;1;Bouchet et al. 2021 (Appendix D);AphiaID 112933, optimum TOC 0.4%, tolleranza 0.2-1.1%
+Asterigerinata mariae;NA;species_traits.csv;
+Asterigerinata spp.;NA;species_traits.csv;
+Astrononion stelligerum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113552, optimum TOC 0.2%, tolleranza 0.1-0.7%
 Aubignyna perlucida;5;Bouchet et al. 2021 (Appendix D);AphiaID 466408, optimum TOC 5.2%, tolleranza 1.8-15.3%
-Quinqueloculina oblonga;5;Bouchet et al. 2021 (Appendix D);AphiaID 912989, optimum TOC 5.2%, tolleranza 3.5-7.8%
-Quinqueloculina costata;5;Bouchet et al. 2021 (Appendix D);AphiaID 523480, optimum TOC 5.9%, tolleranza 3.2-11.0%
-Trochammina inflata;NA;Bouchet et al. 2021 (Appendix D);AphiaID 114348, optimum TOC 8.2%, tolleranza 3.9-17.3%
+Bolivina alata;NA;species_traits.csv;
+Bolivina difformis;NA;species_traits.csv;
+Bolivina dilatata;2;Bouchet et al. 2021 (Appendix D);AphiaID 112973, optimum TOC 2.2%, tolleranza 0.9-5.7%
+Bolivina earlandi;NA;species_traits.csv;
+Bolivina ordinaria;5;Bouchet et al. 2021 (Appendix D);AphiaID 112978, optimum TOC 4.2%, tolleranza 3.4-5.1%
+Bolivina plicatella;NA;species_traits.csv;
+Bolivina pseudoplicata;5;Bouchet et al. 2021 (Appendix D);AphiaID 112982, optimum TOC 4.3%, tolleranza 3.3-5.5%
+Bolivina spathulata;4;Bouchet et al. 2021 (Appendix D);AphiaID 112988, optimum TOC 3.6%, tolleranza 1.5-8.5%
+Bolivina spp.;NA;species_traits.csv;
+Bolivina striatula;1;Bouchet et al. 2021 (Appendix D);AphiaID 112989, optimum TOC 1.7%, tolleranza 0.4-7.9%
+Bolivina subspinescens;NA;species_traits.csv;
+Bolivina variabilis;1;Bouchet et al. 2021 (Appendix D);AphiaID 112998, optimum TOC 1.3%, tolleranza 0.4-4.1%
+Buccella granulata;1;species_traits.csv;
+Bulimina aculeata;3;species_traits.csv;
+Bulimina elongata;3;Bouchet et al. 2021 (Appendix D);AphiaID 933974, optimum TOC 2.5%, tolleranza 1.3-4.9%
+Bulimina gibba;3;species_traits.csv;
+Bulimina marginata;2;Bouchet et al. 2021 (Appendix D);AphiaID 113042, optimum TOC 2.1%, tolleranza 1.2-3.8%
+Bulimina spp.;3;species_traits.csv;
+Buliminella elegantissima;3;Bouchet et al. 2021 (Appendix D);AphiaID 113747, optimum TOC 2.7%, tolleranza 0.4-16.2%
+Cassidulina carinata;1;Bouchet et al. 2021 (Appendix D);AphiaID 183041, optimum TOC 0.9%, tolleranza 0.7-1.0%
+Cibicides refulgens;1;Bouchet et al. 2021 (Appendix D);AphiaID 112877, optimum TOC 0.2%, tolleranza 0.1-0.7%
+Cibicides spp.;NA;species_traits.csv;
+Lobatula lobatula;1;Bouchet et al. 2021 (Appendix D);AphiaID 988323, optimum TOC 0.7%, tolleranza 0.3-1.9%, nome in Bouchet: Cibicidoides lobatulus
+Cibicidoides variabilis;1;species_traits.csv;
+Connemarella rudis;NA;species_traits.csv;
+Conorbella imperatoria;NA;species_traits.csv;
+Cornuspira involvens;NA;species_traits.csv;
+Cornuspira spp.;NA;species_traits.csv;
+Coscinospira hemprichii;NA;species_traits.csv;
+Cribroelphidium excavatum;3;Bouchet et al. 2021 (Appendix D);AphiaID 254680, optimum TOC 2.5%, tolleranza 2.0-3.3%
+Cribroelphidium gunteri;5;Bouchet et al. 2021 (Appendix D);AphiaID 1026170, optimum TOC 4.7%, tolleranza 2.1-10.7%
+Toddinella incerta;1;Bouchet et al. 2021 (Appendix D);AphiaID 113240, optimum TOC 0.1%, tolleranza 0.1-0.2%, nome in Bouchet: Cribroelphidium incertum
+Cribroelphidium poeyanum;3;Bouchet et al. 2021 (Appendix D);AphiaID 113244, optimum TOC 3.2%, tolleranza 2.5-4.1%
+Cribroelphidium selseyense;3;Bouchet et al. 2021 (Appendix D);AphiaID 754247, optimum TOC 2.6%, tolleranza 1.7-4.1%
+Cribroelphidium williamsoni;1;Bouchet et al. 2021 (Appendix D);AphiaID 1026169, optimum TOC 1.6%, tolleranza 0.9-2.7%
+Cribrostomoides jeffreysii;NA;species_traits.csv;
+Cyclocibicides vermiculatus;NA;species_traits.csv;
+Cycloforina contorta;1;Bouchet et al. 2021 (Appendix D);AphiaID 112516, optimum TOC 1.8%, tolleranza 0.8-3.9%
+Cycloforina rugosa;1;species_traits.csv;
+Cycloforina spp.;1;species_traits.csv;
+Cycloforina tenuicollis;1;species_traits.csv;
+Cycloforina villafranca;1;species_traits.csv;
+Dentalina spp.;NA;species_traits.csv;
+Discorbinella bertheloti;3;Bouchet et al. 2021 (Appendix D);AphiaID 113143, optimum TOC 3.3%, tolleranza 2.5-4.3%
+Discorinopsis aguayoi;1;Bouchet et al. 2021 (Appendix D);AphiaID 417645, optimum TOC 1.5%, tolleranza 0.4-6.1%
+Eggerelloides advena;NA;species_traits.csv;
+Eggerelloides scabrum;NA;species_traits.csv;
+Eggerelloides spp.;NA;species_traits.csv;
+Elphidium aculeatum;1;species_traits.csv;
+Elphidium advena;1;Bouchet et al. 2021 (Appendix D);AphiaID 113254, optimum TOC 0.9%, tolleranza 0.2-4.0%, nome in Bouchet: Elphidium advenum
+Elphidium complanatum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113261, optimum TOC 0.5%, tolleranza 0.2-1.2%
+Elphidium crispum;1;Bouchet et al. 2021 (Appendix D);AphiaID 113262, optimum TOC 0.8%, tolleranza 0.3-2.4%
+Elphidium gerthi;1;species_traits.csv;
+Elphidium macellum;NA;species_traits.csv;
+Elphidium margaritaceum;NA;species_traits.csv;
+Elphidium spp.;NA;species_traits.csv;
+Elphidium strigilatum;NA;species_traits.csv;
 Entzia macrescens;NA;Bouchet et al. 2021 (Appendix D);AphiaID 742429, optimum TOC 8.4%, tolleranza 3.9-17.9%
-Hopkinsina pacifica;5;Bouchet et al. 2021 (Appendix D);AphiaID 113728, optimum TOC 10.2%, tolleranza 7.7-13.7%
-Stainforthia fusiformis;5;Bouchet et al. 2021 (Appendix D);AphiaID 113070, optimum TOC 10.4%, tolleranza 8.5-12.8%
+Eponides concameratus;1;species_traits.csv;
+Flintinoides labiosa;NA;species_traits.csv;
+Floresina spp.;NA;species_traits.csv;
+Fursenkoina complanata;NA;species_traits.csv;
+Fursenkoina spp.;NA;species_traits.csv;
+Fursenkoina subacuta;NA;species_traits.csv;
+Gavelinopsis praegeri;NA;species_traits.csv;
+Glaphyrammina americana;NA;species_traits.csv;
+Globulina gibba;NA;species_traits.csv;
+Globulina inaequalis;NA;species_traits.csv;
+Globulina minuta;NA;species_traits.csv;
+Globulina punctata;NA;species_traits.csv;
+Globulina spp.;NA;species_traits.csv;
 Haplophragmoides wilberti;NA;Bouchet et al. 2021 (Appendix D);AphiaID 113955, optimum TOC 11.1%, tolleranza 8.4-14.8%
+Haynesina depressula;1;Bouchet et al. 2021 (Appendix D);AphiaID 113293, optimum TOC 0.5%, tolleranza 0.2-1.2%
+Haynesina germanica;3;Bouchet et al. 2021 (Appendix D);AphiaID 113294, optimum TOC 3.0%, tolleranza 1.5-5.8%
+Haynesina spp.;2;species_traits.csv;
+Hopkinsina atlantica;4;Bouchet et al. 2021 (Appendix D);AphiaID 582285, optimum TOC 3.9%, tolleranza 3.1-4.8%
+Hopkinsina pacifica;5;Bouchet et al. 2021 (Appendix D);AphiaID 113728, optimum TOC 10.2%, tolleranza 7.7-13.7%
+Lachlanella carinata;1;species_traits.csv;
+Lachlanella spp.;1;species_traits.csv;
+Lachlanella undulata;1;species_traits.csv;
+Laevidentalina inflexa;NA;species_traits.csv;
+Laevipeneroplis laevigatus;2;species_traits.csv;
+Lagena doveyensis;NA;species_traits.csv;
+Lagena strumosa;NA;species_traits.csv;
+Lagenammina atlantica;NA;species_traits.csv;
+Lagenammina difflugiformis;NA;species_traits.csv;
+Lagenammina spp.;NA;species_traits.csv;
+Leptohalysis scottii;NA;species_traits.csv;
+Massilina gualtieriana;1;species_traits.csv;
+Massilina secans;1;Bouchet et al. 2021 (Appendix D);AphiaID 163641, optimum TOC 1.1%, tolleranza 0.3-4.7%
+Massilina spp.;1;species_traits.csv;
+Melonis affinis;NA;species_traits.csv;
+Miliammina fusca;3;Bouchet et al. 2021 (Appendix D);AphiaID 114064, optimum TOC 3.2%, tolleranza 2.4-4.3%
+Miliolinella elongata;1;species_traits.csv;
+Miliolinella hybrida;1;species_traits.csv;
+Miliolinella rhodiensis;1;species_traits.csv;
+Miliolinella spp.;1;species_traits.csv;
+Miliolinella subrotunda;1;Bouchet et al. 2021 (Appendix D);AphiaID 112564, optimum TOC 1.5%, tolleranza 0.5-4.4%
+Miliolinella webbiana;1;species_traits.csv;
+ND A;NA;species_traits.csv;
+ND I;NA;species_traits.csv;
+ND P;NA;species_traits.csv;
+Neoconorbina spp.;1;species_traits.csv;
+Neoconorbina terquemi;1;species_traits.csv;
+Neolenticulina variabilis;1;species_traits.csv;
+Nodosaria spp.;1;species_traits.csv;
+Nonion faba;4;species_traits.csv;
+Nonion spp.;4;species_traits.csv;
+Nonionella opima;4;species_traits.csv;
+Nonionella spp.;4;species_traits.csv;
+Nonionellina spp.;NA;species_traits.csv;
+Nonionoides grateloupii;1;Bouchet et al. 2021 (Appendix D);AphiaID 418051, optimum TOC 1.2%, tolleranza 0.7-2.1%
+Nonionoides turgidus;3;Bouchet et al. 2021 (Appendix D);AphiaID 466471, optimum TOC 3.0%, tolleranza 2.3-4.0%
+Nouria polymorphinoides;3;species_traits.csv;
+Ophthalmidium concavum;NA;species_traits.csv;
+Parrina bradyi;NA;species_traits.csv;
+Patellina corrugata;NA;species_traits.csv;
+Peneroplis pertusus;1;Bouchet et al. 2021 (Appendix D);AphiaID 112815, optimum TOC 0.9%, tolleranza 0.3-2.8%
+Peneroplis planatus;1;Bouchet et al. 2021 (Appendix D);AphiaID 112817, optimum TOC 1.4%, tolleranza 0.6-3.3%
+Peneroplis spp.;1;species_traits.csv;
+Planorbulina mediterranensis;1;Bouchet et al. 2021 (Appendix D);AphiaID 113634, optimum TOC 0.9%, tolleranza 0.3-2.7%
+Polymorphina spp.;NA;species_traits.csv;
+Polystomammina nitida;NA;species_traits.csv;
+Elphidium granosum;1;Bouchet et al. 2021 (Appendix D);AphiaID 954808, optimum TOC 1.1%, tolleranza 0.5-2.2%, nome in Bouchet: Porosononion granosum
+Porosononion subgranosus;4;Bouchet et al. 2021 (Appendix D);AphiaID 556479, optimum TOC 3.8%, tolleranza 2.7-5.2%
+Psammosphaera fusca;NA;species_traits.csv;
+Pseudotriloculina cuneata;2;species_traits.csv;
+Pseudotriloculina lecalvezae;2;species_traits.csv;
+Pseudotriloculina limbata;2;species_traits.csv;
+Pseudotriloculina rotunda;2;species_traits.csv;
+Pseudotriloculina sidebottomi;2;species_traits.csv;
+Pseudotriloculina spp.;2;species_traits.csv;
+Pyrgo elongata;1;species_traits.csv;
+Pyrulina spp.;NA;species_traits.csv;
+Quinqueloculina agglutinans;1;species_traits.csv;
+Quinqueloculina annectens;1;species_traits.csv;
+Quinqueloculina auberiana;1;species_traits.csv;
+Quinqueloculina berthelotiana;1;Bouchet et al. 2021 (Appendix D);AphiaID 112816, optimum TOC 1.2%, tolleranza 0.7-2.2%
+Quinqueloculina bicostata;1;Bouchet et al. 2021 (Appendix D);AphiaID 417701, optimum TOC 1.6%, tolleranza 0.8-3.1%
+Quinqueloculina bosciana;1;species_traits.csv;
+Quinqueloculina bradyana;1;species_traits.csv;
+Quinqueloculina carinatastriata;1;Bouchet et al. 2021 (Appendix D);AphiaID 466057, optimum TOC 1.6%, tolleranza 0.8-3.0%
+Quinqueloculina costata;5;Bouchet et al. 2021 (Appendix D);AphiaID 523480, optimum TOC 5.9%, tolleranza 3.2-11.0%
+Quinqueloculina disparilis;1;species_traits.csv;
+Quinqueloculina irregularis;2;species_traits.csv;
+Quinqueloculina jugosa;3;Bouchet et al. 2021 (Appendix D);AphiaID 112641, optimum TOC 2.4%, tolleranza 1.1-5.0%
+Quinqueloculina laevigata;1;Bouchet et al. 2021 (Appendix D);AphiaID 112642, optimum TOC 1.0%, tolleranza 0.2-4.2%
+Quinqueloculina lata;2;Bouchet et al. 2021 (Appendix D);AphiaID 112644, optimum TOC 2.2%, tolleranza 0.6-8.5%
+Quinqueloculina neapolitana;2;species_traits.csv;
+Quinqueloculina oblonga;5;Bouchet et al. 2021 (Appendix D);AphiaID 912989, optimum TOC 5.2%, tolleranza 3.5-7.8%
+Quinqueloculina padana;3;species_traits.csv;
+Quinqueloculina parvula;2;species_traits.csv;
+Quinqueloculina pseudobuchiana;2;species_traits.csv;
+Quinqueloculina pulchella;2;species_traits.csv;
+Quinqueloculina seminulum;1;Bouchet et al. 2021 (Appendix D);AphiaID 112674, optimum TOC 1.8%, tolleranza 0.7-4.7%, nome in Bouchet: Quinqueloculina seminula
+Quinqueloculina spp.;2;species_traits.csv;
+Quinqueloculina schlumbergeri;1;Bouchet et al. 2021 (Appendix D);AphiaID 920885, optimum TOC 1.1%, tolleranza 0.3-4.5%, nome in Bouchet: Quinqueloculina stelligera
+Quinqueloculina ungeriana;2;species_traits.csv;
+Quinqueloculina variolata;1;species_traits.csv;
+Quinqueloculina viennensis;2;species_traits.csv;
+Quinqueloculina vulgaris;1;species_traits.csv;
+Rectuvigerina bononiensis;3;species_traits.csv;
+Rectuvigerina phlegeri;2;Bouchet et al. 2021 (Appendix D);AphiaID 113755, optimum TOC 2.3%, tolleranza 1.3-4.0%
+Reophax fusiformis;NA;species_traits.csv;
+Reophax nana;NA;species_traits.csv;
+Reophax scorpiurus;NA;species_traits.csv;
+Reophax spp.;NA;species_traits.csv;
+Reophax testaceus;NA;species_traits.csv;
+Reussella spinulosa;1;species_traits.csv;
+Reussella spp.;1;species_traits.csv;
+Rosalina anomala;1;species_traits.csv;
+Rosalina bradyi;1;Bouchet et al. 2021 (Appendix D);AphiaID 113167, optimum TOC 0.8%, tolleranza 0.3-2.1%
+Rosalina floridensis;1;species_traits.csv;
+Rosalina globularis;1;Bouchet et al. 2021 (Appendix D);AphiaID 113171, optimum TOC 0.9%, tolleranza 0.2-4.2%
+Rosalina irregularis;5;Bouchet et al. 2021 (Appendix D);AphiaID 113172, optimum TOC 4.8%, tolleranza 4.1-5.6%
+Rosalina macropora;1;Bouchet et al. 2021 (Appendix D);AphiaID 113173, optimum TOC 0.7%, tolleranza 0.2-3.1%
+Rosalina spp.;1;species_traits.csv;
+Rosalina williamsoni;1;species_traits.csv;
+Rotalinoides gaimardi;NA;species_traits.csv;
+Sahulia conica;NA;species_traits.csv;
+Sahulia kerimbaensis;NA;species_traits.csv;
+Sigmavirgulina tortuosa;1;Bouchet et al. 2021 (Appendix D);AphiaID 113392, optimum TOC 0.2%, tolleranza 0.1-0.5%
+Sigmoilina costata;1;Bouchet et al. 2021 (Appendix D);AphiaID 112693, optimum TOC 0.2%, tolleranza 0.1-0.5%
+Sigmoilina grata;1;species_traits.csv;
+Sigmoilina spp.;1;species_traits.csv;
+Siphonaperta agglutinata;1;species_traits.csv;
+Siphonaperta aspera;1;Bouchet et al. 2021 (Appendix D);AphiaID 593433, optimum TOC 1.6%, tolleranza 2.9/0.8% (valori invertiti nella fonte)
+Siphonaperta dilatata;1;species_traits.csv;
+Siphonaperta horrida;1;species_traits.csv;
+Siphonaperta spp.;1;species_traits.csv;
+Siphonina reticulata;1;species_traits.csv;
+Siphotextularia concava;1;species_traits.csv;
+Siphouvigerina spp.;1;species_traits.csv;
+Sorites orbiculus;NA;species_traits.csv;
+Sorites spp.;NA;species_traits.csv;
+Spirillina limbata;NA;species_traits.csv;
+Spirillina spp.;NA;species_traits.csv;
+Spirillina vivipara;1;Bouchet et al. 2021 (Appendix D);AphiaID 113737, optimum TOC 1.6%, tolleranza 0.3-8.8%
+Spiroloculina angulosa;1;species_traits.csv;
+Spiroloculina cymbium;1;species_traits.csv;
+Spiroloculina depressa;1;species_traits.csv;
+Spiroloculina dilatata;2;species_traits.csv;
+Spiroloculina excavata;1;species_traits.csv;
+Spiroloculina ornata;2;species_traits.csv;
+Spiroloculina spp.;2;species_traits.csv;
+Spirophthalmidium acutimargo;NA;species_traits.csv;
+Stainforthia fusiformis;5;Bouchet et al. 2021 (Appendix D);AphiaID 113070, optimum TOC 10.4%, tolleranza 8.5-12.8%
+Stainforthia spp.;3;species_traits.csv;
+Textularia agglutinans;1;Bouchet et al. 2021 (Appendix D);AphiaID 114264, optimum TOC 0.8%, tolleranza 0.5-1.3%
+Textularia bocki;3;Bouchet et al. 2021 (Appendix D);AphiaID 114267, optimum TOC 3.2%, tolleranza 2.7-3.7%
+Textularia calva;3;species_traits.csv;
+Textularia gramen;2;species_traits.csv;
+Textularia pala;2;species_traits.csv;
+Textularia porrecta;2;species_traits.csv;
+Textularia pseudorugosa;2;species_traits.csv;
+Textularia spp.;2;species_traits.csv;
+Tretomphaloides concinnus;NA;species_traits.csv;
+Triloculina adriatica;2;species_traits.csv;
+Triloculina elongata;2;species_traits.csv;
+Triloculina marioni;3;Bouchet et al. 2021 (Appendix D);AphiaID 112763, optimum TOC 2.6%, tolleranza 1.3-5.0%
+Triloculina oblonga;2;species_traits.csv;
+Triloculina plicata;3;species_traits.csv;
+Triloculina schreiberiana;3;species_traits.csv;
+Triloculina spp.;2;species_traits.csv;
+Triloculina tricarinata;1;species_traits.csv;
+Triloculina trigonula;1;Bouchet et al. 2021 (Appendix D);AphiaID 112772, optimum TOC 0.8%, tolleranza 0.2-2.4%
+Triloculinella dilatata;NA;species_traits.csv;
+Trochammina inflata;NA;Bouchet et al. 2021 (Appendix D);AphiaID 114348, optimum TOC 8.2%, tolleranza 3.9-17.3%
+Uvigerina mediterranea;2;species_traits.csv;
+Valvulineria bradyana;2;Bouchet et al. 2021 (Appendix D);AphiaID 112960, optimum TOC 2.2%, tolleranza 1.2-3.9%
+Valvulineria complanata;NA;species_traits.csv;
+Valvulineria minuta;NA;species_traits.csv;
+Vertebralina striata;3;Bouchet et al. 2021 (Appendix D);AphiaID 112785, optimum TOC 2.4%, tolleranza 1.0-5.5%
+Wellmanellinella spp.;NA;species_traits.csv;
+Wellmanellinella striata;NA;species_traits.csv;
+Wiesnerella auriculata;NA;species_traits.csv;

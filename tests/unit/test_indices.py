@@ -28,11 +28,11 @@ def test_exp_hbc_eqr_is_normalised_on_the_column_maximum():
     table = foramecoqs_table(abundance, groups, groups, rules)
 
     cols = table.columns.tolist()
-    assert cols[cols.index("exp(H'bc)") + 1:cols.index("exp(H'bc)") + 3] == ["exp(H'bc) EQR", "E. Quality"]
-    assert table.loc["S1", "exp(H'bc) EQR"] == 1.0 and table.loc["S1", "E. Quality"] == "HIGH"
+    assert cols[cols.index("exp(H'bc)") + 1:cols.index("exp(H'bc)") + 3] == ["exp(H'bc) EQR", "EQS exp(H'bc) EQR"]
+    assert table.loc["S1", "exp(H'bc) EQR"] == 1.0 and table.loc["S1", "EQS exp(H'bc) EQR"] == "HIGH"
     expected = cs_round(table.loc["S2", "exp(H'bc)"] / table.loc["S1", "exp(H'bc)"], 4)
     assert table.loc["S2", "exp(H'bc) EQR"] == expected
-    assert table.loc["S2", "E. Quality"] == eqs_class(expected, EXP_HBC_EQR_RULES)
+    assert table.loc["S2", "EQS exp(H'bc) EQR"] == eqs_class(expected, EXP_HBC_EQR_RULES)
 
 
 def test_cs_round_matches_dotnet_midpoints():
@@ -115,6 +115,25 @@ def test_foram_ambi_redistributes_unassigned_in_proportion_to_assigned_groups():
     assert table.loc["S1", "Foram-AMBI (Alt)"] == 0.75  # il Foram-AMBI alternativo non ridistribuisce
     assert math.isnan(table.loc["S2", "Foram-AMBI"])
     assert table.loc["S2", "EQS Foram-AMBI"] == "N/A"
+
+
+def test_foram_ambi_not_redistributed_above_max_unassigned_pct():
+    from foramqs.indices.foramecoqs import foramecoqs_table
+
+    # S1: 50% NA (> 35%) → come ForamEcoQS: (0·25 + 3·25) / 100 = 0.75; S2: 20% NA (≤ 35%) → ridistribuiti: 1.5
+    abundance = pd.DataFrame({"S1": [10, 10, 20], "S2": [10, 10, 5]}, index=["Sp1", "Sp2", "Sp3"])
+    fsi_group = pd.Series(["ND"] * 3, index=abundance.index)
+    eco_group = pd.Series(["1", "3", "NA"], index=abundance.index)
+    rules = {"exp_hbc": [["Bad"]], "fsi": FSI_RULES, "exp_hbc_eqr": EXP_HBC_EQR_RULES,
+             "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Bad"]]}
+
+    table = foramecoqs_table(
+        abundance, fsi_group, eco_group, rules, redistribute_unassigned=True, max_redistributed_pct=35,
+    )
+    assert table.loc["S1", "Foram-AMBI"] == 0.75
+    assert table.loc["S2", "Foram-AMBI"] == 1.5
+    cols = list(table.columns)
+    assert cols[cols.index("Foram-AMBI") + 1] == "% non assegnati Foram-AMBI"
 
 
 def test_foramecoqs_table_with_alternative_foram_ambi():

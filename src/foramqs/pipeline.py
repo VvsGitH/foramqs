@@ -160,6 +160,7 @@ class RunResult:
     charts: dict[str, list[Chart]]  # nome del foglio → grafici Excel accanto alla tabella
     hidden_sheets: set[str]  # fogli con i soli dati di supporto ai grafici
     issues: pd.DataFrame
+    highlights: dict[str, dict[str, list]]  # nome del foglio → colonna → righe (indice) da scrivere in rosso
 
 
 def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
@@ -197,6 +198,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_eco_series = tb.trait_of(counts, alt_traits_table, "gruppo_ecologico")
 
     redistribute = cfg.raw.get("foram_ambi", {}).get("redistribute_unassigned", False)
+    max_redistributed = cfg.raw.get("foram_ambi", {}).get("max_redistributed_pct")
     feqs = foramecoqs_table(
         counts,
         trait("gruppo_fsi", "FSI"),
@@ -206,7 +208,16 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_samples=alt_samples,
         alt_label=alt_label,
         redistribute_unassigned=redistribute,
+        max_redistributed_pct=max_redistributed,
     )
+    # Campioni con troppi NA per la ridistribuzione: Foram-AMBI come ForamEcoQS, evidenziati in rosso.
+    not_redistributed = []
+    if redistribute and max_redistributed is not None:
+        not_redistributed = [s for s in order if feqs.loc[s, "% non assegnati Foram-AMBI"] > max_redistributed]
+    highlights = {
+        "Foram Echo QS": {"Foram-AMBI": not_redistributed, "% non assegnati Foram-AMBI": not_redistributed},
+        "Abbondanza_rel%_gruppiecologici": {"Foram-AMBI": not_redistributed, "NA": not_redistributed},
+    }
     past = diversity_table(counts).rename_axis("Indice")
     eco_labels = {"1": "GI", "2": "GII", "3": "GIII", "4": "GIV", "5": "GV"}
     shell = tb.by_trait(counts, trait("guscio", "TIPO GUSCIO"), labels["shell"])
@@ -215,9 +226,12 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
     eco_sheet = eco[order].T
     if redistribute:
         # Come nel Foram-AMBI: GI–GV sul totale dei soli assegnati (sommano a 1), NA a parte e fuori dal grafico.
+        # I campioni non ridistribuiti (troppi NA) restano sul totale di tutti gli individui.
         assigned = eco.drop(index=tb.NOT_ASSIGNED, errors="ignore")
-        eco_sheet = (assigned / assigned.sum())[order].T
-        eco_sheet["NA (ridistribuiti)"] = eco.loc[tb.NOT_ASSIGNED, order] if tb.NOT_ASSIGNED in eco.index else 0.0
+        shares = assigned / assigned.sum()
+        shares[not_redistributed] = assigned[not_redistributed]
+        eco_sheet = shares[order].T
+        eco_sheet["NA"] = eco.loc[tb.NOT_ASSIGNED, order] if tb.NOT_ASSIGNED in eco.index else 0.0
     eco_groups = tuple(g for g in eco.index if not (redistribute and g == tb.NOT_ASSIGNED))
     fsi_groups = tb.by_trait(counts, trait("gruppo_fsi", "Gruppo FSI"))
     deformed = tb.deformed_fraction(obs, samples)
@@ -313,7 +327,7 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
     ])
     sheets = {name: frame.rename_axis(frame.index.name or "Campione") for name, frame in sheets.items()}
     return RunResult(checked=checked, sheets=sheets, figures=figures, charts=charts,
-                     hidden_sheets={species_chart_sheet}, issues=issues)
+                     hidden_sheets={species_chart_sheet}, issues=issues, highlights=highlights)
 
 
 def _limits(rules: list[list]) -> tuple[tuple[str, float], ...]:

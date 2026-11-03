@@ -113,7 +113,7 @@ Porting matematico dal codice C# originale (*Mangiagalli et al. 2026, SoftwareX*
 5. **Foram-AMBI (Alve et al. 2016, Jorissen et al. 2018)**:
    $$Foram\text{-}AMBI = \frac{\sum (W_g \cdot \%EG_g)}{100}$$
    Pesi: $EG_1 = 0.0, EG_2 = 1.5, EG_3 = 3.0, EG_4 = 4.5, EG_5 = 6.0$.
-   *Importante*: con `[foram_ambi].redistribute_unassigned = true` (impostazione attuale) gli individui senza gruppo (NA, compresi gli ND) sono ridistribuiti nei gruppi 1–5 in proporzione agli assegnati, cioè le percentuali sono calcolate sul totale dei soli individui assegnati; se nessuno è assegnato il Foram-AMBI è vuoto (EQS `N/A`). Vale per la colonna `Foram-AMBI` di tutti i campioni, mentre il Foram-AMBI alternativo resta come ForamEcoQS. Con `false` si torna al calcolo di ForamEcoQS: percentuali sul totale di tutti i foraminiferi, con NA e ND che agiscono come $EG_1$ (peso 0.0). La colonna `% non assegnati Foram-AMBI` indica la quota ridistribuita.
+   *Importante*: con `[foram_ambi].redistribute_unassigned = true` (impostazione attuale) gli individui senza gruppo (NA, compresi gli ND) sono ridistribuiti nei gruppi 1–5 in proporzione agli assegnati, cioè le percentuali sono calcolate sul totale dei soli individui assegnati; se nessuno è assegnato il Foram-AMBI è vuoto (EQS `N/A`). Vale per la colonna `Foram-AMBI` di tutti i campioni, mentre il Foram-AMBI alternativo resta come ForamEcoQS. Con `false` si torna al calcolo di ForamEcoQS: percentuali sul totale di tutti i foraminiferi, con NA e ND che agiscono come $EG_1$ (peso 0.0). La colonna `% non assegnati Foram-AMBI`, subito dopo `Foram-AMBI`, indica la quota ridistribuita. Oltre `[foram_ambi].max_redistributed_pct` (20%) il campione non viene ridistribuito: il suo Foram-AMBI è calcolato come in ForamEcoQS e le due colonne sono scritte in rosso nel foglio `Foram Echo QS`.
 6. **Classificazione EQS (Ecological Quality Status)**:
    Regole a soglie per $FSI$, $Foram\text{-}AMBI$ ed $\exp(H'_{bc})$ (assegnazione a classi: High, Good, Moderate, Poor, Bad, Azoic).
 
@@ -145,13 +145,13 @@ Calcolati secondo il manuale di riferimento di PAST 4 (*Hammer et al. 2001*):
 L'esecuzione del comando `uv run foramqs run` produce:
 - **`output/Results_<timestamp>.xlsx`** contenente i fogli:
   - `Indici_PAST` (con grafici nativi: Ricchezza S, Shannon H)
-  - `Foram Echo QS` (con grafici nativi e linee di soglia EQS: exp(H'bc), Foram-AMBI; colonne `exp(H'bc) EQR` = exp(H'bc) / massimo tra i campioni ed `E. Quality` = classe dell'EQR in 5 intervalli da 0.2, BAD → HIGH, soglie in `[eqs].exp_hbc_eqr`)
+  - `Foram Echo QS` (con grafici nativi e linee di soglia EQS: exp(H'bc), Foram-AMBI; colonne `exp(H'bc) EQR` = exp(H'bc) / massimo tra i campioni ed `EQS exp(H'bc) EQR` = classe dell'EQR in 5 intervalli da 0.2, BAD → HIGH, soglie in `[eqs].exp_hbc_eqr`)
   - `Abbondanze_assolute`
   - `Abbondanza_relativa%`
   - `Abbondanza_rel%_deformati` (grafico % deformati)
   - `Abbondanza_relativa%_guscio` (grafico a barre 100% impilate)
   - `Abbondanza_rel%_stilivita` (grafico a barre 100% impilate)
-  - `Abbondanza_rel%_gruppiecologici` (grafico a barre 100% impilate + colonna indice esterno M-AMBI; con `redistribute_unassigned = true` GI–GV sono frazioni dei soli individui assegnati, come nel calcolo del Foram-AMBI, e la quota NA è nella colonna `NA (ridistribuiti)`, fuori dal grafico)
+  - `Abbondanza_rel%_gruppiecologici` (grafico a barre 100% impilate + colonna indice esterno M-AMBI; con `redistribute_unassigned = true` GI–GV sono frazioni dei soli individui assegnati, come nel calcolo del Foram-AMBI, e la quota NA è nella colonna `NA`, fuori dal grafico; i campioni oltre `max_redistributed_pct` restano sul totale di tutti gli individui, con `Foram-AMBI` e `NA` in rosso)
   - `Abbondanza_rel%_gruppiecol_alt` (presente se configurato `foram_ambi_alternative`: ripartizione dei gruppi e Foram-AMBI alternativo con grafici dedicati per i soli campioni selezionati)
   - `Confronto_gruppi_ecologici` (presente se configurato `foram_ambi_alternative`: per ogni specie dei campioni, gruppo ecologico della lista principale Jorissen et al. 2018 e della lista alternativa, colonna `groups_column`)
   - `FSI` (grafico nativo con soglie EQS)

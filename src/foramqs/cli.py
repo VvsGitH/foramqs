@@ -91,7 +91,7 @@ def run(
         "Log_pulizia": checked.cleaning_log,
         "Revisione_nomi": checked.name_review,
         "Osservazioni": checked.observations,
-    }, result.figures, result.charts, result.hidden_sheets)
+    }, result.figures, result.charts, result.hidden_sheets, result.highlights)
     counts = result.issues["severita"].value_counts().to_dict()
     typer.echo(f"Segnalazioni: {counts}. Risultati: {out}")
 

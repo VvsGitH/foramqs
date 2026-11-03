@@ -115,6 +115,7 @@ def foramecoqs_table(
     alt_samples: set[str] | Sequence[str] | None = None,
     alt_label: str = "Foram-AMBI (Alt)",
     redistribute_unassigned: bool = False,
+    max_redistributed_pct: float | None = None,
 ) -> pd.DataFrame:
     """Indici ForamEcoQS per ogni campione (una riga per campione).
 
@@ -122,7 +123,8 @@ def foramecoqs_table(
     Se `alt_eco_group` e `alt_samples` sono forniti, calcola anche Foram-AMBI alternativo per i campioni indicati.
     Con `redistribute_unassigned` il Foram-AMBI principale ridistribuisce gli individui NA nei gruppi 1–5 in
     proporzione agli assegnati (percentuali sul totale degli assegnati; NaN se non ce n'è nessuno); il Foram-AMBI
-    alternativo resta come ForamEcoQS.
+    alternativo resta come ForamEcoQS. Con `max_redistributed_pct` i campioni con una quota di NA superiore non
+    vengono ridistribuiti e il loro Foram-AMBI è calcolato come in ForamEcoQS.
     """
     rows = []
     has_alt = alt_eco_group is not None and bool(alt_samples)
@@ -132,8 +134,10 @@ def foramecoqs_table(
         total = total_abundance(counts.tolist())
         sensitive, tolerant = counts[fsi_group == "Sen"].sum(), counts[fsi_group == "Str"].sum()
         by_group = {g: counts[eco_group == str(g)].sum() for g in ECO_GROUP_WEIGHTS}
-        if redistribute_unassigned:
-            assigned = sum(by_group.values())
+        assigned = sum(by_group.values())
+        unassigned = 100 * (1 - assigned / total) if total else math.nan
+        too_many = max_redistributed_pct is not None and unassigned > max_redistributed_pct
+        if redistribute_unassigned and not too_many:
             ambi = foram_ambi(by_group, assigned) if assigned else math.nan
         else:
             ambi = foram_ambi(by_group, total)
@@ -142,8 +146,10 @@ def foramecoqs_table(
             "N": total,
             "exp(H'bc)": exp_hbc(counts.tolist()),
             "FSI": fsi(sensitive, tolerant),
-            "Foram-AMBI": ambi,
         }
+        values["EQS FSI"] = eqs_class(values["FSI"], eqs_rules["fsi"])
+        values["Foram-AMBI"] = ambi
+        values["% non assegnati Foram-AMBI"] = unassigned
         if has_alt:
             if sample in alt_set:
                 by_group_alt = {g: counts[alt_eco_group == str(g)].sum() for g in ECO_GROUP_WEIGHTS}
@@ -157,12 +163,10 @@ def foramecoqs_table(
             values[alt_label] = val_alt
 
         values["% non assegnati FSI"] = 100 * (1 - (sensitive + tolerant) / total) if total else math.nan
-        values["% non assegnati Foram-AMBI"] = 100 * (1 - sum(by_group.values()) / total) if total else math.nan
         if has_alt:
             values[f"% non assegnati {alt_label}"] = unassigned_alt
 
         values["EQS exp(H'bc)"] = eqs_class(values["exp(H'bc)"], eqs_rules["exp_hbc"])
-        values["EQS FSI"] = eqs_class(values["FSI"], eqs_rules["fsi"])
         values["EQS Foram-AMBI"] = eqs_class(values["Foram-AMBI"], eqs_rules["foram_ambi"])
         if has_alt:
             values[f"EQS {alt_label}"] = eqs_alt
@@ -174,5 +178,5 @@ def foramecoqs_table(
     eqr = (table["exp(H'bc)"] / table["exp(H'bc)"].max()).map(lambda v: cs_round(v, 4))
     position = table.columns.get_loc("exp(H'bc)") + 1
     table.insert(position, "exp(H'bc) EQR", eqr)
-    table.insert(position + 1, "E. Quality", eqr.map(lambda v: eqs_class(v, eqs_rules["exp_hbc_eqr"])))
+    table.insert(position + 1, "EQS exp(H'bc) EQR", eqr.map(lambda v: eqs_class(v, eqs_rules["exp_hbc_eqr"])))
     return table

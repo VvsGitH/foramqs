@@ -170,13 +170,19 @@ def test_pipeline_run_with_alternative_foram_ambi(tmp_path):
     assert pd.isna(feqs.loc["MC_FL01", "Foram-AMBI (Alt)"])
 
     # Con la ridistribuzione degli NA (config di default) il foglio dei gruppi mostra le percentuali usate dall'indice:
-    # GI–GV sommano a 1 e Σ peso·% ricostruisce il Foram-AMBI della stessa riga; gli NA restano a parte, fuori dal grafico.
+    # Σ peso·% ricostruisce il Foram-AMBI della stessa riga; GI–GV sommano a 1 nei campioni ridistribuiti, mentre
+    # quelli oltre max_redistributed_pct restano sul totale (in rosso). Gli NA restano a parte, fuori dal grafico.
     from foramqs.indices.foramecoqs import ECO_GROUP_WEIGHTS
 
     eco = res.sheets["Abbondanza_rel%_gruppiecologici"]
     weights = {g: w for g, w in zip(["GI", "GII", "GIII", "GIV", "GV"], ECO_GROUP_WEIGHTS.values()) if g in eco.columns}
-    assert eco[list(weights)].sum(axis=1).round(9).eq(1).all()
+    not_redistributed = res.highlights["Foram Echo QS"]["Foram-AMBI"]
+    over = feqs.index[feqs["% non assegnati Foram-AMBI"] > cfg.raw["foram_ambi"]["max_redistributed_pct"]]
+    assert set(not_redistributed) == set(over) and "MC_FL01" in over  # MC_FL01: 62% di NA
+    redistributed = eco.drop(index=not_redistributed)
+    assert redistributed[list(weights)].sum(axis=1).round(9).eq(1).all()
+    assert (eco.loc[not_redistributed, list(weights)].sum(axis=1) + eco.loc[not_redistributed, "NA"]).round(9).eq(1).all()
     rebuilt = sum(w * eco[g] for g, w in weights.items())
     assert (rebuilt - eco["Foram-AMBI"]).abs().max() < 5e-4
-    assert eco.loc["MC_FL01", "NA (ridistribuiti)"] > 0
-    assert "NA (ridistribuiti)" not in res.charts["Abbondanza_rel%_gruppiecologici"][0].series
+    assert eco.loc["MC_FL01", "NA"] > 0
+    assert "NA" not in res.charts["Abbondanza_rel%_gruppiecologici"][0].series
