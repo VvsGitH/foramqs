@@ -198,7 +198,6 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_eco_series = tb.trait_of(counts, alt_traits_table, "gruppo_ecologico")
 
     redistribute = cfg.raw.get("foram_ambi", {}).get("redistribute_unassigned", False)
-    max_redistributed = cfg.raw.get("foram_ambi", {}).get("max_redistributed_pct")
     feqs = foramecoqs_table(
         counts,
         trait("gruppo_fsi", "FSI"),
@@ -208,16 +207,8 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
         alt_samples=alt_samples,
         alt_label=alt_label,
         redistribute_unassigned=redistribute,
-        max_redistributed_pct=max_redistributed,
     )
-    # Campioni con troppi NA per la ridistribuzione: Foram-AMBI come ForamEcoQS, evidenziati in rosso.
-    not_redistributed = []
-    if redistribute and max_redistributed is not None:
-        not_redistributed = [s for s in order if feqs.loc[s, "% non assegnati Foram-AMBI"] > max_redistributed]
-    highlights = {
-        "Foram Echo QS": {"Foram-AMBI": not_redistributed, "% non assegnati Foram-AMBI": not_redistributed},
-        "Abbondanza_rel%_gruppiecologici": {"Foram-AMBI": not_redistributed, "NA": not_redistributed},
-    }
+    highlights: dict[str, dict[str, list]] = {}
     past = diversity_table(counts).rename_axis("Indice")
     eco_labels = {"1": "GI", "2": "GII", "3": "GIII", "4": "GIV", "5": "GV"}
     shell = tb.by_trait(counts, trait("guscio", "TIPO GUSCIO"), labels["shell"])
@@ -226,10 +217,8 @@ def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
     eco_sheet = eco[order].T
     if redistribute:
         # Come nel Foram-AMBI: GI–GV sul totale dei soli assegnati (sommano a 1), NA a parte e fuori dal grafico.
-        # I campioni non ridistribuiti (troppi NA) restano sul totale di tutti gli individui.
         assigned = eco.drop(index=tb.NOT_ASSIGNED, errors="ignore")
         shares = assigned / assigned.sum()
-        shares[not_redistributed] = assigned[not_redistributed]
         eco_sheet = shares[order].T
         eco_sheet["NA"] = eco.loc[tb.NOT_ASSIGNED, order] if tb.NOT_ASSIGNED in eco.index else 0.0
     eco_groups = tuple(g for g in eco.index if not (redistribute and g == tb.NOT_ASSIGNED))

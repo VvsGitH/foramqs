@@ -163,25 +163,25 @@ def test_pipeline_run_with_alternative_foram_ambi(tmp_path):
     assert set(comparison["GE Bouchet"]) == {"GIII", "NA"}  # solo Ammonia tepida è nel file alternativo del test
 
     feqs = res.sheets["Foram Echo QS"]
+    assert not any(str(s).startswith("*") for s in feqs.index)  # nessuna segnalazione sui nomi dei campioni
     assert "Foram-AMBI (Alt)" in feqs.columns
     assert "EQS Foram-AMBI (Alt)" in feqs.columns
     assert pd.notna(feqs.loc["MC_CB01", "Foram-AMBI (Alt)"])
-    assert pd.notna(feqs.loc["MC_CE01", "Foram-AMBI (Alt)"])
+    # MC_CE01 non ha specie della lista alternativa del test: nessun gruppo su cui ridistribuire gli NA.
+    assert feqs.loc["MC_CE01", "% non assegnati Foram-AMBI (Alt)"] == 100
+    assert pd.isna(feqs.loc["MC_CE01", "Foram-AMBI (Alt)"])
+    assert feqs.loc["MC_CE01", "EQS Foram-AMBI (Alt)"] == "N/A"
     assert pd.isna(feqs.loc["MC_FL01", "Foram-AMBI (Alt)"])
+    assert res.highlights == {}
 
     # Con la ridistribuzione degli NA (config di default) il foglio dei gruppi mostra le percentuali usate dall'indice:
-    # Σ peso·% ricostruisce il Foram-AMBI della stessa riga; GI–GV sommano a 1 nei campioni ridistribuiti, mentre
-    # quelli oltre max_redistributed_pct restano sul totale (in rosso). Gli NA restano a parte, fuori dal grafico.
+    # Σ peso·% ricostruisce il Foram-AMBI della stessa riga; GI–GV sommano a 1 in tutti i campioni, qualunque sia la
+    # quota di NA (MC_FL01: 62%). Gli NA restano a parte, fuori dal grafico.
     from foramqs.indices.foramecoqs import ECO_GROUP_WEIGHTS
 
     eco = res.sheets["Abbondanza_rel%_gruppiecologici"]
     weights = {g: w for g, w in zip(["GI", "GII", "GIII", "GIV", "GV"], ECO_GROUP_WEIGHTS.values()) if g in eco.columns}
-    not_redistributed = res.highlights["Foram Echo QS"]["Foram-AMBI"]
-    over = feqs.index[feqs["% non assegnati Foram-AMBI"] > cfg.raw["foram_ambi"]["max_redistributed_pct"]]
-    assert set(not_redistributed) == set(over) and "MC_FL01" in over  # MC_FL01: 62% di NA
-    redistributed = eco.drop(index=not_redistributed)
-    assert redistributed[list(weights)].sum(axis=1).round(9).eq(1).all()
-    assert (eco.loc[not_redistributed, list(weights)].sum(axis=1) + eco.loc[not_redistributed, "NA"]).round(9).eq(1).all()
+    assert eco[list(weights)].sum(axis=1).round(9).eq(1).all()
     rebuilt = sum(w * eco[g] for g, w in weights.items())
     assert (rebuilt - eco["Foram-AMBI"]).abs().max() < 5e-4
     assert eco.loc["MC_FL01", "NA"] > 0

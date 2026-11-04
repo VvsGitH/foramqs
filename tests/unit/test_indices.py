@@ -112,25 +112,24 @@ def test_foram_ambi_redistributes_unassigned_in_proportion_to_assigned_groups():
     assert table.loc["S1", "Foram-AMBI"] == 1.5
     assert table.loc["S1", "EQS Foram-AMBI"] == "Good"
     assert table.loc["S1", "% non assegnati Foram-AMBI"] == 50.0
-    assert table.loc["S1", "Foram-AMBI (Alt)"] == 0.75  # il Foram-AMBI alternativo non ridistribuisce
+    assert table.loc["S1", "Foram-AMBI (Alt)"] == 1.5  # anche il Foram-AMBI alternativo ridistribuisce
+    assert table.loc["S1", "% non assegnati Foram-AMBI (Alt)"] == 50.0
     assert math.isnan(table.loc["S2", "Foram-AMBI"])
     assert table.loc["S2", "EQS Foram-AMBI"] == "N/A"
 
 
-def test_foram_ambi_not_redistributed_above_max_unassigned_pct():
+def test_foram_ambi_redistributed_whatever_the_unassigned_pct():
     from foramqs.indices.foramecoqs import foramecoqs_table
 
-    # S1: 50% NA (> 35%) → come ForamEcoQS: (0·25 + 3·25) / 100 = 0.75; S2: 20% NA (≤ 35%) → ridistribuiti: 1.5
+    # S1: 50% NA, S2: 20% NA → entrambi ridistribuiti: (0·50 + 3·50) / 100 = 1.5
     abundance = pd.DataFrame({"S1": [10, 10, 20], "S2": [10, 10, 5]}, index=["Sp1", "Sp2", "Sp3"])
     fsi_group = pd.Series(["ND"] * 3, index=abundance.index)
     eco_group = pd.Series(["1", "3", "NA"], index=abundance.index)
     rules = {"exp_hbc": [["Bad"]], "fsi": FSI_RULES, "exp_hbc_eqr": EXP_HBC_EQR_RULES,
              "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Bad"]]}
 
-    table = foramecoqs_table(
-        abundance, fsi_group, eco_group, rules, redistribute_unassigned=True, max_redistributed_pct=35,
-    )
-    assert table.loc["S1", "Foram-AMBI"] == 0.75
+    table = foramecoqs_table(abundance, fsi_group, eco_group, rules, redistribute_unassigned=True)
+    assert table.loc["S1", "Foram-AMBI"] == 1.5
     assert table.loc["S2", "Foram-AMBI"] == 1.5
     cols = list(table.columns)
     assert cols[cols.index("Foram-AMBI") + 1] == "% non assegnati Foram-AMBI"

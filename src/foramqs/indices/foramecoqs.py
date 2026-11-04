@@ -76,7 +76,8 @@ def foram_ambi(eco_group_abundance: dict[int, float], named_total: float) -> flo
     matrice: anche i taxa senza gruppo (NA) e i non determinati (ND) sono nel denominatore e pesano quindi come il
     gruppo I. L'FSI invece usa solo i taxa assegnati a Sen/Str.
     Passando come `named_total` il solo totale degli assegnati si ottiene invece la ridistribuzione degli NA nei
-    gruppi 1–5 in proporzione alle loro abbondanze (vedi `foramecoqs_table(redistribute_unassigned=True)`).
+    gruppi 1–5 in proporzione alle loro abbondanze (vedi `foramecoqs_table(redistribute_unassigned=True)`), usata
+    sempre, anche per il Foram-AMBI alternativo.
     """
     if named_total == 0:
         return 0.0
@@ -115,16 +116,14 @@ def foramecoqs_table(
     alt_samples: set[str] | Sequence[str] | None = None,
     alt_label: str = "Foram-AMBI (Alt)",
     redistribute_unassigned: bool = False,
-    max_redistributed_pct: float | None = None,
 ) -> pd.DataFrame:
     """Indici ForamEcoQS per ogni campione (una riga per campione).
 
     `fsi_group` ("Sen"/"Str"/altro) ed `eco_group` ("1".."5"/"NA") sono indicizzati come le righe della matrice.
     Se `alt_eco_group` e `alt_samples` sono forniti, calcola anche Foram-AMBI alternativo per i campioni indicati.
-    Con `redistribute_unassigned` il Foram-AMBI principale ridistribuisce gli individui NA nei gruppi 1–5 in
-    proporzione agli assegnati (percentuali sul totale degli assegnati; NaN se non ce n'è nessuno); il Foram-AMBI
-    alternativo resta come ForamEcoQS. Con `max_redistributed_pct` i campioni con una quota di NA superiore non
-    vengono ridistribuiti e il loro Foram-AMBI è calcolato come in ForamEcoQS.
+    Con `redistribute_unassigned` il Foram-AMBI principale e quello alternativo ridistribuiscono sempre gli
+    individui NA nei gruppi 1–5 in proporzione agli assegnati (percentuali sul totale degli assegnati; NaN se non ce
+    n'è nessuno), qualunque sia la quota di NA. Le colonne "% non assegnati …" riportano la quota reale di NA.
     """
     rows = []
     has_alt = alt_eco_group is not None and bool(alt_samples)
@@ -136,8 +135,7 @@ def foramecoqs_table(
         by_group = {g: counts[eco_group == str(g)].sum() for g in ECO_GROUP_WEIGHTS}
         assigned = sum(by_group.values())
         unassigned = 100 * (1 - assigned / total) if total else math.nan
-        too_many = max_redistributed_pct is not None and unassigned > max_redistributed_pct
-        if redistribute_unassigned and not too_many:
+        if redistribute_unassigned:
             ambi = foram_ambi(by_group, assigned) if assigned else math.nan
         else:
             ambi = foram_ambi(by_group, total)
@@ -153,8 +151,12 @@ def foramecoqs_table(
         if has_alt:
             if sample in alt_set:
                 by_group_alt = {g: counts[alt_eco_group == str(g)].sum() for g in ECO_GROUP_WEIGHTS}
-                val_alt = foram_ambi(by_group_alt, total)
-                unassigned_alt = 100 * (1 - sum(by_group_alt.values()) / total) if total else math.nan
+                assigned_alt = sum(by_group_alt.values())
+                if redistribute_unassigned:
+                    val_alt = foram_ambi(by_group_alt, assigned_alt) if assigned_alt else math.nan
+                else:
+                    val_alt = foram_ambi(by_group_alt, total)
+                unassigned_alt = 100 * (1 - assigned_alt / total) if total else math.nan
                 eqs_alt = eqs_class(val_alt, eqs_rules["foram_ambi"])
             else:
                 val_alt = math.nan
