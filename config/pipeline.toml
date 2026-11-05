@@ -74,14 +74,12 @@ traits_table = "specie_stilevita"
 foram_ambi_list = "../lists_for_feqs/Lista_Foram_AMBI.csv"
 fsi_list = "../lists_for_feqs/Lista_FSI.csv"
 
+# Foram-AMBI (foglio Foram-AMBI): si calcolano sempre due valori.
+#   "Foram-AMBI ori" = come ForamEcoQS, gli individui senza gruppo ecologico (NA, anche i non determinati) pesano come GI;
+#   "Foram-AMBI"     = gli NA sono ridistribuiti nei gruppi 1–5 in proporzione ai taxa assegnati (con la sua classe EQS).
+
 # Classi di qualità ecologica (EQS): regole [classe, operatore, limite] valutate in ordine; l'ultima è [classe].
 # Valori predefiniti di ForamEcoQS (BioticIndicesCalculator.cs).
-[foram_ambi]
-# true: gli individui senza gruppo ecologico (NA, anche i non determinati) sono ridistribuiti nei gruppi 1–5
-# in proporzione ai taxa assegnati (percentuali sul totale degli assegnati). false: come ForamEcoQS (NA pesano come GI).
-# Vale per il Foram-AMBI e per il Foram-AMBI alternativo di tutti i campioni, qualunque sia la quota di NA.
-redistribute_unassigned = true
-
 [eqs]
 # Dimiza et al. 2016
 fsi = [["Azoic", "==", 0], ["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]]
@@ -93,14 +91,19 @@ exp_hbc = [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor
 exp_hbc_eqr = [["HIGH", ">=", 0.8], ["GOOD", ">=", 0.6], ["MODERATE", ">=", 0.4], ["POOR", ">=", 0.2], ["BAD"]]
 
 [tables]
-# Soglie (frazioni 0-1) per le tabelle di comunità.
-dominant_species_threshold = 0.03  # Tabella_Cluster e Tabella_CCA_<soglia>% (anche _norm)
+# Soglia (frazione 0-1) delle specie dominanti: foglio Abb_rel_5% e, trasformate con log(1+x), fogli CA e PCA_CCA.
+dominant_species_threshold = 0.05
 # Come applicare le soglie:
 #   "cella"  = un valore resta solo dove quella specie supera la soglia in quel campione (metodo Power Query storico);
 #   "specie" = si tengono tutti i valori delle specie che superano la soglia in almeno un campione.
 threshold_mode = "specie"
-# Indice esterno (non calcolato dalla pipeline) presente nella geochimica, riportato in Abbondanza_rel%_gruppiecologici.
+# Indice esterno (non calcolato dalla pipeline) presente nella geochimica: oggi solo controllato dalla validazione.
 external_index_column = "M-AMBI_ 2022"
+# Colonne della geochimica (profondità, granulometria, TOC, metalli pesanti) del foglio PCA_CCA, trasformate con log(1+x).
+pca_cca_environment = [
+    "DEPTH (m)", "GRAVEL", "SAND", "SILT", "TOC (%)",
+    "As", "Cr", "Hg", "Ni", "Mn", "Fe", "Co", "Cu", "Zn", "Cd", "Sn", "Pb",
+]
 
 [labels]
 shell = { A = "Agglutinated", I = "Hyaline", P = "Porcellaneous" }
@@ -108,11 +111,12 @@ lifestyle = { Epifaunale = "Epifaunal", Epifita = "Epiphytic", "Infaunale superf
 lifestyle_abbreviation = { Epifaunale = "E", Epifita = "Epi", "Infaunale superficiale" = "Inf sup", "Infaunale profondo" = "Inf prof", ND = "ND" }
 
 [cluster]
-# Cluster gerarchico dei campioni sulle abbondanze relative di tutte le specie (come in PAST).
-method = "average"     # UPGMA
-metric = "braycurtis"
+# Cluster Analysis (foglio CA) sulle specie del foglio Abb_rel_5% trasformate con log(1+x):
+# Q-mode = campioni, R-mode = specie. L'ordine delle foglie del Q-mode è l'ordine dei campioni in tutti i fogli.
+method = "ward"
+metric = "euclidean"
 # Gruppi di campioni definiti dai ricercatori leggendo il dendrogramma (dato tecnico, non calcolato).
-# La validazione segnala i gruppi che non corrispondono a un ramo del dendrogramma calcolato.
+# La validazione segnala i gruppi che non corrispondono a un ramo del dendrogramma Q-mode calcolato.
 # Dal 2026-10-30 (decisione 2.5): taglio del dendrogramma in 3 rami.
 [cluster.groups]
 G1 = ["MC_FL01", "MC_FO02", "MC_FO01", "MC_VI01", "MC_ML01", "MC_FL02", "MC_ML02", "MC_VI02"]

@@ -10,7 +10,7 @@ Questo documento fornisce il contesto scientifico, architetturale e metodologico
 - **Oggetto di studio**: Comunità di **foraminiferi bentonici viventi** (marini e/o di ambienti costieri/transizionali) utilizzati come bioindicatori della qualità ecologica e dello stress ambientale.
 - **Scopo di `foramqs`**:
   Sostituire un workflow legacy frammentato e incline a errori umani (che combinava fogli Excel con Power Query complessi, il software standalone C# *ForamEcoQS* e calcoli manuali in *PAST*).
-  La pipeline riceve in input esclusivamente i dati grezzi di laboratorio (conteggi per casella e parametri ambientali/geochimici) e genera in modo deterministico e tracciabile un report Excel completo (`Results_<timestamp>.xlsx`), corredato di grafici nativi modificabili, dendrogramma cluster e tabelle formattate per la Canonical Correspondence Analysis (CCA).
+  La pipeline riceve in input esclusivamente i dati grezzi di laboratorio (conteggi per casella e parametri ambientali/geochimici) e genera in modo deterministico e tracciabile un report Excel completo (`Results_<timestamp>.xlsx`), con dieci fogli di risultati (abbondanze, indici, Cluster Analysis Ward con dendrogrammi Q-mode e R-mode, tabella log(1+x) per PCA/CCA in PAST).
 
 ---
 
@@ -21,8 +21,8 @@ Questo documento fornisce il contesto scientifico, architetturale e metodologico
 - **Dipendenze principali**:
   - `pandas` (>=3.1.0) & `numpy` (>=2.5.4): Elaborazione matriciale e manipolazione tabellare.
   - `openpyxl` (>=3.1.5): Lettura delle tabelle Excel native e generazione avanzata di cartelle di lavoro con filtri, blocco riquadri, colonne proporzionali e grafici nativi collegati alle celle.
-  - `scipy` (>=1.18.1): Ottimizzazioni numeriche, funzioni speciali (`gammaln`, `brentq`), calcolo distanze (`braycurtis`) e linkage gerarchico (`UPGMA`).
-  - `matplotlib` (>=3.11.2): Generazione del dendrogramma cluster vettoriale esportato in PNG ad alta risoluzione (150 dpi).
+  - `scipy` (>=1.18.1): Ottimizzazioni numeriche, funzioni speciali (`gammaln`, `brentq`), calcolo distanze (euclidea) e linkage gerarchico (Ward).
+  - `matplotlib` (>=3.11.2): Generazione dei dendrogrammi Q-mode e R-mode esportati in PNG (150 dpi).
   - `typer` (>=0.27.3): Interfaccia da riga di comando (CLI).
   - `requests` (>=2.34.2): Chiamate REST alle API tassonomiche di WoRMS (*World Register of Marine Species*).
   - `tomlkit` (>=0.15.2): Modifica preservando commenti e formattazione del file di configurazione `pipeline.toml`.
@@ -41,9 +41,9 @@ src/foramqs/
 ├── taxonomy.py           # Integrazione WoRMS REST API, cache locale, gestione sinonimi e omonimi
 ├── traits.py             # Gestione reference/species_traits.csv (stili di vita, gruppi ecologici, guscio)
 ├── tables.py             # Matrici di abbondanza assoluta, relativa, tagli percentuali, z-score
-├── multivariate.py       # Cluster UPGMA + Bray-Curtis, validazione coerenza rami/gruppi
+├── multivariate.py       # Cluster Ward + euclidea (Q-mode e R-mode), validazione coerenza rami/gruppi
 ├── charts.py             # Generazione grafici nativi Excel (openpyxl BarChart/LineChart) con soglie EQS
-├── plots.py              # Generazione figura Matplotlib del dendrogramma
+├── plots.py              # Figure Matplotlib dei dendrogrammi Q-mode e R-mode
 ├── report.py             # Scrittura workbook finale Excel (auto-fit, freeze-panes, filtri)
 ├── new_sample.py         # Scaffold protetto di un nuovo campione con backup automatico
 ├── reconcile.py          # Comparatore con risultati storici e tracciamento scostamenti
@@ -113,7 +113,7 @@ Porting matematico dal codice C# originale (*Mangiagalli et al. 2026, SoftwareX*
 5. **Foram-AMBI (Alve et al. 2016, Jorissen et al. 2018)**:
    $$Foram\text{-}AMBI = \frac{\sum (W_g \cdot \%EG_g)}{100}$$
    Pesi: $EG_1 = 0.0, EG_2 = 1.5, EG_3 = 3.0, EG_4 = 4.5, EG_5 = 6.0$.
-   *Importante*: con `[foram_ambi].redistribute_unassigned = true` (impostazione attuale) gli individui senza gruppo (NA, compresi gli ND) sono ridistribuiti nei gruppi 1–5 in proporzione agli assegnati, cioè le percentuali sono calcolate sul totale dei soli individui assegnati; se nessuno è assegnato il Foram-AMBI è vuoto (EQS `N/A`). Vale per il `Foram-AMBI` e per il Foram-AMBI alternativo di tutti i campioni, qualunque sia la quota di NA. Con `false` si torna al calcolo di ForamEcoQS: percentuali sul totale di tutti i foraminiferi, con NA e ND che agiscono come $EG_1$ (peso 0.0). La colonna `% non assegnati Foram-AMBI`, subito dopo `Foram-AMBI`, indica la quota ridistribuita.
+   *Importante*: si calcolano sempre due valori (foglio `Foram-AMBI`). `Foram-AMBI ori` è il calcolo di ForamEcoQS: percentuali sul totale di tutti i foraminiferi, con NA e ND che agiscono come $EG_1$ (peso 0.0). `Foram-AMBI` ridistribuisce gli individui senza gruppo (NA, compresi gli ND) nei gruppi 1–5 in proporzione agli assegnati, cioè le percentuali sono calcolate sul totale dei soli individui assegnati; se nessuno è assegnato è vuoto (EQS `N/A`). La classe `EQS Foram-AMBI` si riferisce a `Foram-AMBI`. Le righe `% GE1`–`% GE5` e `% NA` riportano le quote reali sul totale degli individui (sommano a 100). Il Foram-AMBI alternativo (Bouchet) non è più calcolato.
 6. **Classificazione EQS (Ecological Quality Status)**:
    Regole a soglie per $FSI$, $Foram\text{-}AMBI$ ed $\exp(H'_{bc})$ (assegnazione a classi: High, Good, Moderate, Poor, Bad, Azoic).
 
@@ -131,12 +131,10 @@ Calcolati secondo il manuale di riferimento di PAST 4 (*Hammer et al. 2001*):
 - **Percentuale di deformati**: frazione $\frac{\sum DEFORMATI}{\sum INDIVIDUI}$.
 
 ### E. Statistica Multivariata e Output per PAST
-- **Cluster Gerarchico**: Matrice di dissimilarità Bray-Curtis sulle abbondanze relative totali; linkage UPGMA (`average`). L'ordine dei campioni nelle tabelle e nei grafici segue esattamente le foglie del dendrogramma.
-- **Gruppi di Cluster**: Configurazione di tre rami principali nel dendrogramma (G1, G2, G3).
-- **Tabelle per Canonical Correspondence Analysis (CCA)**:
-  - `Tabella_CCA_All`: tutti i parametri geochimici e indici + tutte le specie (%) con indicazione dello stile di vita abbreviato (es. `Ammonia beccarii (Inf sup)`).
-  - `Tabella_CCA_3%`: solo specie dominanti con abbondanza $\ge 3\%$ in almeno un campione (`threshold_mode = "specie"`).
-  - `Tabella_CCA_3%_norm`: parametri ambientali e indici standardizzati con Z-score campionario ($ddof = 1$) + specie dominanti (%).
+- **Specie dominanti**: specie con abbondanza relativa $\ge 5\%$ in almeno un campione, con tutti i loro valori (`threshold_mode = "specie"`, foglio `Abb_rel_5%`).
+- **Cluster Analysis** (foglio `CA`): metodo di Ward, distanza euclidea, sulle specie dominanti (%) trasformate con $\log_{10}(1+x)$. Q-mode sui campioni, R-mode sulle specie, con i due dendrogrammi. L'ordine dei campioni in tutti i fogli segue le foglie del dendrogramma Q-mode.
+- **Gruppi di Cluster**: Configurazione di tre rami principali nel dendrogramma Q-mode (G1, G2, G3), controllata da C02.
+- **Tabella per PCA/CCA** (foglio `PCA_CCA`, da usare in PAST): specie dominanti, profondità, granulometria, TOC, metalli pesanti (`tables.pca_cca_environment`), S, exp(H'bc), FSI e Foram-AMBI, tutti trasformati con $\log_{10}(1+x)$.
 
 ---
 
@@ -144,27 +142,22 @@ Calcolati secondo il manuale di riferimento di PAST 4 (*Hammer et al. 2001*):
 
 L'esecuzione del comando `uv run foramqs run` produce:
 - **`output/Results_<timestamp>.xlsx`** contenente i fogli:
-  - `Indici_PAST` (con grafici nativi: Ricchezza S, Shannon H)
-  - `Foram Echo QS` (con grafici nativi e linee di soglia EQS: exp(H'bc), Foram-AMBI; colonne `exp(H'bc) EQR` = exp(H'bc) / massimo tra i campioni ed `EQS exp(H'bc) EQR` = classe dell'EQR in 5 intervalli da 0.2, BAD → HIGH, soglie in `[eqs].exp_hbc_eqr`)
-  - `Abbondanze_assolute`
-  - `Abbondanza_relativa%`
-  - `Abbondanza_rel%_deformati` (grafico % deformati)
-  - `Abbondanza_relativa%_guscio` (grafico a barre 100% impilate)
-  - `Abbondanza_rel%_stilivita` (grafico a barre 100% impilate)
-  - `Abbondanza_rel%_gruppiecologici` (grafico a barre 100% impilate + colonna indice esterno M-AMBI; con `redistribute_unassigned = true` GI–GV sono frazioni dei soli individui assegnati, come nel calcolo del Foram-AMBI, e la quota NA è nella colonna `NA`, fuori dal grafico, in tutti i campioni)
-  - `Abbondanza_rel%_gruppiecol_alt` (presente se configurato `foram_ambi_alternative`: ripartizione dei gruppi e Foram-AMBI alternativo con grafici dedicati per i soli campioni selezionati)
-  - `Confronto_gruppi_ecologici` (presente se configurato `foram_ambi_alternative`: per ogni specie dei campioni, gruppo ecologico della lista principale Jorissen et al. 2018 e della lista alternativa, colonna `groups_column`)
-  - `FSI` (grafico nativo con soglie EQS)
-  - `Densità_faunistica_media` (grafico densità)
-  - `Tabella_Cluster` (dati specie dominanti + dendrogramma PNG ad alta definizione + grafico a barre impilate delle specie)
-  - `Tabella_matrice` (tutti i parametri sintetici e geochimici uniti)
-  - `Tabella_CCA_All`, `Tabella_CCA_3%`, `Tabella_CCA_3%_norm` (pronte da incollare direttamente in PAST)
-  - `Grafico_specie` (foglio nascosto con i dati di alimentazione del grafico delle specie dominanti)
+  - `Abb_assolute` (specie × campioni)
+  - `Abb_rel%` (specie × campioni, %)
+  - `Abb_rel_5%` (specie dominanti × campioni, %)
+  - `Indici_PAST` (indici × campioni)
+  - `Exp(H'bc)` (exp(H'bc), `exp(H'bc) EQR` = exp(H'bc) / massimo tra i campioni, `EQS exp(H'bc) EQR` = classe dell'EQR in 5 intervalli da 0.2, soglie in `[eqs].exp_hbc_eqr`)
+  - `FSI` (% Sen, % Str sul totale Sen + Str, FSI, EQS FSI)
+  - `Foram-AMBI` (% GE1–GE5, % NA, Foram-AMBI ori, Foram-AMBI, EQS Foram-AMBI)
+  - `Altre_info` (densità faunistica media, % per tipo di guscio, % per stile di vita, % deformati)
+  - `CA` (campioni × specie: formule Excel `=LOG10(1+'Abb_rel_5%'!…)` + dendrogrammi Q-mode e R-mode)
+  - `PCA_CCA` (campioni × parametri, tutti in $\log_{10}(1+x)$)
+  - I fogli 1–8 hanno i campioni nelle colonne, `CA` e `PCA_CCA` nelle righe; l'ordine dei campioni è sempre quello del dendrogramma Q-mode.
   - `Validazione` (elenco di tutti gli avvisi, info o errori riscontrati)
   - `Log_pulizia` (audit trail riga per riga di ogni trasformazione di testo effettuata)
   - `Revisione_nomi` (dettaglio di come ciascun taxon è stato risolto con WoRMS o alias)
   - `Osservazioni` (tabella normalizzata flat casella per casella con taxon_id)
-- **`output/figures_<timestamp>/dendrogramma.png`**: dendrogramma UPGMA vettoriale salvato in formato raster ad alta risoluzione.
+- **`output/figures_<timestamp>/dendrogramma_Q_mode.png`, `dendrogramma_R_mode.png`**: dendrogrammi della Cluster Analysis (anche nel foglio `CA`).
 
 ---
 
@@ -197,15 +190,15 @@ L'esecuzione del comando `uv run foramqs run` produce:
 
 1. **Protocollo biologico e frazione**: Colorazione con soluzione di **Rosa Bengala**; frazione analizzata al microscopio **$> 125\ \mu\text{m}$**.
 2. **Gestione individui morti**: Le righe con specie registrata ma con cella `N°INDIVIDUI` vuota rappresentano foraminiferi morti (non colorati con Rosa Bengala o gusci vuoti). Vengono escluse dalle conte del vivente ma tracciate con la nota informativa `I02` e commento associato.
-3. **Individui non determinati**: Le etichette "Not determined" o "Specie anomala" prive dell'indicazione del guscio vengono scartate (V10). Se è presente il guscio (`ND A`, `ND I`, `ND P`), vengono conteggiate e contribuiscono al totale degli individui $N$, alla densità e, come i taxa NA, al Foram-AMBI (ridistribuiti nei gruppi assegnati, oppure come $EG_1$ con `redistribute_unassigned = false`), ma sono escluse da FSI.
+3. **Individui non determinati**: Le etichette "Not determined" o "Specie anomala" prive dell'indicazione del guscio vengono scartate (V10). Se è presente il guscio (`ND A`, `ND I`, `ND P`), vengono conteggiate e contribuiscono al totale degli individui $N$, alla densità e, come i taxa NA, al Foram-AMBI (ridistribuiti nei gruppi assegnati in `Foram-AMBI`, come $EG_1$ in `Foram-AMBI ori`), ma sono escluse da FSI.
 4. **Giovanili**: I record "Genere Juvenile" confluiscono sistematicamente in "Genere spp." per evitare sovrastima artificiale della ricchezza specifica.
 5. **Trattamento replica singola MC_FO02**: Avendo una sola replica campionata (R1), è stato deciso di replicare R1 tre volte (`[input.copied_replicas]`) per renderla comparabile con il volume standard delle altre stazioni (450 ml totali = 3 repliche da 150 ml).
 6. **Classi EQS**: Confermata la soglia norvegese per $\exp(H'_{bc})$ (High $\ge 22$, Good $\ge 13$, Moderate $\ge 7$, Poor $> 3$, Bad), con l'alternativa italiana documentata in config.
 7. **Deformità morfologiche**: Si utilizza esclusivamente l'abbondanza relativa complessiva dei deformati ($\sum DEFORMATI / \sum INDIVIDUI$), senza calcolo di indici teratologici secondari (FDI).
-8. **Analisi multivariata CCA**: Flusso ibrido Python/PAST confermato: `foramqs` prepara e formatta le matrici complete e standardizzate (`Tabella_CCA_*`), mentre l'elaborazione biplot/triplot e l'esplorazione dell'ordinamento sono demandate all'ambiente interattivo di PAST.
-9. **Foram-AMBI Alternativo Configurabile**: Possibilità di calcolare, per un sottoinsieme di campioni configurato in `[foram_ambi_alternative]`, un Foram-AMBI secondario basato su un file CSV dedicato (`reference/foram_ambi_alt.csv`). La lista è indipendente (solo le specie presenti nel file ricevono il gruppo ecologico 1–5, le altre sono `NA`), valorizza le colonne dedicate in `Foram Echo QS` ed esporta il foglio/grafico `Abbondanza_rel%_gruppiecol_alt`.
+8. **Analisi multivariata**: `foramqs` calcola la Cluster Analysis (Ward, euclidea, Q-mode e R-mode su $\log_{10}(1+x)$) e prepara la tabella `PCA_CCA` in $\log_{10}(1+x)$; PCA e CCA (biplot/triplot) si fanno in PAST.
+9. **Foram-AMBI Alternativo**: non più calcolato. La configurazione `[foram_ambi_alternative]` e il file `reference/foram_ambi_alt.csv` restano e sono ancora controllati da `check` (A01–A05).
 10. **Geochimica e valori censurati**: Nessun valore censurato aggiuntivo (LOD/LOQ) da gestire oltre alla regola storica dello Stagno ($>200 \to 201$).
-11. **Grafici Excel Nativi**: Tutti i grafici nel file dei risultati (tranne il dendrogramma) sono inseriti come grafici Excel collegati dinamicamente alle celle, rendendoli personalizzabili per tesi e presentazioni.
+11. **Grafici**: il file dei risultati contiene solo i due dendrogrammi (immagini nel foglio `CA`); i grafici Excel nativi dei fogli precedenti non sono più prodotti (il modulo `charts.py` resta disponibile).
 
 ---
 
@@ -215,7 +208,7 @@ L'esecuzione del comando `uv run foramqs run` produce:
 # 1. Verifica preliminare della coerenza dei dati (genera report di validazione)
 uv run foramqs check
 
-# 2. Esecuzione completa della pipeline (genera Results_<data>.xlsx e dendrogramma)
+# 2. Esecuzione completa della pipeline (genera Results_<data>.xlsx e i dendrogrammi Q-mode e R-mode)
 uv run foramqs run
 
 # 3. Aggiunta guidata di un nuovo campione (crea template, backup e aggiorna config)

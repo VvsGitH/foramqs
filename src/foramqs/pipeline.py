@@ -8,7 +8,6 @@ from pathlib import Path
 import pandas as pd
 
 from foramqs import multivariate as mv
-from foramqs.charts import Chart
 from foramqs import plots
 from foramqs import tables as tb
 from foramqs import traits as tr
@@ -16,12 +15,11 @@ from foramqs import validate as v
 from foramqs.clean import build_observations, clean_taxon_name, cleaning_log, copy_single_replica
 from foramqs.config import Config, read_config_csv
 from foramqs.indices.diversity import diversity_table
-from foramqs.indices.foramecoqs import foramecoqs_table
+from foramqs.indices.foramecoqs import EXP_HBC_COLUMNS, FORAM_AMBI_COLUMNS, FSI_COLUMNS, foramecoqs_table
 from foramqs.inputs import geochemistry_values, load_inputs
 from foramqs.taxonomy import WormsClient, resolution_issues, resolve_taxa
 
 ALT_GROUPS_SHEET = "Abbondanza_rel%_gruppiecol_alt"  # i nomi dei fogli Excel hanno al massimo 31 caratteri
-ECO_GROUPS_COMPARISON_SHEET = "Confronto_gruppi_ecologici"
 
 
 @dataclass(frozen=True)
@@ -152,173 +150,99 @@ class PipelineBlocked(Exception):
         self.checked = checked
 
 
+# Fogli dei risultati (i fogli della Fase 1 seguono, aggiunti dalla CLI).
+ABSOLUTE, RELATIVE = "Abb_assolute", "Abb_rel%"  # il foglio delle specie dominanti è Abb_rel_<soglia>%
+PAST, EXP_HBC, FSI, FORAM_AMBI, OTHER = "Indici_PAST", "Exp(H'bc)", "FSI", "Foram-AMBI", "Altre_info"
+CA, PCA_CCA = "CA", "PCA_CCA"
+
+
 @dataclass(frozen=True)
 class RunResult:
     checked: CheckResult
-    sheets: dict[str, pd.DataFrame]  # nome del foglio → tabella (l'indice diventa la prima colonna)
-    figures: dict[str, list[Path]]  # nome del foglio → immagini da inserire accanto alla tabella (dendrogramma)
-    charts: dict[str, list[Chart]]  # nome del foglio → grafici Excel accanto alla tabella
-    hidden_sheets: set[str]  # fogli con i soli dati di supporto ai grafici
+    sheets: dict[str, pd.DataFrame]  # nome del foglio → tabella (l'indice diventa la prima colonna), nell'ordine di scrittura
+    figures: dict[str, list[Path]]  # nome del foglio → immagini da inserire accanto alla tabella (dendrogrammi)
+    formulas: dict[str, pd.DataFrame]  # nome del foglio → formule Excel con la stessa forma della tabella
     issues: pd.DataFrame
-    highlights: dict[str, dict[str, list]]  # nome del foglio → colonna → righe (indice) da scrivere in rosso
 
 
 def run(cfg: Config, figures_dir: Path, offline: bool = False) -> RunResult:
-    """Pipeline completa: controlli, tabelle, indici, cluster e grafici.
+    """Pipeline completa: controlli della Fase 1, poi i dieci fogli dei risultati.
 
-    I grafici sono grafici Excel (`charts`) collegati alle celle; solo il dendrogramma è un'immagine in `figures_dir`.
+    Tutti i fogli hanno i campioni nell'ordine delle foglie del dendrogramma Q-mode. I fogli 1–8 hanno i campioni
+    nelle colonne, CA e PCA_CCA nelle righe. Il foglio CA è scritto con formule `=LOG10(1+x)` che puntano ad Abb_rel_<soglia>%.
     """
     checked = check(cfg, offline=offline)
     if checked.has_errors:
         raise PipelineBlocked(checked)
 
     obs, traits, geo = checked.observations, checked.traits, checked.geochemistry
-    t, labels = cfg.raw["tables"], cfg.raw["labels"]
+    t, labels, cl = cfg.raw["tables"], cfg.raw["labels"], cfg.raw["cluster"]
     samples = list(dict.fromkeys(obs["campione"]))
-    mode = t["threshold_mode"]
 
     counts = tb.abundance(obs, samples)
     rel = tb.relative(counts)
-    clustering = mv.cluster_samples(rel, cfg.raw["cluster"]["method"], cfg.raw["cluster"]["metric"])
-    order = clustering.order
-    groups = cfg.raw["cluster"]["groups"]
-
-    def trait(column: str, name: str) -> pd.Series:
-        return tb.trait_of(counts, traits, column).rename(name)
-
-    alt_cfg = cfg.raw.get("foram_ambi_alternative", {})
-    configured_alt_samples = alt_cfg.get("samples", [])
-    alt_samples = [s for s in order if s in configured_alt_samples]
-    alt_label = alt_cfg.get("label", "Foram-AMBI (Alt)")
-    alt_sheet_name = alt_cfg.get("groups_sheet", ALT_GROUPS_SHEET)
-
-    alt_eco_series = None
-    if alt_samples and checked.alt_traits is not None:
-        alt_traits_table = checked.alt_traits.drop_duplicates("taxon_id")[["nome_valido", "gruppo_ecologico"]]
-        alt_eco_series = tb.trait_of(counts, alt_traits_table, "gruppo_ecologico")
-
-    redistribute = cfg.raw.get("foram_ambi", {}).get("redistribute_unassigned", False)
-    feqs = foramecoqs_table(
-        counts,
-        trait("gruppo_fsi", "FSI"),
-        trait("gruppo_ecologico", "EG"),
-        cfg.raw["eqs"],
-        alt_eco_group=alt_eco_series,
-        alt_samples=alt_samples,
-        alt_label=alt_label,
-        redistribute_unassigned=redistribute,
-    )
-    highlights: dict[str, dict[str, list]] = {}
-    past = diversity_table(counts).rename_axis("Indice")
-    eco_labels = {"1": "GI", "2": "GII", "3": "GIII", "4": "GIV", "5": "GV"}
-    shell = tb.by_trait(counts, trait("guscio", "TIPO GUSCIO"), labels["shell"])
-    lifestyle = tb.by_trait(counts, trait("stile_di_vita", "STILE DI VITA"), labels["lifestyle"])
-    eco = tb.by_trait(counts, trait("gruppo_ecologico", "Gruppo ecologico"), eco_labels)
-    eco_sheet = eco[order].T
-    if redistribute:
-        # Come nel Foram-AMBI: GI–GV sul totale dei soli assegnati (sommano a 1), NA a parte e fuori dal grafico.
-        assigned = eco.drop(index=tb.NOT_ASSIGNED, errors="ignore")
-        shares = assigned / assigned.sum()
-        eco_sheet = shares[order].T
-        eco_sheet["NA"] = eco.loc[tb.NOT_ASSIGNED, order] if tb.NOT_ASSIGNED in eco.index else 0.0
-    eco_groups = tuple(g for g in eco.index if not (redistribute and g == tb.NOT_ASSIGNED))
-    fsi_groups = tb.by_trait(counts, trait("gruppo_fsi", "Gruppo FSI"))
-    deformed = tb.deformed_fraction(obs, samples)
-    _, density = tb.density(obs, samples, cfg.density["replica_volume_ml"], cfg.density["per_ml"])
-    dominant = tb.above_threshold(rel, t["dominant_species_threshold"], mode)
     cut = t["dominant_species_threshold"]
-    abbreviations = labels["lifestyle_abbreviation"]
-    species_all = tb.species_columns_for_past(rel, traits, 0, mode, abbreviations)
-    species_cut = tb.species_columns_for_past(rel, traits, cut, mode, abbreviations)
+    dominant_sheet = f"Abb_rel_{cut * 100:g}%"
+    dominant = tb.above_threshold(rel, cut, t["threshold_mode"]) * 100
 
-    environment = geo.assign(Shannon_H=past.loc["Shannon_H"])
-    main_indices = feqs[["exp(H'bc)", "FSI", "Species Richness (S)", "Foram-AMBI"]]
-    matrix = environment.join(pd.DataFrame({
-        "FSI": feqs["FSI"],
-        "Foram-AMBI": feqs["Foram-AMBI"],
-        "Deformed_rel%_abundance": deformed * 100,
-        "Densità faunistica media": density,
-    }))
-    # Tabelle da incollare in PAST per la CCA: indici, variabili ambientali (anche z-score) e specie (%).
-    parameters = main_indices.join(environment)
-    cut_pct = f"{cut * 100:g}%"
-    cca = f"Tabella_CCA_{cut_pct}"
+    # Cluster Analysis (Q-mode sui campioni, R-mode sulle specie) sulle specie dominanti trasformate con log(1+x).
+    ca = tb.log10_1px(dominant.T)
+    metric_name = {"euclidean": "euclidea", "braycurtis": "di Bray-Curtis"}.get(cl["metric"], cl["metric"])
+    method = f"{cl['method'].capitalize()}, distanza {metric_name}"
+    q_mode = mv.cluster(ca, cl["method"], cl["metric"])
+    r_mode = mv.cluster(ca.T, cl["method"], cl["metric"])
+    order = q_mode.order
+
+    def trait(column: str) -> pd.Series:
+        return tb.trait_of(counts, traits, column)
+
+    feqs = foramecoqs_table(counts, trait("gruppo_fsi"), trait("gruppo_ecologico"), cfg.raw["eqs"])
+    shell = tb.by_trait(counts, trait("guscio"), labels["shell"]) * 100
+    lifestyle = tb.by_trait(counts, trait("stile_di_vita"), labels["lifestyle"]) * 100
+    _, density = tb.density(obs, samples, cfg.density["replica_volume_ml"], cfg.density["per_ml"])
+    deformed = tb.deformed_fraction(obs, samples) * 100
+    other = pd.concat([
+        density.to_frame().T,
+        shell.rename(index=lambda c: f"% {c}"),
+        lifestyle.rename(index=lambda c: f"% {c}"),
+        deformed.rename("% Deformati").to_frame().T,
+    ])
+
+    environment = t["pca_cca_environment"]
+    missing = [c for c in environment if c not in geo.columns]
+    if missing:
+        raise ValueError(f"Colonne di [tables].pca_cca_environment assenti dalla geochimica: {', '.join(missing)}")
+    pca_cca = pd.concat([
+        dominant.T,
+        geo[environment],
+        feqs[["Species Richness (S)", "exp(H'bc)", "FSI", "Foram-AMBI"]].rename(columns={"Species Richness (S)": "S"}),
+    ], axis=1)
+
+    def by_index(columns: list[str]) -> pd.DataFrame:
+        return feqs[columns].T.rename_axis("Indice")
 
     sheets = {
-        "Indici_PAST": past[order],
-        "Foram Echo QS": feqs.loc[order],
-        "Abbondanze_assolute": counts,
-        "Abbondanza_relativa%": rel,
-        "Abbondanza_rel%_deformati": deformed.loc[order].to_frame(),
-        "Abbondanza_relativa%_guscio": shell[order],
-        "Abbondanza_rel%_stilivita": lifestyle[order],
-        "Abbondanza_rel%_gruppiecologici": eco_sheet.join(feqs["Foram-AMBI"]).join(geo[t["external_index_column"]]),
-        "FSI": fsi_groups[order].T.join(feqs["FSI"]),
-        "Densità_faunistica_media": density.loc[order].to_frame(),
-        "Tabella_Cluster": dominant[order],
-        "Tabella_matrice": matrix.loc[order],
-        "Tabella_CCA_All": parameters.join(species_all).loc[order],
-        cca: parameters.join(species_cut).loc[order],
-        f"{cca}_norm": tb.zscore(main_indices).join(tb.zscore(environment)).join(species_cut).loc[order],
+        ABSOLUTE: counts[order],
+        RELATIVE: (rel * 100)[order],
+        dominant_sheet: dominant[order],
+        PAST: diversity_table(counts)[order].rename_axis("Indice"),
+        EXP_HBC: by_index(EXP_HBC_COLUMNS)[order],
+        FSI: by_index(FSI_COLUMNS)[order],
+        FORAM_AMBI: by_index(FORAM_AMBI_COLUMNS)[order],
+        OTHER: other[order].rename_axis("Parametro"),
+        CA: ca.loc[order],
+        PCA_CCA: tb.log10_1px(pca_cca).loc[order],
     }
+    sheets = {name: frame.rename_axis(frame.index.name or "Campione") for name, frame in sheets.items()}
+    formulas = {CA: tb.log10_1px_formulas(dominant_sheet, sheets[dominant_sheet])}
 
-    if alt_samples and alt_eco_series is not None:
-        eco_alt = tb.by_trait(counts, alt_eco_series.rename("Gruppo ecologico"), eco_labels)
-        canonical_order = ["GI", "GII", "GIII", "GIV", "GV", "NA"]
-        eco_alt = eco_alt.reindex([c for c in canonical_order if c in eco_alt.index])
-        sheets[alt_sheet_name] = eco_alt[alt_samples].T.join(feqs.loc[alt_samples, [alt_label]])
-        # Gruppo ecologico di ogni specie dei campioni nella lista principale (Jorissen et al. 2018) e in quella alternativa.
-        sheets[ECO_GROUPS_COMPARISON_SHEET] = pd.DataFrame({
-            "GE Jorissen": trait("gruppo_ecologico", "GE Jorissen").replace(eco_labels),
-            alt_cfg.get("groups_column", "GE (Alt)"): alt_eco_series.replace(eco_labels),
-        }).rename_axis("Specie")
-
-    species_chart_sheet = "Grafico_specie"
-    sheets[species_chart_sheet] = tb.above_cut_by_sample(rel, cut).loc[order]
-
-    eqs = cfg.raw["eqs"]
-    per_ml = cfg.density["per_ml"]
-    charts = {
-        "Indici_PAST": [
-            Chart("Ricchezza specifica (S)", ("Taxa_S",), by="rows", y_title="Taxa"),
-            Chart("Indice di Shannon (PAST, Miller–Madow)", ("Shannon_H",), by="rows", y_title="H'"),
-        ],
-        "Foram Echo QS": [
-            Chart("exp(H'bc)", ("exp(H'bc)",), y_title="exp(H'bc)", limits=_limits(eqs["exp_hbc"])),
-            Chart("Foram-AMBI", ("Foram-AMBI",), y_title="Foram-AMBI", limits=_limits(eqs["foram_ambi"])),
-        ],
-        "FSI": [Chart("Foram Stress Index (FSI)", ("FSI",), y_title="FSI", limits=_limits(eqs["fsi"]))],
-        "Abbondanza_rel%_deformati": [Chart("Individui deformati", (deformed.name,), percent=True)],
-        "Abbondanza_relativa%_guscio": [Chart("Tipi di guscio", tuple(shell.index), by="rows", stacked=True, percent=True)],
-        "Abbondanza_rel%_stilivita": [Chart("Stili di vita", tuple(lifestyle.index), by="rows", stacked=True, percent=True)],
-        "Abbondanza_rel%_gruppiecologici": [Chart("Gruppi ecologici", eco_groups, stacked=True, percent=True)],
-        "Densità_faunistica_media": [
-            Chart("Densità faunistica media", (density.name,), y_title=f"individui / {per_ml:g} ml"),
-        ],
-        "Tabella_Cluster": [Chart(
-            f"Specie con abbondanza ≥ {cut_pct} nel campione", tuple(sheets[species_chart_sheet].columns),
-            stacked=True, percent=True, source=species_chart_sheet, width=34, height=24,
-        )],
-    }
-    if alt_samples and alt_eco_series is not None:
-        charts[alt_sheet_name] = [
-            Chart(f"Gruppi ecologici ({alt_label})", tuple(eco_alt.index), stacked=True, percent=True),
-            Chart(alt_label, (alt_label,), y_title=alt_label, limits=_limits(eqs["foram_ambi"])),
-        ]
-        charts["Foram Echo QS"].append(
-            Chart(alt_label, (alt_label,), y_title=alt_label, limits=_limits(eqs["foram_ambi"]))
-        )
-    figures = {"Tabella_Cluster": [plots.dendrogram_chart(clustering, groups, figures_dir / "dendrogramma.png")]}
-
+    groups = cl["groups"]
+    figures = {CA: [
+        plots.q_mode_chart(q_mode, groups, method, figures_dir / "dendrogramma_Q_mode.png"),
+        plots.r_mode_chart(r_mode, method, figures_dir / "dendrogramma_R_mode.png"),
+    ]}
     issues = v.issues_frame([
         *[v.Issue(**row) for row in checked.issues.to_dict("records")],
-        *mv.check_group_branches(clustering, groups),
+        *mv.check_group_branches(q_mode, groups, method),
     ])
-    sheets = {name: frame.rename_axis(frame.index.name or "Campione") for name, frame in sheets.items()}
-    return RunResult(checked=checked, sheets=sheets, figures=figures, charts=charts,
-                     hidden_sheets={species_chart_sheet}, issues=issues, highlights=highlights)
-
-
-def _limits(rules: list[list]) -> tuple[tuple[str, float], ...]:
-    """Limiti di classe EQS da disegnare: una linea per regola con soglia (esclusa l'uguaglianza esatta)."""
-    return tuple((label, limit) for label, operator, limit in (r for r in rules if len(r) == 3) if operator != "==")
+    return RunResult(checked=checked, sheets=sheets, figures=figures, formulas=formulas, issues=issues)

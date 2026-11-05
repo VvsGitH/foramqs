@@ -23,12 +23,15 @@ def write_workbook(
     charts: dict[str, list[Chart]] | None = None,
     hidden: set[str] = frozenset(),
     highlights: dict[str, dict[str, list]] | None = None,
+    formulas: dict[str, pd.DataFrame] | None = None,
 ) -> Path:
     """Un foglio per tabella; se l'indice non è un semplice contatore diventa la prima colonna.
 
     A destra della tabella di ogni foglio vengono messi, uno sotto l'altro, le immagini di `figures` e poi i
     grafici Excel di `charts` con lo stesso nome di foglio. I fogli in `hidden` (dati di supporto ai grafici) sono nascosti.
     `highlights` (foglio → colonna → valori dell'indice) indica le celle da scrivere in rosso.
+    `formulas` (foglio → tabella di formule con stesso indice e stesse colonne) sostituisce i valori con formule
+    Excel; i valori vengono calcolati da Excel all'apertura del file.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     written: dict[str, pd.DataFrame] = {}
@@ -51,6 +54,11 @@ def write_workbook(
                     ws.cell(labels.index(label) + 2, col).font = RED
             if name in hidden:
                 ws.sheet_state = "hidden"
+            if name in (formulas or {}):
+                cells = formulas[name].reindex(index=labels, columns=frame.columns[1:])
+                for r, row in enumerate(cells.itertuples(index=False), start=2):
+                    for c, formula in enumerate(row, start=2):
+                        ws.cell(r, c).value = formula
 
         # Dopo aver scritto tutti i fogli: un grafico può prendere i dati da un altro foglio (Chart.source).
         for name, frame in written.items():

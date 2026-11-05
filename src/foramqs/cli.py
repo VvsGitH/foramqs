@@ -71,7 +71,7 @@ def run(
     config: Path = typer.Option(DEFAULT_CONFIG, help="File di configurazione"),
     offline: bool = typer.Option(False, help="Usa solo la cache WoRMS"),
 ) -> None:
-    """Pipeline completa: scrive output/Results_<data>.xlsx con tabelle, indici e grafici."""
+    """Pipeline completa: scrive output/Results_<data>.xlsx con tabelle, indici e Cluster Analysis."""
     cfg = load_config(config)
     stamp = f"{datetime.now():%Y%m%d_%H%M}"
     out_dir = cfg.path("output_dir")
@@ -91,7 +91,7 @@ def run(
         "Log_pulizia": checked.cleaning_log,
         "Revisione_nomi": checked.name_review,
         "Osservazioni": checked.observations,
-    }, result.figures, result.charts, result.hidden_sheets, result.highlights)
+    }, result.figures, formulas=result.formulas)
     counts = result.issues["severita"].value_counts().to_dict()
     typer.echo(f"Segnalazioni: {counts}. Risultati: {out}")
 

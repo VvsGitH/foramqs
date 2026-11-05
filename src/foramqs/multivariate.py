@@ -1,11 +1,11 @@
-"""Cluster gerarchico dei campioni (come in PAST).
+"""Cluster Analysis gerarchica (foglio CA).
 
-Cluster: UPGMA (`method="average"`) su distanze di Bray-Curtis tra le abbondanze relative dei campioni.
-L'ordine delle foglie del dendrogramma dà l'ordine dei campioni nelle tabelle e nei grafici. I gruppi di campioni
-sono invece definiti dai ricercatori in config ([cluster.groups]): qui si controlla solo che corrispondano a rami
-del dendrogramma calcolato.
+Metodo e distanza da config ([cluster]: oggi Ward, euclidea) sulle specie dominanti trasformate con log(1+x).
+Q-mode: gli oggetti sono i campioni (righe della tabella CA); R-mode: le specie (colonne).
+L'ordine delle foglie del Q-mode dà l'ordine dei campioni in tutti i fogli. I gruppi di campioni sono invece definiti
+dai ricercatori in config ([cluster.groups]): qui si controlla solo che corrispondano a rami del dendrogramma Q-mode.
 
-La CCA non è calcolata qui: si fa in PAST sulle tabelle Tabella_CCA_*.
+PCA e CCA non sono calcolate qui: si fanno in PAST sul foglio PCA_CCA.
 """
 
 from __future__ import annotations
@@ -21,20 +21,21 @@ from foramqs.validate import WARNING, Issue
 
 
 @dataclass(frozen=True)
-class SampleClustering:
+class Clustering:
     linkage: np.ndarray
-    samples: list[str]  # nell'ordine delle colonne della matrice usata
+    samples: list[str]  # oggetti raggruppati (campioni o specie), nell'ordine delle righe della matrice usata
     order: list[str]  # ordine delle foglie del dendrogramma
 
 
-def cluster_samples(relative_table: pd.DataFrame, method: str, metric: str) -> SampleClustering:
-    samples = list(relative_table.columns)
-    z = linkage(pdist(relative_table.T.to_numpy(), metric), method)
-    order = [samples[i] for i in dendrogram(z, no_plot=True)["leaves"]]
-    return SampleClustering(linkage=z, samples=samples, order=order)
+def cluster(table: pd.DataFrame, method: str, metric: str) -> Clustering:
+    """Cluster gerarchico delle righe di `table` (per l'R-mode passare la tabella trasposta)."""
+    objects = [str(o) for o in table.index]
+    z = linkage(pdist(table.to_numpy(dtype=float), metric), method)
+    order = [objects[i] for i in dendrogram(z, no_plot=True)["leaves"]]
+    return Clustering(linkage=z, samples=objects, order=order)
 
 
-def branches(clustering: SampleClustering) -> list[frozenset[str]]:
+def branches(clustering: Clustering) -> list[frozenset[str]]:
     """Tutti gli insiemi di campioni che formano un ramo del dendrogramma."""
     found = []
 
@@ -49,11 +50,11 @@ def branches(clustering: SampleClustering) -> list[frozenset[str]]:
     return found
 
 
-def check_group_branches(clustering: SampleClustering, groups: dict[str, list[str]]) -> list[Issue]:
-    """C02: gruppi che non sono un ramo del dendrogramma (C01, sui campioni dei gruppi, è in validate.py)."""
+def check_group_branches(clustering: Clustering, groups: dict[str, list[str]], description: str) -> list[Issue]:
+    """C02: gruppi che non sono un ramo del dendrogramma Q-mode (C01, sui campioni dei gruppi, è in validate.py)."""
     tree_branches = set(branches(clustering))
     return [
-        Issue("C02", WARNING, f"Il gruppo {name} non corrisponde a un ramo del dendrogramma UPGMA/Bray-Curtis",
+        Issue("C02", WARNING, f"Il gruppo {name} non corrisponde a un ramo del dendrogramma Q-mode ({description})",
               dettagli=", ".join(members))
         for name, members in groups.items()
         if len(members) > 1 and frozenset(members) not in tree_branches

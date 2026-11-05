@@ -2,13 +2,15 @@
 
 Convenzioni:
   - le matrici hanno una riga per taxon (`nome_valido`) e una colonna per campione;
-  - le abbondanze relative sono frazioni 0-1 (come in Power Query); le tabelle per PAST usano le percentuali;
+  - le abbondanze relative sono frazioni 0-1; i fogli Abb_rel% e Abb_rel_5% le riportano in percentuale;
   - i tratti (guscio, stile di vita, gruppi) vengono dalla tabella dei tratti, mai dai fogli grezzi.
 """
 
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
+from openpyxl.utils import get_column_letter
 
 NOT_ASSIGNED = "NA"
 
@@ -70,37 +72,23 @@ def above_threshold(relative_table: pd.DataFrame, threshold: float, mode: str) -
     raise ValueError(f"threshold_mode sconosciuto: {mode!r} (ammessi: 'cella', 'specie')")
 
 
-def species_columns_for_past(
-    relative_table: pd.DataFrame, traits: pd.DataFrame, threshold: float, mode: str, abbreviations: dict[str, str],
-) -> pd.DataFrame:
-    """Specie sopra soglia in percentuale, una riga per campione, con l'etichetta 'Specie (stile di vita)' usata in PAST.
+def log10_1px(table: pd.DataFrame) -> pd.DataFrame:
+    """Trasformazione log(1+x) in base 10, cella per cella (la stessa formula di `=LOG10(1+x)` in Excel)."""
+    return np.log10(1 + table.astype(float))
 
-    Con `threshold=0` restano tutte le specie.
+
+def log10_1px_formulas(source_sheet: str, source: pd.DataFrame) -> pd.DataFrame:
+    """Formule Excel `=LOG10(1+cella)` per la tabella trasposta di `source` (campioni × specie).
+
+    `source` è la tabella com'è scritta nel foglio `source_sheet` da `report.write_workbook`: intestazione nella riga 1
+    e indice nella colonna A, quindi la cella (specie i, campione j) è nella riga i+2 e nella colonna j+2.
     """
-    dominant = above_threshold(relative_table, threshold, mode) * 100
-    lifestyle = trait_of(dominant, traits, "stile_di_vita").map(lambda v: abbreviations.get(v, v))
-    dominant.index = [f"{name} ({lifestyle[name]})" for name in dominant.index]
-    table = dominant.T
-    table.index.name = "Campione"
-    return table
-
-
-def above_cut_by_sample(relative_table: pd.DataFrame, cut: float) -> pd.DataFrame:
-    """Per ogni campione (riga) le specie con abbondanza ≥ `cut` in quel campione; il resto in 'Others (< cut)'.
-
-    Le colonne sono le specie sopra il cut in almeno un campione, dalla più abbondante nel complesso; frazioni 0-1,
-    ogni riga somma a 1. È la tabella del grafico delle specie dominanti.
-    """
-    shown = relative_table.where(relative_table >= cut, 0)
-    shown = shown[(shown > 0).any(axis=1)]
-    shown = shown.loc[shown.sum(axis=1).sort_values(ascending=False).index]
-    table = shown.T
-    table[f"Others (specie < {cut * 100:g}%)"] = 1 - table.sum(axis=1)
-    table.index.name = "Campione"
-    table.columns.name = None
-    return table
-
-
-def zscore(table: pd.DataFrame) -> pd.DataFrame:
-    """Standardizzazione per colonna con la deviazione standard campionaria (come List.StandardDeviation di PQ)."""
-    return (table - table.mean()) / table.std(ddof=1)
+    sheet = source_sheet.replace("'", "''")
+    cols = {sample: get_column_letter(j + 2) for j, sample in enumerate(source.columns)}
+    formulas = pd.DataFrame(
+        {species: [f"=LOG10(1+'{sheet}'!{cols[sample]}{i + 2})" for sample in source.columns]
+         for i, species in enumerate(source.index)},
+        index=pd.Index(source.columns, name="Campione"),
+    )
+    formulas.columns.name = None
+    return formulas

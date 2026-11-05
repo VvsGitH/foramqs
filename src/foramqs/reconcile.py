@@ -29,8 +29,14 @@ KNOWN_CAUSES = pd.DataFrame([
               "sinonimi uniti secondo WoRMS."),
 ], columns=["dove", "causa"])
 
-# indice nel vecchio Results → (foglio nuovo, colonna o riga nuova)
-_FORAMECOQS = {"Species Richness (S)": "Species Richness (S)", "exp(H'bc)": "exp(H'bc)", "FSI": "FSI", "Foram-AMBI 2025": "Foram-AMBI"}
+# indice nel vecchio foglio "Foram Echo QS" → (foglio nuovo, riga nuova). Il vecchio Foram-AMBI (ForamEcoQS) non
+# ridistribuiva gli NA: si confronta con "Foram-AMBI ori".
+_FORAMECOQS = {
+    "Species Richness (S)": ("Indici_PAST", "Taxa_S"),
+    "exp(H'bc)": ("Exp(H'bc)", "exp(H'bc)"),
+    "FSI": ("FSI", "FSI"),
+    "Foram-AMBI 2025": ("Foram-AMBI", "Foram-AMBI ori"),
+}
 
 
 def _rows(wb: openpyxl.Workbook, sheet: str) -> list[list]:
@@ -52,8 +58,8 @@ def old_indices(path: Path) -> pd.DataFrame:
         wb = openpyxl.load_workbook(path, data_only=True)
     parts = []
     feqs = _by_sample(_rows(wb, "Foram Echo QS"))
-    for old, new in _FORAMECOQS.items():
-        parts.append(feqs[old].rename_axis("campione").rename("vecchio").reset_index().assign(indice=new))
+    for old in _FORAMECOQS:
+        parts.append(feqs[old].rename_axis("campione").rename("vecchio").reset_index().assign(indice=old))
     past_rows = _rows(wb, "Indici_PAST")[1:18]
     past = pd.DataFrame(past_rows[1:], columns=past_rows[0]).set_index(past_rows[0][0])
     for index_name, values in past.iterrows():
@@ -67,16 +73,16 @@ def old_indices(path: Path) -> pd.DataFrame:
 
 
 def new_indices(sheets: dict[str, pd.DataFrame]) -> pd.DataFrame:
-    parts = []
-    feqs = sheets["Foram Echo QS"]
-    for new in _FORAMECOQS.values():
-        parts.append(feqs[new].rename("nuovo").rename_axis("campione").reset_index().assign(indice=new))
-    for index_name, values in sheets["Indici_PAST"].iterrows():
-        parts.append(values.rename("nuovo").rename_axis("campione").reset_index().assign(indice=f"PAST {index_name}"))
-    density = sheets["Densità_faunistica_media"].iloc[:, 0]
-    parts.append(density.rename("nuovo").rename_axis("campione").reset_index().assign(indice="Densità faunistica media"))
-    deformed = sheets["Abbondanza_rel%_deformati"].iloc[:, 0]
-    parts.append(deformed.rename("nuovo").rename_axis("campione").reset_index().assign(indice="Deformati (frazione)"))
+    """Indici dei fogli nuovi (indici nelle righe, campioni nelle colonne) in formato long: indice, campione, valore."""
+
+    def row(sheet: str, name: str, indice: str, scale: float = 1.0) -> pd.DataFrame:
+        values = pd.to_numeric(sheets[sheet].loc[name], errors="coerce") * scale
+        return values.rename("nuovo").rename_axis("campione").reset_index().assign(indice=indice)
+
+    parts = [row(sheet, name, old) for old, (sheet, name) in _FORAMECOQS.items()]
+    parts += [row("Indici_PAST", name, f"PAST {name}") for name in sheets["Indici_PAST"].index]
+    parts.append(row("Altre_info", "Densità faunistica media", "Densità faunistica media"))
+    parts.append(row("Altre_info", "% Deformati", "Deformati (frazione)", scale=0.01))
     return pd.concat(parts, ignore_index=True)
 
 

@@ -91,80 +91,52 @@ def test_squares_is_undefined_when_all_taxa_are_singletons():
     assert diversity_indices([1, 1, 3])["Squares"] == pytest.approx(3 + 4 * 11 / (25 - 6))
 
 
-def test_foram_ambi_redistributes_unassigned_in_proportion_to_assigned_groups():
+FORAM_AMBI_RULES = [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]]
+RULES = {"exp_hbc": [["Bad"]], "fsi": FSI_RULES, "exp_hbc_eqr": EXP_HBC_EQR_RULES, "foram_ambi": FORAM_AMBI_RULES}
+
+
+def test_foram_ambi_ori_and_redistributed():
     from foramqs.indices.foramecoqs import foramecoqs_table
 
-    # S1: Sp1 EG1 = 10, Sp2 EG3 = 10, Sp3 NA = 20 → ridistribuiti: 50% GI, 50% GIII → (0·50 + 3·50) / 100 = 1.5
+    # S1: Sp1 EG1 = 10, Sp2 EG3 = 10, Sp3 NA = 20
+    #   ori: NA al denominatore, pesano come GI → (3·10) / 40 = 0.75
+    #   ridistribuito: 50% GI, 50% GIII → (0·50 + 3·50) / 100 = 1.5
     # S2: solo NA → nessun gruppo su cui ridistribuire
     abundance = pd.DataFrame({"S1": [10, 10, 20], "S2": [0, 0, 7]}, index=["Sp1", "Sp2", "Sp3"])
     fsi_group = pd.Series(["ND"] * 3, index=abundance.index)
     eco_group = pd.Series(["1", "3", "NA"], index=abundance.index)
-    rules = {"exp_hbc": [["Bad"]], "fsi": FSI_RULES, "exp_hbc_eqr": EXP_HBC_EQR_RULES,
-             "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]]}
 
-    as_foramecoqs = foramecoqs_table(abundance, fsi_group, eco_group, rules)
-    assert as_foramecoqs.loc["S1", "Foram-AMBI"] == 0.75  # NA nel denominatore, pesano come GI
-
-    table = foramecoqs_table(
-        abundance, fsi_group, eco_group, rules,
-        alt_eco_group=eco_group, alt_samples=["S1"], redistribute_unassigned=True,
-    )
+    table = foramecoqs_table(abundance, fsi_group, eco_group, RULES)
+    assert table.loc["S1", "Foram-AMBI ori"] == 0.75
     assert table.loc["S1", "Foram-AMBI"] == 1.5
     assert table.loc["S1", "EQS Foram-AMBI"] == "Good"
-    assert table.loc["S1", "% non assegnati Foram-AMBI"] == 50.0
-    assert table.loc["S1", "Foram-AMBI (Alt)"] == 1.5  # anche il Foram-AMBI alternativo ridistribuisce
-    assert table.loc["S1", "% non assegnati Foram-AMBI (Alt)"] == 50.0
+    assert [table.loc["S1", f"% GE{g}"] for g in range(1, 6)] == [25.0, 0.0, 25.0, 0.0, 0.0]
+    assert table.loc["S1", "% NA"] == 50.0
     assert math.isnan(table.loc["S2", "Foram-AMBI"])
     assert table.loc["S2", "EQS Foram-AMBI"] == "N/A"
+    assert table.loc["S2", "% NA"] == 100.0
 
 
-def test_foram_ambi_redistributed_whatever_the_unassigned_pct():
+def test_sen_and_str_percentages_are_on_sen_plus_str():
     from foramqs.indices.foramecoqs import foramecoqs_table
 
-    # S1: 50% NA, S2: 20% NA → entrambi ridistribuiti: (0·50 + 3·50) / 100 = 1.5
-    abundance = pd.DataFrame({"S1": [10, 10, 20], "S2": [10, 10, 5]}, index=["Sp1", "Sp2", "Sp3"])
-    fsi_group = pd.Series(["ND"] * 3, index=abundance.index)
-    eco_group = pd.Series(["1", "3", "NA"], index=abundance.index)
-    rules = {"exp_hbc": [["Bad"]], "fsi": FSI_RULES, "exp_hbc_eqr": EXP_HBC_EQR_RULES,
-             "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Bad"]]}
+    # Sen = 30, Str = 10, ND = 60: le percentuali ignorano gli ND, come la formula dell'FSI.
+    abundance = pd.DataFrame({"S1": [30, 10, 60], "S2": [0, 0, 5]}, index=["Sp1", "Sp2", "Sp3"])
+    fsi_group = pd.Series(["Sen", "Str", "ND"], index=abundance.index)
+    eco_group = pd.Series(["1", "2", "NA"], index=abundance.index)
 
-    table = foramecoqs_table(abundance, fsi_group, eco_group, rules, redistribute_unassigned=True)
-    assert table.loc["S1", "Foram-AMBI"] == 1.5
-    assert table.loc["S2", "Foram-AMBI"] == 1.5
-    cols = list(table.columns)
-    assert cols[cols.index("Foram-AMBI") + 1] == "% non assegnati Foram-AMBI"
+    table = foramecoqs_table(abundance, fsi_group, eco_group, RULES)
+    assert table.loc["S1", "% Sen"] == 75.0 and table.loc["S1", "% Str"] == 25.0
+    assert table.loc["S1", "FSI"] == fsi(30, 10)
+    assert math.isnan(table.loc["S2", "% Sen"]) and math.isnan(table.loc["S2", "% Str"])
 
 
-def test_foramecoqs_table_with_alternative_foram_ambi():
-    from foramqs.indices.foramecoqs import foramecoqs_table
+def test_foramecoqs_table_has_the_columns_of_the_result_sheets():
+    from foramqs.indices.foramecoqs import EXP_HBC_COLUMNS, FORAM_AMBI_COLUMNS, FSI_COLUMNS, foramecoqs_table
 
-    abundance = pd.DataFrame({"S1": [10, 20, 10], "S2": [5, 5, 10]}, index=["Sp1", "Sp2", "Sp3"])
-    fsi_group = pd.Series(["Sen", "Str", "ND"], index=["Sp1", "Sp2", "Sp3"])
-    eco_group = pd.Series(["1", "2", "3"], index=["Sp1", "Sp2", "Sp3"])
-    # Nella lista alternativa: Sp1 è 3, Sp2 è NA (non presente), Sp3 è 4
-    alt_eco = pd.Series(["3", "NA", "4"], index=["Sp1", "Sp2", "Sp3"])
-    eqs_rules = {
-        "exp_hbc": [["High", ">=", 22], ["Good", ">=", 13], ["Moderate", ">=", 7], ["Poor", ">", 3], ["Bad"]],
-        "fsi": [["High", ">=", 9], ["Good", ">=", 5.5], ["Moderate", ">=", 2], ["Poor", ">=", 1], ["Bad"]],
-        "foram_ambi": [["High", "<=", 1.2], ["Good", "<=", 3.3], ["Moderate", "<=", 4.3], ["Poor", "<=", 5.5], ["Bad"]],
-        "exp_hbc_eqr": EXP_HBC_EQR_RULES,
-    }
-    table = foramecoqs_table(
-        abundance, fsi_group, eco_group, eqs_rules,
-        alt_eco_group=alt_eco, alt_samples=["S1"], alt_label="Foram-AMBI (Alt)",
-    )
-    assert "Foram-AMBI (Alt)" in table.columns
-    assert "EQS Foram-AMBI (Alt)" in table.columns
-    assert "% non assegnati Foram-AMBI (Alt)" in table.columns
-
-    # S1 (N = 40): Sp1=10 (EG 3: peso 3.0), Sp2=20 (NA: peso 0), Sp3=10 (EG 4: peso 4.5)
-    # AMBI alt = (10*3.0 + 10*4.5) / 40 = 75 / 40 = 1.875 -> EQS Good (<= 3.3)
-    # Non assegnati alt = 20 / 40 = 50.0%
-    assert table.loc["S1", "Foram-AMBI (Alt)"] == 1.875
-    assert table.loc["S1", "EQS Foram-AMBI (Alt)"] == "Good"
-    assert table.loc["S1", "% non assegnati Foram-AMBI (Alt)"] == 50.0
-
-    # S2 non è in alt_samples: deve essere NaN e vuoto
-    assert math.isnan(table.loc["S2", "Foram-AMBI (Alt)"])
-    assert table.loc["S2", "EQS Foram-AMBI (Alt)"] == ""
-    assert math.isnan(table.loc["S2", "% non assegnati Foram-AMBI (Alt)"])
+    abundance = pd.DataFrame({"S1": [10, 20, 10]}, index=["Sp1", "Sp2", "Sp3"])
+    groups = pd.Series(["Sen", "Str", "ND"], index=abundance.index)
+    table = foramecoqs_table(abundance, groups, pd.Series(["1", "2", "3"], index=abundance.index), RULES)
+    assert set(EXP_HBC_COLUMNS + FSI_COLUMNS + FORAM_AMBI_COLUMNS) <= set(table.columns)
+    assert FORAM_AMBI_COLUMNS[-1] == "EQS Foram-AMBI"
+    assert not any("Alt" in c or "Bouchet" in c for c in table.columns)

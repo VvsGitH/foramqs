@@ -57,11 +57,11 @@ Le colonne citate per nome in `config/pipeline.toml` devono esistere, altrimenti
 | Colonna | Voce di config | Uso |
 |---|---|---|
 | `GRAVEL`, `SAND`, `SILT` | `input.grain_size_columns` | granulometria: la somma deve essere circa 100% |
-| `M-AMBI_ 2022` | `tables.external_index_column` | indice esterno della macrofauna (foglio `Abbondanza_rel%_gruppiecologici`) |
+| `M-AMBI_ 2022` | `tables.external_index_column` | indice esterno della macrofauna (oggi solo controllato, non riportato nei risultati) |
 
 Se una colonna viene rinominata nel file, va aggiornato il nome corrispondente in config.
 
-Tutte le colonne numeriche entrano in `Tabella_matrice` e nelle tabelle per la CCA (`Tabella_CCA_*`): un valore mancante è quindi un errore (V27).
+Le colonne di `tables.pca_cca_environment` (profondità, granulometria, TOC, metalli) entrano nel foglio `PCA_CCA`, trasformate con log₁₀(1+x); un valore mancante è un errore (V27).
 
 Le colonne `Shannon_H` e `ORDINE` vengono ignorate, perché ora sono calcolate dalla pipeline.
 

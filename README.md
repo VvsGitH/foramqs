@@ -2,9 +2,8 @@
 
 Pipeline unica che sostituisce Power Query, ForamEcoQS e i passaggi manuali in PAST. Parte **solo** dai dati
 grezzi (le tabelle `MC_*` e la geochimica di `input_data/Campioni_P_2025_Data_Raw.xlsx`) e da poche tabelle tecniche non
-derivabili, e produce un `Results_<data>.xlsx` con gli stessi fogli di prima, più i grafici e i report di controllo.
-I grafici sono grafici Excel collegati alle celle dei fogli: si possono modificare in Excel come qualsiasi altro.
-Fa eccezione il dendrogramma, che è un'immagine perché Excel non ha un tipo di grafico equivalente.
+derivabili, e produce un `Results_<data>.xlsx` con dieci fogli di risultati (vedi [Fogli dei risultati](#fogli-dei-risultati))
+più i report di controllo. I due dendrogrammi della Cluster Analysis (Q-mode e R-mode) sono immagini nel foglio `CA`.
 
 Principi:
 - **nessun dato derivato viene copiato a mano**: Shannon, densità, liste per ForamEcoQS, etichette PAST… sono calcolati;
@@ -80,7 +79,7 @@ Il formato atteso (Tabelle Excel dei campioni, colonne obbligatorie, geochimica)
 | Comando | Cosa fa |
 |---|---|
 | `uv run foramqs check` | Legge, valida e pulisce gli input e risolve i nomi in WoRMS. Scrive `output/check_<data>.xlsx` senza calcolare indici. |
-| `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` (con i grafici) e `output/figures_<data>/dendrogramma.png`. Se ci sono errori negli input si ferma e li elenca. |
+| `uv run foramqs run` | Pipeline completa → `output/Results_<data>.xlsx` (i dieci fogli dei risultati) e i dendrogrammi `output/figures_<data>/dendrogramma_Q_mode.png`, `dendrogramma_R_mode.png`. Se ci sono errori negli input si ferma e li elenca. |
 | `uv run foramqs diff input_data/Campioni_P_2025_Results.xlsx` | Confronta gli indici con un vecchio Results ed elenca, per campione, i cambiamenti che spiegano le differenze. |
 | `uv run foramqs add-sample MC_XX01 --gruppo G1` | Aggiunge un campione vuoto da compilare a mano: foglio con la Tabella delle conte, riga in `Geochimica_campioni`, campione nel gruppo di cluster indicato. Fa prima un backup del workbook in `input_data/backup/`. |
 | `uv run foramqs migrate-traits` | Crea `reference/species_traits.csv` dalle fonti storiche. **Già eseguito**: da qui in poi la tabella dei tratti si modifica a mano. |
@@ -93,7 +92,7 @@ Con `--offline` WoRMS non viene interrogato e si usa solo la cache (`config/worm
 |---|---|---|
 | `input_data/Campioni_P_2025_Data_Raw.xlsx` | Tabelle `MC_*` (conte per casella), colonna `COMMENTI & DUBBI` accanto, tabella `Geochimica_campioni` | laboratorio |
 | `reference/species_traits.csv` | Tratti per taxon: stile di vita, gruppo ecologico Foram-AMBI (1-5/NA), gruppo FSI (Sen/Str/ND), guscio (A/I/P) | ricercatori |
-| `reference/foram_ambi_alt.csv` | Assegnazione alternativa ai gruppi ecologici Foram-AMBI per campioni specifici (`nome;gruppo_ecologico`) | ricercatori |
+| `reference/foram_ambi_alt.csv` | Assegnazione alternativa ai gruppi ecologici Foram-AMBI per campioni specifici (`nome;gruppo_ecologico`): oggi solo controllata da `check` (A01–A05), il Foram-AMBI alternativo non è più calcolato | ricercatori |
 | `config/name_corrections.csv` | Refusi da correggere nel testo (`trova;sostituisci;motivo;fonte`) | ricercatori |
 | `config/taxon_aliases.csv` | AphiaID imposto per un nome, con precedenza su WoRMS (`nome;aphia_id;motivo;fonte`) | ricercatori |
 | `config/non_foram_terms.csv` | Voci da scartare (diatomee, "No Forams"…) | ricercatori |
@@ -141,7 +140,7 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
 | R01-R04 | errore/avviso | Tratti: valore non ammesso o conflitto, righe in contrasto, taxa senza tratti |
 | R05 | info | Guscio nei fogli diverso dalla tabella dei tratti: vale sempre quello dei tratti |
 | C01 | errore/avviso | Gruppi di cluster: campioni sconosciuti o in più gruppi (errore), campioni senza gruppo (avviso) |
-| C02 | avviso | Gruppo che non è un ramo del dendrogramma (solo in `run`, serve il cluster) |
+| C02 | avviso | Gruppo che non è un ramo del dendrogramma Q-mode (solo in `run`, serve il cluster) |
 | A01-A05 | errore | Foram-AMBI alternativo: campioni sconosciuti, file non trovato, valori non ammessi, conflitti o nome del foglio non valido per Excel |
 | I01-I03 | info | Giovanili sommati a `Genere spp.`; righe senza N°INDIVIDUI (individui morti) non conteggiate; replica R1 copiata (`[input.copied_replicas]`) |
 
@@ -149,20 +148,34 @@ Non vengono più letti: il vecchio `Campioni_P_2025_Data.xlsx` (tabella `ALL`, `
 
 - **ForamEcoQS** (`indices/foramecoqs.py`): S, exp(H'bc) (Chao–Shen), FSI, Foram-AMBI e classi EQS, portati dal
   sorgente C# con la stessa aritmetica (arrotondamenti .NET). Verificati sui vecchi risultati in `tests/legacy`.
-  Unica differenza voluta: con `[foram_ambi].redistribute_unassigned = true` il Foram-AMBI ridistribuisce gli
-  individui senza gruppo ecologico nei gruppi assegnati, in proporzione (anche il Foram-AMBI alternativo), in tutti
-  i campioni, qualunque sia la quota di NA (riportata nelle colonne `% non assegnati …`).
+  Il Foram-AMBI è calcolato in due modi: `Foram-AMBI ori` come ForamEcoQS (gli individui senza gruppo ecologico
+  restano al denominatore e pesano come GI) e `Foram-AMBI` con gli NA ridistribuiti nei gruppi assegnati, in
+  proporzione; la classe `EQS Foram-AMBI` si riferisce a quest'ultimo.
 - **PAST** (`indices/diversity.py`): i 16 indici del foglio `Indici_PAST` (Shannon con correzione di
   Miller–Madow, Simpson non distorto, Chao-1, iChao-1, ACE…), verificati sui valori di PAST.
-- **Cluster**: UPGMA + Bray-Curtis sulle abbondanze relative.
-- **CCA**: non è calcolata dalla pipeline, si fa in PAST. Le tabelle da incollare hanno le stesse colonne di
-  parametri (exp(H'bc), FSI, S, Foram-AMBI, tutta la geochimica, Shannon_H) e le specie in % con lo stile di vita:
-  - `Tabella_CCA_All`: tutte le specie;
-  - `Tabella_CCA_<soglia>%` (oggi `Tabella_CCA_5%`): solo le specie sopra `tables.dominant_species_threshold`;
-  - `Tabella_CCA_<soglia>%_norm`: come la precedente, con i parametri in z-score (deviazione standard campionaria).
-- **Grafico delle specie** (foglio `Tabella_Cluster`): per ogni campione le specie sopra la soglia in quel
-  campione, il resto in Others. I dati del grafico stanno nel foglio nascosto `Grafico_specie`
-  (in Excel: tasto destro su una scheda → Scopri).
+- **Cluster Analysis** (foglio `CA`): metodo di Ward, distanza euclidea (`[cluster]`), sulle specie dominanti
+  trasformate con log₁₀(1+x). Q-mode sui campioni, R-mode sulle specie. L'ordine delle foglie del Q-mode è l'ordine
+  dei campioni in tutti i fogli.
+- **PCA/CCA**: non sono calcolate dalla pipeline, si fanno in PAST sul foglio `PCA_CCA`.
+
+## Fogli dei risultati
+
+| Foglio | Righe × colonne | Contenuto |
+|---|---|---|
+| `Abb_assolute` | specie × campioni | individui per specie |
+| `Abb_rel%` | specie × campioni | abbondanze relative (%) di tutte le specie |
+| `Abb_rel_5%` | specie × campioni | specie con abbondanza ≥ `tables.dominant_species_threshold` (5%) in almeno un campione, con tutti i loro valori (%) |
+| `Indici_PAST` | indici × campioni | i 16 indici di PAST |
+| `Exp(H'bc)` | indici × campioni | exp(H'bc), exp(H'bc) EQR (= exp(H'bc) / massimo tra i campioni), EQS exp(H'bc) EQR |
+| `FSI` | indici × campioni | % Sen, % Str (sul totale Sen + Str), FSI, EQS FSI |
+| `Foram-AMBI` | indici × campioni | % GE1–GE5 e % NA (sul totale degli individui), Foram-AMBI ori, Foram-AMBI, EQS Foram-AMBI |
+| `Altre_info` | parametri × campioni | densità faunistica media, % per tipo di guscio, % per stile di vita, % deformati |
+| `CA` | campioni × specie | log₁₀(1+x) di `Abb_rel_5%`, scritto come formule Excel `=LOG10(1+'Abb_rel_5%'!…)`; dendrogrammi Q-mode e R-mode |
+| `PCA_CCA` | campioni × parametri | log₁₀(1+x) di specie di `Abb_rel_5%`, `tables.pca_cca_environment` (profondità, granulometria, TOC, metalli), S, exp(H'bc), FSI, Foram-AMBI |
+
+Seguono i fogli dei controlli: `Validazione`, `Log_pulizia`, `Revisione_nomi`, `Osservazioni`.
+Il nome del foglio delle specie dominanti segue la soglia (`Abb_rel_<soglia>%`). Le formule del foglio `CA` sono
+calcolate da Excel all'apertura del file.
 
 ## Struttura del codice
 
@@ -175,8 +188,8 @@ src/foramqs/
   traits.py, migrate.py               tabella dei tratti e sua migrazione
   tables.py                           abbondanze e tabelle di sintesi
   indices/                            ForamEcoQS e PAST
-  multivariate.py                     cluster
-  charts.py, plots.py                 grafici Excel; dendrogramma (unica immagine)
+  multivariate.py                     Cluster Analysis (Q-mode e R-mode)
+  charts.py, plots.py                 grafici Excel (oggi non usati dalla pipeline); dendrogrammi
   reconcile.py                        confronto con un vecchio Results
   new_sample.py                       aggiunta di un campione vuoto (comando add-sample)
   pipeline.py, cli.py, report.py      collegamento dei passi, comandi, scrittura Excel

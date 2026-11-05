@@ -136,53 +136,67 @@ def test_alternative_ambi_sheet_name_too_long_for_excel_is_an_error(make_project
     assert "A05" in codes(issues, "errore")
 
 
-def test_pipeline_run_with_alternative_foram_ambi(tmp_path):
+def test_pipeline_run_writes_the_ten_result_sheets(tmp_path):
+    import math
+
+    import numpy as np
+
+    from foramqs.indices.foramecoqs import EXP_HBC_COLUMNS, FORAM_AMBI_COLUMNS, FSI_COLUMNS
     from foramqs.pipeline import run
+    from foramqs.report import write_workbook
 
     shutil.copytree(DEFAULT_CONFIG.parent, tmp_path / "config")
     shutil.copytree(PROJECT_ROOT / "reference", tmp_path / "reference")
     cfg = load_config(tmp_path / "config" / DEFAULT_CONFIG.name)
     cfg.raw["paths"]["data_workbook"] = str(PROJECT_ROOT / "input_data" / "Campioni_P_2025_Data_Raw.xlsx")
 
-    alt_file = tmp_path / "reference" / "foram_ambi_alt.csv"
-    alt_file.write_text("nome;gruppo_ecologico\nAmmonia tepida;3\n", encoding="utf-8")
-
-    cfg.raw["foram_ambi_alternative"]["samples"] = ["MC_CB01", "MC_CE01"]
-    cfg.raw["foram_ambi_alternative"]["label"] = "Foram-AMBI (Alt)"
-
     res = run(cfg, figures_dir=tmp_path / "figures", offline=True)
-    assert all(len(name) <= 31 for name in res.sheets)  # limite di Excel: oltre, i grafici perdono il foglio di origine
-    assert "Abbondanza_rel%_gruppiecol_alt" in res.sheets
-    alt_sheet = res.sheets["Abbondanza_rel%_gruppiecol_alt"]
-    assert set(alt_sheet.index) == {"MC_CB01", "MC_CE01"}
-    assert "Foram-AMBI (Alt)" in alt_sheet.columns
+    sheets = res.sheets
+    assert list(sheets) == ["Abb_assolute", "Abb_rel%", "Abb_rel_5%", "Indici_PAST", "Exp(H'bc)", "FSI",
+                            "Foram-AMBI", "Altre_info", "CA", "PCA_CCA"]
 
-    comparison = res.sheets["Confronto_gruppi_ecologici"]
-    assert comparison.columns.tolist() == ["GE Jorissen", "GE Bouchet"]
-    assert comparison.loc["Ammonia tepida", "GE Bouchet"] == "GIII"
-    assert set(comparison["GE Bouchet"]) == {"GIII", "NA"}  # solo Ammonia tepida è nel file alternativo del test
+    # Stesso ordine dei campioni ovunque: quello delle foglie del dendrogramma Q-mode.
+    order = list(sheets["Abb_assolute"].columns)
+    assert sorted(order) == sorted(res.checked.observations["campione"].unique())
+    for name in list(sheets)[:8]:
+        assert list(sheets[name].columns) == order, name  # campioni nelle colonne
+    for name in ("CA", "PCA_CCA"):
+        assert list(sheets[name].index) == order, name  # campioni nelle righe
 
-    feqs = res.sheets["Foram Echo QS"]
-    assert not any(str(s).startswith("*") for s in feqs.index)  # nessuna segnalazione sui nomi dei campioni
-    assert "Foram-AMBI (Alt)" in feqs.columns
-    assert "EQS Foram-AMBI (Alt)" in feqs.columns
-    assert pd.notna(feqs.loc["MC_CB01", "Foram-AMBI (Alt)"])
-    # MC_CE01 non ha specie della lista alternativa del test: nessun gruppo su cui ridistribuire gli NA.
-    assert feqs.loc["MC_CE01", "% non assegnati Foram-AMBI (Alt)"] == 100
-    assert pd.isna(feqs.loc["MC_CE01", "Foram-AMBI (Alt)"])
-    assert feqs.loc["MC_CE01", "EQS Foram-AMBI (Alt)"] == "N/A"
-    assert pd.isna(feqs.loc["MC_FL01", "Foram-AMBI (Alt)"])
-    assert res.highlights == {}
+    rel, dominant = sheets["Abb_rel%"], sheets["Abb_rel_5%"]
+    assert np.allclose(rel.sum(), 100)
+    assert (dominant.max(axis=1) >= 5).all() and set(dominant.index) == set(rel.index[(rel >= 5).any(axis=1)])
+    assert dominant.equals(rel.loc[dominant.index])  # modalità "specie": tutti i valori delle specie dominanti
 
-    # Con la ridistribuzione degli NA (config di default) il foglio dei gruppi mostra le percentuali usate dall'indice:
-    # Σ peso·% ricostruisce il Foram-AMBI della stessa riga; GI–GV sommano a 1 in tutti i campioni, qualunque sia la
-    # quota di NA (MC_FL01: 62%). Gli NA restano a parte, fuori dal grafico.
-    from foramqs.indices.foramecoqs import ECO_GROUP_WEIGHTS
+    assert list(sheets["Exp(H'bc)"].index) == EXP_HBC_COLUMNS
+    assert list(sheets["FSI"].index) == FSI_COLUMNS
+    assert list(sheets["Foram-AMBI"].index) == FORAM_AMBI_COLUMNS
+    fsi_sheet, ambi = sheets["FSI"], sheets["Foram-AMBI"]
+    assert np.allclose((fsi_sheet.loc["% Sen"] + fsi_sheet.loc["% Str"]).astype(float), 100)
+    shares = ambi.loc[[f"% GE{g}" for g in range(1, 6)] + ["% NA"]].astype(float)
+    assert np.allclose(shares.sum(), 100)
+    weights = np.array([0.0, 1.5, 3.0, 4.5, 6.0])
+    assigned = shares.iloc[:5]
+    rebuilt = (assigned.mul(weights, axis=0).sum() / assigned.sum()).astype(float)
+    assert (rebuilt - ambi.loc["Foram-AMBI"].astype(float)).abs().max() < 5e-4
+    rebuilt_ori = assigned.mul(weights, axis=0).sum() / 100
+    assert (rebuilt_ori - ambi.loc["Foram-AMBI ori"].astype(float)).abs().max() < 5e-4
 
-    eco = res.sheets["Abbondanza_rel%_gruppiecologici"]
-    weights = {g: w for g, w in zip(["GI", "GII", "GIII", "GIV", "GV"], ECO_GROUP_WEIGHTS.values()) if g in eco.columns}
-    assert eco[list(weights)].sum(axis=1).round(9).eq(1).all()
-    rebuilt = sum(w * eco[g] for g, w in weights.items())
-    assert (rebuilt - eco["Foram-AMBI"]).abs().max() < 5e-4
-    assert eco.loc["MC_FL01", "NA"] > 0
-    assert "NA" not in res.charts["Abbondanza_rel%_gruppiecologici"][0].series
+    other = sheets["Altre_info"]
+    assert other.index[0] == "Densità faunistica media" and other.index[-1] == "% Deformati"
+
+    # CA = log10(1 + Abb_rel_5%) trasposta; PCA_CCA = log10(1 + valori), specie comprese.
+    assert np.allclose(sheets["CA"], np.log10(1 + dominant.T.loc[order]))
+    pca = sheets["PCA_CCA"]
+    assert list(pca.columns[:len(dominant)]) == list(dominant.index)
+    assert list(pca.columns[-4:]) == ["S", "exp(H'bc)", "FSI", "Foram-AMBI"]
+    assert "M-AMBI_ 2022" not in pca.columns
+    assert np.allclose(pca["S"], np.log10(1 + sheets["Indici_PAST"].loc["Taxa_S"].astype(float)))
+    assert math.isclose(pca.loc[order[0], "TOC (%)"], math.log10(1 + res.checked.geochemistry.loc[order[0], "TOC (%)"]))
+
+    # Nel file Excel il foglio CA contiene le formule e i due dendrogrammi.
+    path = write_workbook(tmp_path / "r.xlsx", res.sheets, res.figures, formulas=res.formulas)
+    wb = openpyxl.load_workbook(path)
+    assert wb.sheetnames[:10] == list(sheets)
+    assert wb["CA"]["B2"].value == "=LOG10(1+'Abb_rel_5%'!B2)"
+    assert len(wb["CA"]._images) == 2

@@ -1,6 +1,5 @@
-"""Grafici come immagine (PNG): solo il dendrogramma, che non ha un equivalente tra i grafici di Excel.
-
-Gli altri grafici sono grafici Excel nativi (charts.py). Colori e stile sono gli stessi.
+"""Grafici come immagine (PNG): i dendrogrammi della Cluster Analysis (Q-mode e R-mode), che non hanno un
+equivalente tra i grafici di Excel. Colori e stile sono gli stessi dei grafici Excel (charts.py).
 """
 
 from __future__ import annotations
@@ -13,7 +12,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from scipy.cluster.hierarchy import dendrogram  # noqa: E402
 
-from foramqs.multivariate import SampleClustering  # noqa: E402
+from foramqs.multivariate import Clustering  # noqa: E402
 
 CATEGORICAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 SURFACE, TEXT, MUTED, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
@@ -34,13 +33,25 @@ def _save(fig, path: Path) -> Path:
     return path
 
 
-def dendrogram_chart(clustering: SampleClustering, groups: dict[str, list[str]], path: Path) -> Path:
-    """Dendrogramma UPGMA/Bray-Curtis; le etichette riportano il gruppo definito in config."""
+def q_mode_chart(clustering: Clustering, groups: dict[str, list[str]], method: str, path: Path) -> Path:
+    """Dendrogramma Q-mode (campioni); le etichette riportano il gruppo definito in config."""
     group_of = {s: g for g, members in groups.items() for s in members}
     labels = [f"{s.removeprefix('MC_')} ({group_of.get(s, '-')})" for s in clustering.samples]
     fig, ax = plt.subplots(figsize=(9, 4))
     dendrogram(clustering.linkage, labels=labels, ax=ax, color_threshold=0, above_threshold_color=CATEGORICAL[0],
                leaf_rotation=60, leaf_font_size=8)
-    ax.set_ylabel("Dissimilarità di Bray-Curtis")
-    ax.set_title("Cluster dei campioni (UPGMA, Bray-Curtis)")
+    ax.set_ylabel("Distanza")
+    ax.set_title(f"Cluster Analysis Q-mode: campioni ({method})")
+    return _save(fig, path)
+
+
+def r_mode_chart(clustering: Clustering, method: str, path: Path) -> Path:
+    """Dendrogramma R-mode (specie), orizzontale perché i nomi delle specie sono lunghi."""
+    fig, ax = plt.subplots(figsize=(9, max(4.0, 0.25 * len(clustering.samples) + 1)))
+    dendrogram(clustering.linkage, labels=clustering.samples, ax=ax, orientation="left", color_threshold=0,
+               above_threshold_color=CATEGORICAL[1], leaf_font_size=8)
+    ax.grid(axis="y", visible=False)
+    ax.grid(axis="x", visible=True)
+    ax.set_xlabel("Distanza")
+    ax.set_title(f"Cluster Analysis R-mode: specie ({method})")
     return _save(fig, path)
